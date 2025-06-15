@@ -42,7 +42,7 @@ export class ArivoApi implements ICredentialType {
 
 	test: ICredentialTestRequest = {
 		request: {
-			baseURL: 'https://arivo.com.br/api/v2/',
+			baseURL: (globalThis as any).process?.env?.ARIVO_BASE_URL || 'https://arivo.com.br/api/v2/',
 			url: '/teams?per_page=1',
 		},
 	};

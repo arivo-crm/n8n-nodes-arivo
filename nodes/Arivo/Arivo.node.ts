@@ -5,7 +5,9 @@ import {
 	INodeTypeDescription,
 	IDataObject,
 } from 'n8n-workflow';
-import { arivoApiRequest, arivoApiRequestAllItems } from './GenericFunctions';
+import { contactOperations, contactFields } from './ContactDescription';
+import { createContact, getContact, getContacts, updateContact, deleteContact } from './ContactOperations';
+import { getContactCustomFields } from './loadOptions';
 
 export class Arivo implements INodeType {
 	description: INodeTypeDescription = {
@@ -45,153 +47,16 @@ export class Arivo implements INodeType {
 				],
 				default: 'contact',
 			},
-			// Operations for Contact
-			{
-				displayName: 'Operation',
-				name: 'operation',
-				type: 'options',
-				noDataExpression: true,
-				displayOptions: {
-					show: {
-						resource: ['contact'],
-					},
-				},
-				options: [
-					{
-						name: 'Create',
-						value: 'create',
-						description: 'Create a contact',
-						action: 'Create a contact',
-					},
-					{
-						name: 'Get',
-						value: 'get',
-						description: 'Get a contact',
-						action: 'Get a contact',
-					},
-					{
-						name: 'Get Many',
-						value: 'getMany',
-						description: 'Get many contacts',
-						action: 'Get many contacts',
-					},
-					{
-						name: 'Update',
-						value: 'update',
-						description: 'Update a contact',
-						action: 'Update a contact',
-					},
-				],
-				default: 'create',
-			},
-			// Fields for Contact
-			{
-				displayName: 'Contact ID',
-				name: 'contactId',
-				type: 'string',
-				displayOptions: {
-					show: {
-						operation: ['get', 'update'],
-						resource: ['contact'],
-					},
-				},
-				default: '',
-				required: true,
-				description: 'The ID of the contact',
-			},
-			{
-				displayName: 'Contact Fields',
-				name: 'contactFields',
-				type: 'collection',
-				displayOptions: {
-					show: {
-						operation: ['create', 'update'],
-						resource: ['contact'],
-					},
-				},
-				default: {},
-				options: [
-					{
-						displayName: 'Name',
-						name: 'name',
-						type: 'string',
-						default: '',
-						description: 'The name of the contact',
-					},
-					{
-						displayName: 'Email',
-						name: 'email',
-						type: 'string',
-						default: '',
-						description: 'The email address of the contact',
-					},
-					{
-						displayName: 'Phone',
-						name: 'phone',
-						type: 'string',
-						default: '',
-						description: 'The phone number of the contact',
-					},
-					{
-						displayName: 'Company',
-						name: 'company',
-						type: 'string',
-						default: '',
-						description: 'The company name of the contact',
-					},
-					{
-						displayName: 'Title',
-						name: 'title',
-						type: 'string',
-						default: '',
-						description: 'The job title of the contact',
-					},
-					{
-						displayName: 'Address',
-						name: 'address',
-						type: 'string',
-						default: '',
-						description: 'The address of the contact',
-					},
-					{
-						displayName: 'City',
-						name: 'city',
-						type: 'string',
-						default: '',
-						description: 'The city of the contact',
-					},
-					{
-						displayName: 'State',
-						name: 'state',
-						type: 'string',
-						default: '',
-						description: 'The state/province of the contact',
-					},
-					{
-						displayName: 'Country',
-						name: 'country',
-						type: 'string',
-						default: '',
-						description: 'The country of the contact',
-					},
-					{
-						displayName: 'Zip',
-						name: 'zip',
-						type: 'string',
-						default: '',
-						description: 'The postal code of the contact',
-					},
-					{
-						displayName: 'Notes',
-						name: 'notes',
-						type: 'string',
-						default: '',
-						description: 'Additional notes about the contact',
-					},
-				],
-			},
-			// TODO: Add handlers for 'deal' resource
+			...contactOperations,
+			...contactFields,
+			// TODO: Add deal operations and fields
 		],
+	};
+
+	methods = {
+		loadOptions: {
+			getContactCustomFields
+		},
 	};
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
@@ -203,23 +68,23 @@ export class Arivo implements INodeType {
 		for (let i = 0; i < items.length; i++) {
 			try {
 				if (resource === 'contact') {
+					let response: IDataObject = {};
 					if (operation === 'create') {
-						const contactFields = this.getNodeParameter('contactFields', i, {}) as IDataObject;
-						const response = await arivoApiRequest.call(this, 'POST', '/contacts', contactFields);
-						returnData.push({ json: response, pairedItem: { item: i } });
+						response = await createContact.call(this, i);
+					} else if (operation === 'delete') {
+						response = await deleteContact.call(this, i);
 					} else if (operation === 'get') {
-						const contactId = this.getNodeParameter('contactId', i) as string;
-						const response = await arivoApiRequest.call(this, 'GET', `/contacts/${contactId}`);
-						returnData.push({ json: response, pairedItem: { item: i } });
+						response = await getContact.call(this, i);
 					} else if (operation === 'getMany') {
-						const response = await arivoApiRequestAllItems.call(this, 'GET', '/contacts');
-						returnData.push({ json: response, pairedItem: { item: i } });
+						const responseArray = await getContacts.call(this, i);
+						for (const contact of responseArray) {
+							returnData.push({ json: contact, pairedItem: { item: i } });
+						}
+						continue;
 					} else if (operation === 'update') {
-						const contactId = this.getNodeParameter('contactId', i) as string;
-						const contactFields = this.getNodeParameter('contactFields', i, {}) as IDataObject;
-						const response = await arivoApiRequest.call(this, 'PUT', `/contacts/${contactId}`, contactFields);
-						returnData.push({ json: response, pairedItem: { item: i } });
+						response = await updateContact.call(this, i);
 					}
+					returnData.push({ json: response, pairedItem: { item: i } });
 				}
 				// TODO: Add handlers for 'deal' resource
 			} catch (error) {
