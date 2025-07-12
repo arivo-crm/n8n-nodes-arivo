@@ -6,26 +6,23 @@ import type {
 	ILoadOptionsFunctions,
 	IHttpRequestMethods,
 	IHttpRequestOptions,
-	ILogger,
 } from 'n8n-workflow';
 import { NodeApiError } from 'n8n-workflow';
 
-interface IContextWithLogger {
-	logger?: ILogger;
-}
 
 /**
  * Make an API request to Arivo
  */
 export async function arivoApiRequest(
-	this: (IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions) & IContextWithLogger,
+	this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
 	method: IHttpRequestMethods,
 	endpoint: string,
 	body: IDataObject = {},
 	query: IDataObject = {},
-	returnFullResponse: boolean = false,
+	option: IDataObject = {},
 ): Promise<any> {
 	const baseUrl = (globalThis as any).process?.env?.ARIVO_BASE_URL || 'https://arivo.com.br/api/v2';
+	
 	const options: IHttpRequestOptions = {
 		method,
 		body,
@@ -35,31 +32,16 @@ export async function arivoApiRequest(
 			'Content-Type': 'application/json',
 		},
 		json: true,
-		returnFullResponse: returnFullResponse,
 	};
 
-	const credentials = await this.getCredentials('arivoApi');
-	options.headers = {
-		...options.headers,
-		'Authorization': `Bearer ${credentials.apiKey}`,
-	};
+	if (Object.keys(option).length !== 0) {
+		Object.assign(options, option);
+	}
 
 	try {
-		if (this.logger) {
-			this.logger.debug(`Request URL: ${options.url}`);
-			this.logger.debug(`Request body: ${JSON.stringify(options.body)}`);
-			this.logger.debug(`Request query: ${JSON.stringify(options.qs)}`);
-			this.logger.debug('Request options:', options);
-		}
 		const response = await this.helpers.requestWithAuthentication.call(this, 'arivoApi', options);
-		if (this.logger) {
-			this.logger.debug('Response:', response);
-		}
 		return response;
 	} catch (error) {
-		if (this.logger) {
-			this.logger.error('Error:', error);
-		}
 		throw new NodeApiError(this.getNode(), error as JsonObject);
 	}
 }
@@ -85,7 +67,7 @@ export async function arivoApiRequest(
  * @returns Array of all items from all pages
  */
 export async function arivoApiRequestAllItems(
-	this: (IHookFunctions | IExecuteFunctions) & IContextWithLogger,
+	this: IHookFunctions | IExecuteFunctions,
 	method: IHttpRequestMethods,
 	endpoint: string,
 	body: IDataObject = {},
@@ -108,19 +90,10 @@ export async function arivoApiRequestAllItems(
 	let currentUrl = endpoint;
 	let pageCount = 0;
 
-	if (this.logger) {
-		this.logger.debug(`Starting pagination for endpoint: ${endpoint}`);
-		this.logger.debug(`Return all: ${returnAll}, Limit: ${limit}`);
-	}
-
 	do {
 		pageCount++;
 		
-		if (this.logger) {
-			this.logger.debug(`Fetching page ${pageCount} from: ${currentUrl}`);
-		}
-
-		const response = await arivoApiRequest.call(this, method, currentUrl, body, query, true);
+		const response = await arivoApiRequest.call(this, method, currentUrl, body, pageCount === 1 ? query : {}, { resolveWithFullResponse: true });
 		
 		// Extract data from response
 		let responseData: any;
@@ -143,27 +116,18 @@ export async function arivoApiRequestAllItems(
 			newItems = [responseData];
 		}
 
-		if (this.logger) {
-			this.logger.debug(`Page ${pageCount} returned ${newItems.length} items`);
-		}
-
 		items.push(...newItems);
 
 		// Check if we've reached the user-specified limit
 		if (!returnAll && limit && items.length >= limit) {
-			if (this.logger) {
-				this.logger.debug(`Reached user limit of ${limit}, returning ${items.length} items`);
-			}
 			return items.slice(0, limit);
 		}
 
 		// Check for next page URL in headers
-		const nextPageUrl = response.headers?.['X-Next-Page'] || response.headers?.['x-next-page'];
+		const headers = response.headers || {};
+		const nextPageUrl = headers['x-next-page'];
 		
 		if (!nextPageUrl) {
-			if (this.logger) {
-				this.logger.debug(`No X-Next-Page header found, pagination complete. Total items: ${items.length}`);
-			}
 			break;
 		}
 
@@ -172,16 +136,8 @@ export async function arivoApiRequestAllItems(
 		const baseUrl = (globalThis as any).process?.env?.ARIVO_BASE_URL || 'https://arivo.com.br/api/v2';
 		currentUrl = nextPageUrl.replace(baseUrl, '');
 
-		if (this.logger) {
-			this.logger.debug(`Next page URL: ${currentUrl}`);
-		}
-
 		// Note: Rate limiting can be handled by the API itself
 	} while (true);
-
-	if (this.logger) {
-		this.logger.debug(`Pagination complete. Total pages: ${pageCount}, Total items: ${items.length}`);
-	}
 
 	return items;
 } 
