@@ -9,6 +9,13 @@ import type {
 } from 'n8n-workflow';
 import { NodeApiError } from 'n8n-workflow';
 
+/**
+ * Sleep for a specified number of milliseconds
+ */
+async function sleep(ms: number): Promise<void> {
+	return new Promise(resolve => (globalThis as any).setTimeout(resolve, ms));
+}
+
 
 /**
  * Make an API request to Arivo
@@ -38,12 +45,34 @@ export async function arivoApiRequest(
 		Object.assign(options, option);
 	}
 
-	try {
-		const response = await this.helpers.requestWithAuthentication.call(this, 'arivoApi', options);
-		return response;
-	} catch (error) {
-		throw new NodeApiError(this.getNode(), error as JsonObject);
-	}
+	let maxRetries = 3;
+	let response;
+
+	do {
+		try {
+			response = await this.helpers.requestWithAuthentication.call(this, 'arivoApi', options);
+			return response;
+		} catch (error: any) {
+			// Handle 429 Too Many Requests with retry logic
+			if (error.statusCode === 429) {
+				// Get retry-after from header, default to 1 second if not provided
+				const retryAfter = error.response?.headers['retry-after'] || 
+								   error.response?.headers['x-ratelimit-reset'] || 
+								   1000;
+				
+				await sleep(+retryAfter * 1000); // Convert to milliseconds if needed
+				maxRetries--;
+				continue;
+			}
+			
+			throw new NodeApiError(this.getNode(), error as JsonObject);
+		}
+	} while (maxRetries > 0);
+
+	// If we've exhausted all retries
+	throw new NodeApiError(this.getNode(), {
+		message: 'Could not complete API request. Maximum number of rate-limit retries reached.',
+	} as JsonObject);
 }
 
 /**
@@ -136,7 +165,20 @@ export async function arivoApiRequestAllItems(
 		const baseUrl = (globalThis as any).process?.env?.ARIVO_BASE_URL || 'https://arivo.com.br/api/v2';
 		currentUrl = nextPageUrl.replace(baseUrl, '');
 
-		// Note: Rate limiting can be handled by the API itself
+		// Rate limiting: check headers and wait if needed
+		const rateLimitRemaining = parseInt(headers['x-ratelimit-remaining'] || '999', 10);
+		const rateLimitReset = parseInt(headers['x-ratelimit-reset'] || '0', 10);
+		
+		// If we're close to the rate limit, wait a bit before next request
+		if (rateLimitRemaining <= 5) {
+			const currentTime = Math.floor(Date.now() / 1000);
+			const waitTime = Math.max(1000, (rateLimitReset - currentTime) * 1000 + 1000); // Wait until reset + 1 second
+			
+			await sleep(Math.min(waitTime, 60000)); // Max 1 minute wait
+		} else if (pageCount > 1) {
+			// Small delay between requests to be API-friendly
+			await sleep(100);
+		}
 	} while (true);
 
 	return items;
