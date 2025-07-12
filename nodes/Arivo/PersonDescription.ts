@@ -1,6 +1,6 @@
 import { INodeProperties } from 'n8n-workflow';
 
-export const contactOperations: INodeProperties[] = [
+export const personOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
@@ -8,86 +8,62 @@ export const contactOperations: INodeProperties[] = [
 		noDataExpression: true,
 		displayOptions: {
 			show: {
-				resource: ['contact'],
+				resource: ['person'],
 			},
 		},
 		options: [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a contact',
-				action: 'Create a contact',
+				description: 'Create a person',
+				action: 'Create a person',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a contact',
-				action: 'Delete a contact',
+				description: 'Delete a person',
+				action: 'Delete a person',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a contact',
-				action: 'Get a contact',
+				description: 'Get a person',
+				action: 'Get a person',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many contacts',
-				action: 'Get many contacts',
+				description: 'Get many persons',
+				action: 'Get many persons',
 			},
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a contact',
-				action: 'Update a contact',
+				description: 'Update a person',
+				action: 'Update a person',
 			},
 		],
 		default: 'create',
 	},
 ];
 
-export const contactFields: INodeProperties[] = [
+export const personFields: INodeProperties[] = [
 	// ----------------------------------
-	//         contact:create
+	//         person:create
 	// ----------------------------------
 	{
-		displayName: 'Contact Name',
-		name: 'contactName',
+		displayName: 'Person Name',
+		name: 'personName',
 		type: 'string',
 		displayOptions: {
 			show: {
 				operation: ['create'],
-				resource: ['contact'],
+				resource: ['person'],
 			},
 		},
 		default: '',
 		required: true,
-		description: 'The name of the contact',
-	},
-	{
-		displayName: 'Contact Type',
-		name: 'contact_type',
-		type: 'options',
-		displayOptions: {
-			show: {
-				operation: ['create'],
-				resource: ['contact'],
-			},
-		},
-		options: [
-			{
-				name: 'Person',
-				value: 'person',
-			},
-			{
-				name: 'Company',
-				value: 'company',
-			},
-		],
-		default: 'person',
-		required: true,
-		description: 'The type of the contact',
+		description: 'The name of the person',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -96,11 +72,39 @@ export const contactFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['create'],
-				resource: ['contact'],
+				resource: ['person'],
 			},
 		},
 		default: {},
 		options: [
+			{
+				displayName: 'CPF',
+				name: 'cpf',
+				type: 'string',
+				default: '',
+				description: 'Brazilian individual taxpayer registration (CPF)',
+			},
+			{
+				displayName: 'Birth Date',
+				name: 'birth_date',
+				type: 'dateTime',
+				default: '',
+				description: 'Birth date of the person (YYYY-MM-DD format)',
+			},
+			{
+				displayName: 'Position',
+				name: 'position',
+				type: 'string',
+				default: '',
+				description: 'Job position of the person',
+			},
+			{
+				displayName: 'Company ID',
+				name: 'company_id',
+				type: 'string',
+				default: '',
+				description: 'ID of the company where this person works',
+			},
 			{
 				displayName: 'Email',
 				name: 'email',
@@ -115,7 +119,7 @@ export const contactFields: INodeProperties[] = [
 						name: 'email',
 						values: [
 							{
-								displayName: 'E-mail address',
+								displayName: 'E-Mail Address',
 								name: 'address',
 								type: 'string',
 								default: '',
@@ -145,7 +149,7 @@ export const contactFields: INodeProperties[] = [
 						],
 					},
 				],
-				description: 'The email addresses of the contact',
+				description: 'The email addresses of the person',
 			},
 			{
 				displayName: 'Phone',
@@ -195,42 +199,28 @@ export const contactFields: INodeProperties[] = [
 						],
 					},
 				],
-				description: 'The phone numbers of the contact',
-			},
-			{
-				displayName: 'Company ID',
-				name: 'company_id',
-				type: 'string',
-				default: '',
-				description: 'The company ID of the contact',
-			},
-			{
-				displayName: 'Position',
-				name: 'position',
-				type: 'string',
-				default: '',
-				description: 'The job position of the contact',
+				description: 'The phone numbers of the person',
 			},
             {
 				displayName: 'Tags',
 				name: 'tags',
 				type: 'string',
 				default: '',
-				description: 'The tags of the contact',
+				description: 'The tags of the person',
 			},
             {
 				displayName: 'User ID',
 				name: 'user_id',
 				type: 'string',
 				default: '',
-				description: 'The user ID owner of the contact',
+				description: 'The user ID owner of the person',
 			},
             {
 				displayName: 'Team ID',
 				name: 'team_id',
 				type: 'string',
 				default: '',
-				description: 'The team ID owner of the contact',
+				description: 'The team ID owner of the person',
 			},            
 			{
 				displayName: 'Address',
@@ -257,7 +247,6 @@ export const contactFields: INodeProperties[] = [
 								name: 'city',
 								type: 'string',
 								default: '',
-								description: 'The city',
 							},
 							{
 								displayName: 'State',
@@ -271,14 +260,12 @@ export const contactFields: INodeProperties[] = [
 								name: 'district',
 								type: 'string',
 								default: '',
-								description: 'The district',
 							},
 							{
 								displayName: 'Country',
 								name: 'country',
 								type: 'string',
 								default: '',
-								description: 'The country',
 							},
 							{
 								displayName: 'Zip',
@@ -311,7 +298,7 @@ export const contactFields: INodeProperties[] = [
 						],
 					},
 				],
-				description: 'The addresses of the contact',
+				description: 'The addresses of the person',
 			},
 			{
 				displayName: 'Custom Fields',
@@ -332,7 +319,7 @@ export const contactFields: INodeProperties[] = [
 								name: 'field',
 								type: 'options',
 								typeOptions: {
-									loadOptionsMethod: 'getContactCustomFields',
+									loadOptionsMethod: 'getPersonCustomFields',
 								},
 								default: '',
 								description: 'Name of the custom field. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
@@ -347,49 +334,49 @@ export const contactFields: INodeProperties[] = [
 						],
 					},
 				],
-				description: 'Custom fields for the contact',
+				description: 'Custom fields for the person',
 			},
 		],
 	},
 
 	// ----------------------------------
-	//         contact:delete
+	//         person:delete
 	// ----------------------------------
 	{
-		displayName: 'Contact ID',
-		name: 'contactId',
+		displayName: 'Person ID',
+		name: 'personId',
 		type: 'string',
 		displayOptions: {
 			show: {
 				operation: ['delete'],
-				resource: ['contact'],
+				resource: ['person'],
 			},
 		},
 		default: '',
 		required: true,
-		description: 'The ID of the contact',
+		description: 'The ID of the person',
 	},
 
 	// ----------------------------------
-	//         contact:get
+	//         person:get
 	// ----------------------------------
 	{
-		displayName: 'Contact ID',
-		name: 'contactId',
+		displayName: 'Person ID',
+		name: 'personId',
 		type: 'string',
 		displayOptions: {
 			show: {
 				operation: ['get'],
-				resource: ['contact'],
+				resource: ['person'],
 			},
 		},
 		default: '',
 		required: true,
-		description: 'The ID of the contact',
+		description: 'The ID of the person',
 	},
 
 	// ----------------------------------
-	//         contact:getMany
+	//         person:getMany
 	// ----------------------------------
 	{
 		displayName: 'Return All',
@@ -398,7 +385,7 @@ export const contactFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['getMany'],
-				resource: ['contact'],
+				resource: ['person'],
 			},
 		},
 		default: true,
@@ -411,15 +398,14 @@ export const contactFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['getMany'],
-				resource: ['contact'],
+				resource: ['person'],
 				returnAll: [false],
 			},
 		},
 		typeOptions: {
 			minValue: 1,
-			maxValue: 1000,
 		},
-		default: 100,
+		default: 50,
 		description: 'Max number of results to return',
 	},
 	{
@@ -429,7 +415,7 @@ export const contactFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['getMany'],
-				resource: ['contact'],
+				resource: ['person'],
 			},
 		},
 		default: {},
@@ -449,16 +435,10 @@ export const contactFields: INodeProperties[] = [
 				description: 'Filter by CPF (Brazilian individual taxpayer registration)',
 			},
 			{
-				displayName: 'CNPJ',
-				name: 'cnpj',
-				type: 'string',
-				default: '',
-				description: 'Filter by CNPJ (Brazilian corporate taxpayer registration)',
-			},
-			{
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				default: '',
 				description: 'Filter by email address',
 			},
@@ -477,7 +457,7 @@ export const contactFields: INodeProperties[] = [
 				description: 'Filter by district',
 			},
             {
-				displayName: 'Zip code',
+				displayName: 'Zip Code',
 				name: 'zip_code',
 				type: 'string',
 				default: '',
@@ -533,27 +513,6 @@ export const contactFields: INodeProperties[] = [
 				description: 'Filter by team ID',
 			},
 			{
-				displayName: 'Contact Type',
-				name: 'contact_type',
-				type: 'options',
-				options: [
-					{
-						name: 'All',
-						value: '',
-					},
-					{
-						name: 'Person',
-						value: 'person',
-					},
-					{
-						name: 'Company',
-						value: 'company',
-					},
-				],
-				default: '',
-				description: 'Filter by contact type',
-			},
-			{
 				displayName: 'Sort By',
 				name: 'sort_field',
 				type: 'options',
@@ -593,27 +552,26 @@ export const contactFields: INodeProperties[] = [
 					},
 				],
 				default: 'desc',
-				description: 'Sort order',
 			},
 		],
 	},
 
 	// ----------------------------------
-	//         contact:update
+	//         person:update
 	// ----------------------------------
 	{
-		displayName: 'Contact ID',
-		name: 'contactId',
+		displayName: 'Person ID',
+		name: 'personId',
 		type: 'string',
 		displayOptions: {
 			show: {
 				operation: ['update'],
-				resource: ['contact'],
+				resource: ['person'],
 			},
 		},
 		default: '',
 		required: true,
-		description: 'The ID of the contact',
+		description: 'The ID of the person',
 	},
 	{
 		displayName: 'Update Fields',
@@ -622,34 +580,45 @@ export const contactFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['update'],
-				resource: ['contact'],
+				resource: ['person'],
 			},
 		},
 		default: {},
 		options: [
 			{
-				displayName: 'Contact Name',
-				name: 'updateContactName',
+				displayName: 'Person Name',
+				name: 'updatePersonName',
 				type: 'string',
 				default: '',
-				description: 'The name of the contact',
+				description: 'The name of the person',
 			},
 			{
-				displayName: 'Contact Type',
-				name: 'updateContactType',
-				type: 'options',
-				options: [
-					{
-						name: 'Person',
-						value: 'person',
-					},
-					{
-						name: 'Company',
-						value: 'company',
-					},
-				],
-				default: 'person',
-				description: 'The type of the contact',
+				displayName: 'CPF',
+				name: 'cpf',
+				type: 'string',
+				default: '',
+				description: 'Brazilian individual taxpayer registration (CPF)',
+			},
+			{
+				displayName: 'Birth Date',
+				name: 'birth_date',
+				type: 'dateTime',
+				default: '',
+				description: 'Birth date of the person (YYYY-MM-DD format)',
+			},
+			{
+				displayName: 'Position',
+				name: 'position',
+				type: 'string',
+				default: '',
+				description: 'Job position of the person',
+			},
+			{
+				displayName: 'Company ID',
+				name: 'company_id',
+				type: 'string',
+				default: '',
+				description: 'ID of the company where this person works',
 			},
 			{
 				displayName: 'Email',
@@ -665,7 +634,7 @@ export const contactFields: INodeProperties[] = [
 						name: 'email',
 						values: [
 							{
-								displayName: 'E-mail address',
+								displayName: 'E-Mail Address',
 								name: 'address',
 								type: 'string',
 								default: '',
@@ -695,7 +664,7 @@ export const contactFields: INodeProperties[] = [
 						],
 					},
 				],
-				description: 'The email addresses of the contact',
+				description: 'The email addresses of the person',
 			},
 			{
 				displayName: 'Phone',
@@ -745,42 +714,28 @@ export const contactFields: INodeProperties[] = [
 						],
 					},
 				],
-				description: 'The phone numbers of the contact',
-			},
-			{
-				displayName: 'Company ID',
-				name: 'company_id',
-				type: 'string',
-				default: '',
-				description: 'The company ID of the contact',
-			},
-			{
-				displayName: 'Position',
-				name: 'position',
-				type: 'string',
-				default: '',
-				description: 'The job position of the contact',
+				description: 'The phone numbers of the person',
 			},
             {
 				displayName: 'Tags',
 				name: 'tags',
 				type: 'string',
 				default: '',
-				description: 'The tags of the contact',
+				description: 'The tags of the person',
 			},
             {
 				displayName: 'User ID',
 				name: 'user_id',
 				type: 'string',
 				default: '',
-				description: 'The user ID owner of the contact',
+				description: 'The user ID owner of the person',
 			},
             {
 				displayName: 'Team ID',
 				name: 'team_id',
 				type: 'string',
 				default: '',
-				description: 'The team ID owner of the contact',
+				description: 'The team ID owner of the person',
 			},
 			{
 				displayName: 'Address',
@@ -807,7 +762,6 @@ export const contactFields: INodeProperties[] = [
 								name: 'city',
 								type: 'string',
 								default: '',
-								description: 'The city',
 							},
 							{
 								displayName: 'State',
@@ -821,14 +775,12 @@ export const contactFields: INodeProperties[] = [
 								name: 'district',
 								type: 'string',
 								default: '',
-								description: 'The district',
 							},
 							{
 								displayName: 'Country',
 								name: 'country',
 								type: 'string',
 								default: '',
-								description: 'The country',
 							},
 							{
 								displayName: 'Zip',
@@ -861,7 +813,7 @@ export const contactFields: INodeProperties[] = [
 						],
 					},
 				],
-				description: 'The addresses of the contact',
+				description: 'The addresses of the person',
 			},
 			{
 				displayName: 'Custom Fields',
@@ -882,7 +834,7 @@ export const contactFields: INodeProperties[] = [
 								name: 'field',
 								type: 'options',
 								typeOptions: {
-									loadOptionsMethod: 'getContactCustomFields',
+									loadOptionsMethod: 'getPersonCustomFields',
 								},
 								default: '',
 								description: 'Name of the custom field. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
@@ -897,7 +849,7 @@ export const contactFields: INodeProperties[] = [
 						],
 					},
 				],
-				description: 'Custom fields for the contact',
+				description: 'Custom fields for the person',
 			},
 		],
 	},

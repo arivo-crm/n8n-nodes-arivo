@@ -28,6 +28,6 @@ async function getCustomFields(this: ILoadOptionsFunctions, fieldType: string): 
     return returnData;
 }
 
-export async function getContactCustomFields(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+export async function getPersonCustomFields(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     return getCustomFields.call(this, 'person');
 }

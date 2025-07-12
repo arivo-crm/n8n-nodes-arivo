@@ -5,9 +5,9 @@ import {
 	INodeTypeDescription,
 	IDataObject,
 } from 'n8n-workflow';
-import { contactOperations, contactFields } from './ContactDescription';
-import { createContact, getContact, getContacts, updateContact, deleteContact } from './ContactOperations';
-import { getContactCustomFields } from './loadOptions';
+import { personOperations, personFields } from './PersonDescription';
+import { createPerson, getPerson, getPersons, updatePerson, deletePerson } from './PersonOperations';
+import { getPersonCustomFields } from './loadOptions';
 
 export class Arivo implements INodeType {
 	description: INodeTypeDescription = {
@@ -37,25 +37,25 @@ export class Arivo implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
-						name: 'Contact',
-						value: 'contact',
+						name: 'Person',
+						value: 'person',
 					},
 					{
 						name: 'Deal',
 						value: 'deal',
 					},
 				],
-				default: 'contact',
+				default: 'person',
 			},
-			...contactOperations,
-			...contactFields,
+			...personOperations,
+			...personFields,
 			// TODO: Add deal operations and fields
 		],
 	};
 
 	methods = {
 		loadOptions: {
-			getContactCustomFields
+			getPersonCustomFields
 		},
 	};
 
@@ -67,22 +67,22 @@ export class Arivo implements INodeType {
 
 		for (let i = 0; i < items.length; i++) {
 			try {
-				if (resource === 'contact') {
+				if (resource === 'person') {
 					let response: IDataObject = {};
 					if (operation === 'create') {
-						response = await createContact.call(this, i);
+						response = await createPerson.call(this, i);
 					} else if (operation === 'delete') {
-						response = await deleteContact.call(this, i);
+						response = await deletePerson.call(this, i);
 					} else if (operation === 'get') {
-						response = await getContact.call(this, i);
+						response = await getPerson.call(this, i);
 					} else if (operation === 'getMany') {
-						const responseArray = await getContacts.call(this, i);
-						for (const contact of responseArray) {
-							returnData.push({ json: contact, pairedItem: { item: i } });
+						const responseArray = await getPersons.call(this, i);
+						for (const person of responseArray) {
+							returnData.push({ json: person, pairedItem: { item: i } });
 						}
 						continue;
 					} else if (operation === 'update') {
-						response = await updateContact.call(this, i);
+						response = await updatePerson.call(this, i);
 					}
 					returnData.push({ json: response, pairedItem: { item: i } });
 				}

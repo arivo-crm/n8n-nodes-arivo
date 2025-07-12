@@ -1,7 +1,7 @@
 import { IExecuteFunctions, IDataObject } from 'n8n-workflow';
 import { arivoApiRequest, arivoApiRequestAllItems } from './GenericFunctions';
 
-function buildCommonContactBody(body: IDataObject, fields: IDataObject): IDataObject {
+function buildCommonPersonBody(body: IDataObject, fields: IDataObject): IDataObject {
 	// Handle emails
 	if (fields.email && Array.isArray((fields.email as any).email)) {
 		body.emails = (fields.email as any).email
@@ -39,50 +39,51 @@ function buildCommonContactBody(body: IDataObject, fields: IDataObject): IDataOb
 	return body;
 }
 
-export async function createContact(
+export async function createPerson(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject> {
-	const contactName = this.getNodeParameter('contactName', index) as string;
-	const contactType = this.getNodeParameter('contact_type', index) as string;
+	const personName = this.getNodeParameter('personName', index) as string;
 	const additionalFields = this.getNodeParameter('additionalFields', index, {}) as IDataObject;
 
 	const body: IDataObject = {
-		name: contactName,
-		contact_type: contactType,
+		name: personName,
+		contact_type: 'person', // Hard-coded for person type
 		...additionalFields,
 	};
 
-	buildCommonContactBody(body, additionalFields);
+	buildCommonPersonBody(body, additionalFields);
 
 	return await arivoApiRequest.call(this, 'POST', '/contacts', body);
 }
 
-export async function deleteContact(
+export async function deletePerson(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject> {
-	const contactId = this.getNodeParameter('contactId', index) as string;
+	const personId = this.getNodeParameter('personId', index) as string;
 
-	return await arivoApiRequest.call(this, 'DELETE', `/contacts/${contactId}`);
+	return await arivoApiRequest.call(this, 'DELETE', `/contacts/${personId}`);
 }
 
-export async function getContact(
+export async function getPerson(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject> {
-	const contactId = this.getNodeParameter('contactId', index) as string;
+	const personId = this.getNodeParameter('personId', index) as string;
 
-	return await arivoApiRequest.call(this, 'GET', `/contacts/${contactId}`);
+	return await arivoApiRequest.call(this, 'GET', `/contacts/${personId}`);
 }
 
-export async function getContacts(
+export async function getPersons(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject[]> {
 	const additionalFields = this.getNodeParameter('additionalFields', index, {}) as IDataObject;
 
-	const query: IDataObject = {};
+	const query: IDataObject = {
+		contact_type: 'person', // Automatically filter for person contacts only
+	};
 	
 	// Add all additional fields to query if they have values
 	Object.keys(additionalFields).forEach(key => {
@@ -96,30 +97,25 @@ export async function getContacts(
 	return await arivoApiRequestAllItems.call(this, 'GET', '/contacts', {}, query);
 }
 
-export async function updateContact(
+export async function updatePerson(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject> {
-	const contactId = this.getNodeParameter('contactId', index) as string;
+	const personId = this.getNodeParameter('personId', index) as string;
 	const updateFields = this.getNodeParameter('updateFields', index, {}) as IDataObject;
 
 	const body: IDataObject = {
+		contact_type: 'person', // Ensure we maintain person type
 		...updateFields,
 	};
 
-	// Handle the updateContactName if it exists
-	if (updateFields.updateContactName) {
-		body.name = updateFields.updateContactName;
-		delete body.updateContactName;
+	// Handle the updatePersonName if it exists
+	if (updateFields.updatePersonName) {
+		body.name = updateFields.updatePersonName;
+		delete body.updatePersonName;
 	}
 
-	// Handle the updateContactType if it exists
-	if (updateFields.updateContactType) {
-		body.contact_type = updateFields.updateContactType;
-		delete body.updateContactType;
-	}
+	buildCommonPersonBody(body, updateFields);
 
-	buildCommonContactBody(body, updateFields);
-
-	return await arivoApiRequest.call(this, 'PUT', `/contacts/${contactId}`, body);
+	return await arivoApiRequest.call(this, 'PUT', `/contacts/${personId}`, body);
 } 
