@@ -8,9 +8,11 @@ import {
 import { personOperations, personFields } from './PersonDescription';
 import { companyOperations, companyFields } from './CompanyDescription';
 import { dealOperations, dealFields } from './DealDescription';
+import { noteOperations, noteFields } from './NoteDescription';
 import { createPerson, getPerson, getPersons, updatePerson, deletePerson } from './PersonOperations';
 import { createCompany, getCompany, getCompanies, updateCompany, deleteCompany } from './CompanyOperations';
 import { createDeal, getDeal, getDeals, updateDeal, deleteDeal } from './DealOperations';
+import { createNote, getNote, getNotes, updateNote, deleteNote } from './NoteOperations';
 import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields } from './loadOptions';
 
 export class Arivo implements INodeType {
@@ -52,6 +54,10 @@ export class Arivo implements INodeType {
 						name: 'Deal',
 						value: 'deal',
 					},
+					{
+						name: 'Note',
+						value: 'note',
+					},
 				],
 				default: 'person',
 			},
@@ -61,6 +67,8 @@ export class Arivo implements INodeType {
 			...companyFields,
 			...dealOperations,
 			...dealFields,
+			...noteOperations,
+			...noteFields,
 		],
 	};
 
@@ -132,6 +140,24 @@ export class Arivo implements INodeType {
 						continue;
 					} else if (operation === 'update') {
 						response = await updateDeal.call(this, i);
+					}
+					returnData.push({ json: response, pairedItem: { item: i } });
+				} else if (resource === 'note') {
+					let response: IDataObject = {};
+					if (operation === 'create') {
+						response = await createNote.call(this, i);
+					} else if (operation === 'delete') {
+						response = await deleteNote.call(this, i);
+					} else if (operation === 'get') {
+						response = await getNote.call(this, i);
+					} else if (operation === 'getMany') {
+						const responseArray = await getNotes.call(this, i);
+						for (const note of responseArray) {
+							returnData.push({ json: note, pairedItem: { item: i } });
+						}
+						continue;
+					} else if (operation === 'update') {
+						response = await updateNote.call(this, i);
 					}
 					returnData.push({ json: response, pairedItem: { item: i } });
 				}

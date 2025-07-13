@@ -313,7 +313,7 @@ export const dealFields: INodeProperties[] = [
 				resource: ['deal'],
 			},
 		},
-		default: true,
+		default: false,
 		description: 'Whether to return all results or only up to a given limit',
 	},
 	{

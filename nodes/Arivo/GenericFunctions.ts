@@ -102,7 +102,14 @@ export async function arivoApiRequestAllItems(
 	body: IDataObject = {},
 	query: IDataObject = {},
 ): Promise<any> {
-	const returnAll = this.getNodeParameter('returnAll', 0) as boolean;
+	// Try to get returnAll parameter, but default to false if it doesn't exist
+	let returnAll = false;
+	try {
+		returnAll = this.getNodeParameter('returnAll', 0) as boolean;
+	} catch (error) {
+		// If returnAll parameter doesn't exist, default to false (use limit)
+		returnAll = false;
+	}
 	
 	// Only try to get limit parameter if returnAll is false
 	let limit: number | undefined;

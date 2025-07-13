@@ -400,7 +400,7 @@ export const companyFields: INodeProperties[] = [
 				resource: ['company'],
 			},
 		},
-		default: true,
+		default: false,
 		description: 'Whether to return all results or only up to a given limit',
 	},
 	{

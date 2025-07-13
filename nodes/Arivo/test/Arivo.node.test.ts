@@ -66,6 +66,10 @@ describe('Arivo Node', () => {
 					name: 'Deal',
 					value: 'deal',
 				},
+				{
+					name: 'Note',
+					value: 'note',
+				},
 			]);
 			expect(resourceProperty?.default).toBe('person');
 		});
@@ -137,7 +141,8 @@ describe('Arivo Node', () => {
 				const nodeParameters = {
 					resource: 'person',
 					operation: 'getMany',
-					returnAll: true,
+					returnAll: false,
+					limit: 50,
 				};
 
 				mockGetPersons.mockResolvedValue(mockPersonsListResponse.data);
@@ -165,7 +170,8 @@ describe('Arivo Node', () => {
 				const nodeParameters = {
 					resource: 'person',
 					operation: 'getMany',
-					returnAll: true,
+					returnAll: false,
+					limit: 50,
 				};
 
 				mockGetPersons.mockResolvedValue([]);

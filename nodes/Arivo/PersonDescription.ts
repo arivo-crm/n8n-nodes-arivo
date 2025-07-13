@@ -408,7 +408,7 @@ export const personFields: INodeProperties[] = [
 				resource: ['person'],
 			},
 		},
-		default: true,
+		default: false,
 		description: 'Whether to return all results or only up to a given limit',
 	},
 	{

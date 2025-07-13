@@ -344,6 +344,45 @@ export const mockDealsListResponse = {
 	},
 };
 
+// Common test data for note operations
+export const mockNoteData = {
+	id: '1',
+	object: 'note',
+	text: 'This is a sample note for testing purposes',
+	contact_id: '123',
+	deal_id: null,
+	task_id: null,
+	user_id: '1',
+	team_id: '2',
+	created_at: '2012-06-25T04:08:00-03:00',
+	updated_at: '2012-06-25T04:08:00-03:00',
+};
+
+// Mock API response for getMany notes operation
+export const mockNotesListResponse = {
+	data: [
+		mockNoteData,
+		{
+			...mockNoteData,
+			id: '2',
+			text: 'Another note linked to a deal',
+			contact_id: null,
+			deal_id: '456',
+			user_id: '2',
+			team_id: '1',
+			created_at: '2012-06-25T04:09:00-03:00',
+			updated_at: '2012-06-25T04:09:00-03:00',
+		},
+	],
+	meta: {
+		pagination: {
+			current_page: 1,
+			per_page: 20,
+			total: 2,
+		},
+	},
+};
+
 // Mock API response headers
 export const mockApiHeaders = {
 	'x-total': '2',
