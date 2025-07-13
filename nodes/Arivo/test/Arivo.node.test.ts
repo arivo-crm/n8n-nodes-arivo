@@ -55,8 +55,8 @@ describe('Arivo Node', () => {
 			expect(resourceProperty).toBeDefined();
 			expect(resourceProperty?.options).toEqual([
 				{
-					name: 'Person',
-					value: 'person',
+					name: 'Task',
+					value: 'task',
 				},
 				{
 					name: 'Company',
@@ -70,6 +70,10 @@ describe('Arivo Node', () => {
 					name: 'Note',
 					value: 'note',
 				},
+				{
+					name: 'Person',
+					value: 'person',
+				},
 			]);
 			expect(resourceProperty?.default).toBe('person');
 		});
@@ -78,6 +82,7 @@ describe('Arivo Node', () => {
 			expect(arivoNode.methods?.loadOptions?.getPersonCustomFields).toBeDefined();
 			// Check if new methods exist in the keys array (they're there but undefined when accessed directly)
 			const loadOptionsMethods = Object.keys(arivoNode.methods?.loadOptions || {});
+			expect(loadOptionsMethods).toContain('getTaskTypes');
 			expect(loadOptionsMethods).toContain('getCompanyCustomFields');
 			expect(loadOptionsMethods).toContain('getDealCustomFields');
 		});

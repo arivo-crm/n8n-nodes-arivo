@@ -383,6 +383,85 @@ export const mockNotesListResponse = {
 	},
 };
 
+// Common test data for task operations
+export const mockTaskData = {
+	id: '1',
+	object: 'task',
+	created_at: '2012-06-25T04:08:00-03:00',
+	updated_at: '2012-06-25T04:08:00-03:00',
+	name: 'Conversa sobre o contrato',
+	done: false,
+	task_type_id: '1',
+	due_type_id: 998,
+	due_date: '2012-12-31T16:00:00-02:00',
+	due_date_end: '2012-12-31T17:00:00-02:00',
+	completed_at: null,
+	comment: 'Marquei no café ao lado do prédio.',
+	contact_id: null,
+	deal_id: null,
+	task_recurrence: null,
+	tags: [],
+	team_id: null,
+	user_id: '1',
+	creator_id: null,
+};
+
+// Mock API response for getMany tasks operation
+export const mockTasksListResponse = {
+	data: [
+		mockTaskData,
+		{
+			...mockTaskData,
+			id: '2',
+			name: 'Entregar documentação do míssil',
+			done: true,
+			task_type_id: '2',
+			due_type_id: 999,
+			due_date: null,
+			due_date_end: null,
+			completed_at: '2012-06-26T10:00:00-03:00',
+			comment: 'Documentação entregue com sucesso',
+			contact_id: null,
+			deal_id: '456',
+			tags: ['urgent', 'documentation'],
+			team_id: '1',
+			user_id: '2',
+			creator_id: '1',
+		},
+	],
+	meta: {
+		pagination: {
+			current_page: 1,
+			per_page: 50,
+			total: 2,
+		},
+	},
+};
+
+// Mock activity types data
+export const mockActivityTypes = [
+	{
+		id: 7,
+		label: 'Tarefa',
+	},
+	{
+		id: 8,
+		label: 'Visita',
+	},
+	{
+		id: 9,
+		label: 'Ligação',
+	},
+	{
+		id: 10,
+		label: 'Email',
+	},
+	{
+		id: 11,
+		label: 'Reunião',
+	},
+];
+
 // Mock API response headers
 export const mockApiHeaders = {
 	'x-total': '2',

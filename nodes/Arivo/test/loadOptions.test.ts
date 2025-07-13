@@ -1,4 +1,4 @@
-import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields } from '../loadOptions';
+import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes } from '../loadOptions';
 import { createMockLoadOptionsFunctions } from './helpers';
 import { arivoApiRequest } from '../GenericFunctions';
 import customFieldsResponse from './fixtures/custom-fields-response.json';
@@ -214,6 +214,76 @@ describe('Load Options', () => {
 
 			await expect(getDealCustomFields.call(mockLoadOptionsFunction)).rejects.toThrow(
 				'API request failed',
+			);
+		});
+	});
+
+	describe('getTaskTypes', () => {
+		it('should return task types', async () => {
+			const taskTypesResponse = [
+				{
+					id: 7,
+					label: 'Tarefa',
+				},
+				{
+					id: 8,
+					label: 'Visita',
+				},
+				{
+					id: 9,
+					label: 'Ligação',
+				},
+			];
+
+			mockArivoApiRequest.mockResolvedValue(taskTypesResponse);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getTaskTypes.call(mockLoadOptionsFunction);
+
+			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/task_types');
+			expect(result).toEqual([
+				{
+					name: 'Tarefa',
+					value: 7,
+				},
+				{
+					name: 'Visita',
+					value: 8,
+				},
+				{
+					name: 'Ligação',
+					value: 9,
+				},
+			]);
+		});
+
+		it('should handle API errors gracefully', async () => {
+			const error = new Error('API request failed');
+			mockArivoApiRequest.mockRejectedValue(error);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getTaskTypes.call(mockLoadOptionsFunction)).rejects.toThrow(
+				'API request failed',
+			);
+		});
+
+		it('should handle empty response', async () => {
+			mockArivoApiRequest.mockResolvedValue([]);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getTaskTypes.call(mockLoadOptionsFunction);
+
+			expect(result).toEqual([]);
+		});
+
+		it('should handle null/undefined response', async () => {
+			mockArivoApiRequest.mockResolvedValue(undefined);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getTaskTypes.call(mockLoadOptionsFunction)).rejects.toThrow(
+				'No data got returned',
 			);
 		});
 	});

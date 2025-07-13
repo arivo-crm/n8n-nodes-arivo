@@ -9,11 +9,13 @@ import { personOperations, personFields } from './PersonDescription';
 import { companyOperations, companyFields } from './CompanyDescription';
 import { dealOperations, dealFields } from './DealDescription';
 import { noteOperations, noteFields } from './NoteDescription';
+import { taskOperations, taskFields } from './TaskDescription';
 import { createPerson, getPerson, getPersons, updatePerson, deletePerson } from './PersonOperations';
 import { createCompany, getCompany, getCompanies, updateCompany, deleteCompany } from './CompanyOperations';
 import { createDeal, getDeal, getDeals, updateDeal, deleteDeal } from './DealOperations';
 import { createNote, getNote, getNotes, updateNote, deleteNote } from './NoteOperations';
-import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields } from './loadOptions';
+import { createTask, getTask, getTasks, updateTask, deleteTask } from './TaskOperations';
+import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes } from './loadOptions';
 
 export class Arivo implements INodeType {
 	description: INodeTypeDescription = {
@@ -43,8 +45,8 @@ export class Arivo implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
-						name: 'Person',
-						value: 'person',
+						name: 'Task',
+						value: 'task',
 					},
 					{
 						name: 'Company',
@@ -58,25 +60,32 @@ export class Arivo implements INodeType {
 						name: 'Note',
 						value: 'note',
 					},
+					{
+						name: 'Person',
+						value: 'person',
+					},
 				],
 				default: 'person',
 			},
-			...personOperations,
-			...personFields,
+			...taskOperations,
+			...taskFields,
 			...companyOperations,
 			...companyFields,
 			...dealOperations,
 			...dealFields,
 			...noteOperations,
 			...noteFields,
+			...personOperations,
+			...personFields,
 		],
 	};
 
 	methods = {
 		loadOptions: {
-			getPersonCustomFields,
+			getTaskTypes,
 			getCompanyCustomFields,
 			getDealCustomFields,
+			getPersonCustomFields,
 		},
 	};
 
@@ -158,6 +167,24 @@ export class Arivo implements INodeType {
 						continue;
 					} else if (operation === 'update') {
 						response = await updateNote.call(this, i);
+					}
+					returnData.push({ json: response, pairedItem: { item: i } });
+				} else if (resource === 'task') {
+					let response: IDataObject = {};
+					if (operation === 'create') {
+						response = await createTask.call(this, i);
+					} else if (operation === 'delete') {
+						response = await deleteTask.call(this, i);
+					} else if (operation === 'get') {
+						response = await getTask.call(this, i);
+					} else if (operation === 'getMany') {
+						const responseArray = await getTasks.call(this, i);
+						for (const task of responseArray) {
+							returnData.push({ json: task, pairedItem: { item: i } });
+						}
+						continue;
+					} else if (operation === 'update') {
+						response = await updateTask.call(this, i);
 					}
 					returnData.push({ json: response, pairedItem: { item: i } });
 				}

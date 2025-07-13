@@ -39,3 +39,26 @@ export async function getCompanyCustomFields(this: ILoadOptionsFunctions): Promi
 export async function getDealCustomFields(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     return getCustomFields.call(this, 'deal');
 }
+
+export async function getTaskTypes(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+    const responseData = await arivoApiRequest.call(this, 'GET', '/task_types');
+
+    if (responseData === undefined) {
+        throw new NodeOperationError(this.getNode(), 'No data got returned');
+    }
+
+    const returnData: INodePropertyOptions[] = [];
+    
+    // The response is an array of task types
+    if (Array.isArray(responseData)) {
+        for (const taskType of responseData) {
+            const type = taskType as { id: number; label: string };
+            returnData.push({
+                name: type.label,
+                value: type.id,
+            });
+        }
+    }
+    
+    return returnData;
+}
