@@ -31,3 +31,11 @@ async function getCustomFields(this: ILoadOptionsFunctions, fieldType: string): 
 export async function getPersonCustomFields(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     return getCustomFields.call(this, 'person');
 }
+
+export async function getCompanyCustomFields(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+    return getCustomFields.call(this, 'company');
+}
+
+export async function getDealCustomFields(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+    return getCustomFields.call(this, 'deal');
+}

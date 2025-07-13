@@ -1,4 +1,4 @@
-import { getPersonCustomFields } from '../loadOptions';
+import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields } from '../loadOptions';
 import { createMockLoadOptionsFunctions } from './helpers';
 import { arivoApiRequest } from '../GenericFunctions';
 import customFieldsResponse from './fixtures/custom-fields-response.json';
@@ -143,6 +143,78 @@ describe('Load Options', () => {
 					value: 'contact_notes',
 				},
 			]);
+		});
+	});
+
+	describe('getCompanyCustomFields', () => {
+		it('should return custom fields for company contacts', async () => {
+			mockArivoApiRequest.mockResolvedValue(customFieldsResponse);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getCompanyCustomFields.call(mockLoadOptionsFunction);
+
+			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/custom_fields/company');
+			expect(result).toEqual([
+				{
+					name: 'Department',
+					value: 'custom_field_1',
+				},
+				{
+					name: 'Salary Range',
+					value: 'custom_field_2',
+				},
+				{
+					name: 'Start Date',
+					value: 'custom_field_3',
+				},
+			]);
+		});
+
+		it('should handle API errors gracefully', async () => {
+			const error = new Error('API request failed');
+			mockArivoApiRequest.mockRejectedValue(error);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getCompanyCustomFields.call(mockLoadOptionsFunction)).rejects.toThrow(
+				'API request failed',
+			);
+		});
+	});
+
+	describe('getDealCustomFields', () => {
+		it('should return custom fields for deals', async () => {
+			mockArivoApiRequest.mockResolvedValue(customFieldsResponse);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getDealCustomFields.call(mockLoadOptionsFunction);
+
+			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/custom_fields/deal');
+			expect(result).toEqual([
+				{
+					name: 'Department',
+					value: 'custom_field_1',
+				},
+				{
+					name: 'Salary Range',
+					value: 'custom_field_2',
+				},
+				{
+					name: 'Start Date',
+					value: 'custom_field_3',
+				},
+			]);
+		});
+
+		it('should handle API errors gracefully', async () => {
+			const error = new Error('API request failed');
+			mockArivoApiRequest.mockRejectedValue(error);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getDealCustomFields.call(mockLoadOptionsFunction)).rejects.toThrow(
+				'API request failed',
+			);
 		});
 	});
 });

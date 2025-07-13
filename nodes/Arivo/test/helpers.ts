@@ -215,6 +215,135 @@ export const mockPersonsListResponse = {
 	},
 };
 
+// Common test data for company operations
+export const mockCompanyData = {
+	id: 456,
+	name: 'Acme Corporation',
+	contact_type: 'company',
+	cnpj: '12.345.678/0001-90',
+	main_contact_id: '123',
+	website: 'https://acme.com',
+	emails: [
+		{
+			address: 'contact@acme.com',
+			type: 'work',
+		},
+	],
+	phones: [
+		{
+			number: '(11) 1234-5678',
+			type: 'work',
+		},
+	],
+	addresses: [
+		{
+			street: '123 Business Ave',
+			city: 'São Paulo',
+			state: 'SP',
+			district: 'Centro',
+			country: 'Brazil',
+			zip: '01234-567',
+			type: 'work',
+		},
+	],
+	custom_fields: {
+		'industry': 'Technology',
+		'employees': '100-500',
+	},
+	tags: ['corporate', 'technology'],
+	user_id: '1',
+	team_id: '2',
+	created_at: '2024-01-15T10:30:00-03:00',
+	updated_at: '2024-01-15T10:30:00-03:00',
+};
+
+// Mock API response for getMany companies operation
+export const mockCompaniesListResponse = {
+	data: [
+		mockCompanyData,
+		{
+			...mockCompanyData,
+			id: 789,
+			name: 'Global Tech Solutions',
+			cnpj: '98.765.432/0001-10',
+			main_contact_id: '124',
+			website: 'https://globaltech.com',
+			emails: [],
+			phones: [],
+			addresses: [],
+			tags: ['global', 'solutions'],
+			custom_fields: {},
+			user_id: '2',
+			team_id: '1',
+		},
+	],
+	meta: {
+		pagination: {
+			current_page: 1,
+			per_page: 20,
+			total: 2,
+		},
+	},
+};
+
+// Common test data for deal operations
+export const mockDealData = {
+	id: 100,
+	name: 'Big Software Deal',
+	description: 'Large enterprise software implementation project',
+	value: 150000.00,
+	company_id: '456',
+	contact_id: '123',
+	status: 'open',
+	temperature: 'hot',
+	opened_at: '2024-01-15T10:30:00-03:00',
+	estimated_close_date: '2024-03-15T00:00:00-03:00',
+	closed_at: null,
+	pipeline_id: '1',
+	pipeline_step_id: '3',
+	quote_items: [],
+	custom_fields: {
+		'probability': '80%',
+		'source': 'website',
+	},
+	tags: ['enterprise', 'software'],
+	user_id: '1',
+	team_id: '2',
+	created_at: '2024-01-15T10:30:00-03:00',
+	updated_at: '2024-01-15T10:30:00-03:00',
+};
+
+// Mock API response for getMany deals operation
+export const mockDealsListResponse = {
+	data: [
+		mockDealData,
+		{
+			...mockDealData,
+			id: 101,
+			name: 'Consulting Project',
+			description: 'Strategic consulting engagement',
+			value: 75000.00,
+			company_id: '789',
+			contact_id: '124',
+			temperature: 'warm',
+			opened_at: '2024-01-16T14:20:00-03:00',
+			estimated_close_date: '2024-02-28T00:00:00-03:00',
+			pipeline_step_id: '2',
+			tags: ['consulting', 'strategy'],
+			custom_fields: {},
+			user_id: '2',
+			team_id: '1',
+		},
+	],
+	meta: {
+		pagination: {
+			current_page: 1,
+			per_page: 20,
+			total: 2,
+		},
+	},
+};
+
 // Mock API response headers
 export const mockApiHeaders = {
 	'x-total': '2',

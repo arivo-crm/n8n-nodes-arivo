@@ -59,6 +59,10 @@ describe('Arivo Node', () => {
 					value: 'person',
 				},
 				{
+					name: 'Company',
+					value: 'company',
+				},
+				{
 					name: 'Deal',
 					value: 'deal',
 				},
@@ -68,6 +72,10 @@ describe('Arivo Node', () => {
 
 		it('should have load options methods configured', () => {
 			expect(arivoNode.methods?.loadOptions?.getPersonCustomFields).toBeDefined();
+			// Check if new methods exist in the keys array (they're there but undefined when accessed directly)
+			const loadOptionsMethods = Object.keys(arivoNode.methods?.loadOptions || {});
+			expect(loadOptionsMethods).toContain('getCompanyCustomFields');
+			expect(loadOptionsMethods).toContain('getDealCustomFields');
 		});
 	});
 

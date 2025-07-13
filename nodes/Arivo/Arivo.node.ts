@@ -6,8 +6,12 @@ import {
 	IDataObject,
 } from 'n8n-workflow';
 import { personOperations, personFields } from './PersonDescription';
+import { companyOperations, companyFields } from './CompanyDescription';
+import { dealOperations, dealFields } from './DealDescription';
 import { createPerson, getPerson, getPersons, updatePerson, deletePerson } from './PersonOperations';
-import { getPersonCustomFields } from './loadOptions';
+import { createCompany, getCompany, getCompanies, updateCompany, deleteCompany } from './CompanyOperations';
+import { createDeal, getDeal, getDeals, updateDeal, deleteDeal } from './DealOperations';
+import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields } from './loadOptions';
 
 export class Arivo implements INodeType {
 	description: INodeTypeDescription = {
@@ -41,6 +45,10 @@ export class Arivo implements INodeType {
 						value: 'person',
 					},
 					{
+						name: 'Company',
+						value: 'company',
+					},
+					{
 						name: 'Deal',
 						value: 'deal',
 					},
@@ -49,13 +57,18 @@ export class Arivo implements INodeType {
 			},
 			...personOperations,
 			...personFields,
-			// TODO: Add deal operations and fields
+			...companyOperations,
+			...companyFields,
+			...dealOperations,
+			...dealFields,
 		],
 	};
 
 	methods = {
 		loadOptions: {
-			getPersonCustomFields
+			getPersonCustomFields,
+			getCompanyCustomFields,
+			getDealCustomFields,
 		},
 	};
 
@@ -85,8 +98,43 @@ export class Arivo implements INodeType {
 						response = await updatePerson.call(this, i);
 					}
 					returnData.push({ json: response, pairedItem: { item: i } });
+				} else if (resource === 'company') {
+					let response: IDataObject = {};
+					if (operation === 'create') {
+						response = await createCompany.call(this, i);
+					} else if (operation === 'delete') {
+						response = await deleteCompany.call(this, i);
+					} else if (operation === 'get') {
+						response = await getCompany.call(this, i);
+					} else if (operation === 'getMany') {
+						const responseArray = await getCompanies.call(this, i);
+						for (const company of responseArray) {
+							returnData.push({ json: company, pairedItem: { item: i } });
+						}
+						continue;
+					} else if (operation === 'update') {
+						response = await updateCompany.call(this, i);
+					}
+					returnData.push({ json: response, pairedItem: { item: i } });
+				} else if (resource === 'deal') {
+					let response: IDataObject = {};
+					if (operation === 'create') {
+						response = await createDeal.call(this, i);
+					} else if (operation === 'delete') {
+						response = await deleteDeal.call(this, i);
+					} else if (operation === 'get') {
+						response = await getDeal.call(this, i);
+					} else if (operation === 'getMany') {
+						const responseArray = await getDeals.call(this, i);
+						for (const deal of responseArray) {
+							returnData.push({ json: deal, pairedItem: { item: i } });
+						}
+						continue;
+					} else if (operation === 'update') {
+						response = await updateDeal.call(this, i);
+					}
+					returnData.push({ json: response, pairedItem: { item: i } });
 				}
-				// TODO: Add handlers for 'deal' resource
 			} catch (error) {
 				if (this.continueOnFail()) {
 					returnData.push({
