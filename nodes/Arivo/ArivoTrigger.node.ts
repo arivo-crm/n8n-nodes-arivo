@@ -2,7 +2,6 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	IWebhookFunctions,
-	IDataObject,
 	IWebhookResponseData,
 	IHookFunctions,
 } from 'n8n-workflow';
@@ -74,6 +73,36 @@ export class ArivoTrigger implements INodeType {
 
 	webhookMethods = {
 		default: {
+			async checkExists(this: IHookFunctions): Promise<boolean> {
+				const webhookUrl = this.getNodeWebhookUrl('default');
+				const event = this.getNodeParameter('event') as string;
+				const webhookData = this.getWorkflowStaticData('node');
+
+				try {
+					const response = await this.helpers.request({
+						method: 'GET',
+						url: '/webhooks',
+					});
+
+					if (response.data && Array.isArray(response.data)) {
+						const existingWebhook = response.data.find((webhook: any) => 
+							webhook.url === webhookUrl && 
+							webhook.events && 
+							webhook.events.includes(event)
+						);
+
+						if (existingWebhook) {
+							webhookData.webhookId = existingWebhook.id;
+							return true;
+						}
+					}
+				} catch (error) {
+					// If we can't check, assume it doesn't exist
+					return false;
+				}
+
+				return false;
+			},
 			async create(this: IHookFunctions) {
 				const webhookUrl = this.getNodeWebhookUrl('default');
 				const event = this.getNodeParameter('event') as string;
@@ -115,10 +144,9 @@ export class ArivoTrigger implements INodeType {
 	};
 
 	async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
-		const req = this.getRequestObject();
-		const bodyArray = Array.isArray(req.body) ? req.body : [req.body];
+		const bodyData = this.getBodyData();
 		return {
-			workflowData: [this.helpers.returnJsonArray(bodyArray as IDataObject[])],
+			workflowData: [this.helpers.returnJsonArray([bodyData])],
 		};
 	}
 } 

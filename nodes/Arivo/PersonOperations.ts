@@ -87,8 +87,9 @@ export async function getPersons(
 	
 	// Add all additional fields to query if they have values
 	Object.keys(additionalFields).forEach(key => {
-		if (additionalFields[key] !== undefined && additionalFields[key] !== '') {
-			query[key] = additionalFields[key];
+		const value = additionalFields[key];
+		if (value !== undefined && value !== '' && value !== null) {
+			query[key] = value;
 		}
 	});
 

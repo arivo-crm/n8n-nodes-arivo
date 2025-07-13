@@ -1,5 +1,273 @@
 import { INodeProperties } from 'n8n-workflow';
 
+// Reusable field definitions
+const customFields: INodeProperties = {
+	displayName: 'Custom Fields',
+	name: 'customFieldsUi',
+	placeholder: 'Add Custom Field',
+	type: 'fixedCollection',
+	typeOptions: {
+		multipleValues: true,
+	},
+	default: {},
+	options: [
+		{
+			name: 'customFieldsValues',
+			displayName: 'Custom Field',
+			values: [
+				{
+					displayName: 'Field Name or ID',
+					name: 'field',
+					type: 'options',
+					typeOptions: {
+						loadOptionsMethod: 'getPersonCustomFields',
+					},
+					default: '',
+					description: 'Name of the custom field. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
+				},
+				{
+					displayName: 'Value',
+					name: 'value',
+					type: 'string',
+					default: '',
+					description: 'Value of the custom field',
+				},
+			],
+		},
+	],
+	description: 'Custom fields for the person',
+};
+
+const emailField: INodeProperties = {
+	displayName: 'Email',
+	name: 'email',
+	type: 'fixedCollection',
+	typeOptions: {
+		multipleValues: true,
+	},
+	default: {},
+	options: [
+		{
+			displayName: 'Email',
+			name: 'email',
+			values: [
+				{
+					displayName: 'E-Mail Address',
+					name: 'address',
+					type: 'string',
+					default: '',
+					description: 'The email address',
+				},
+				{
+					displayName: 'Type',
+					name: 'type',
+					type: 'options',
+					options: [
+						{
+							name: 'Work',
+							value: 'work',
+						},
+						{
+							name: 'Personal',
+							value: 'personal',
+						},
+						{
+							name: 'Other',
+							value: 'other',
+						},
+					],
+					default: 'work',
+					description: 'The type of email address',
+				},
+			],
+		},
+	],
+	description: 'The email addresses of the person',
+};
+
+const phoneField: INodeProperties = {
+	displayName: 'Phone',
+	name: 'phone',
+	type: 'fixedCollection',
+	typeOptions: {
+		multipleValues: true,
+	},
+	default: {},
+	options: [
+		{
+			displayName: 'Phone',
+			name: 'phone',
+			values: [
+				{
+					displayName: 'Number',
+					name: 'number',
+					type: 'string',
+					default: '',
+					description: 'The phone number',
+				},
+				{
+					displayName: 'Type',
+					name: 'type',
+					type: 'options',
+					options: [
+						{
+							name: 'Work',
+							value: 'work',
+						},
+						{
+							name: 'Mobile',
+							value: 'mobile',
+						},
+						{
+							name: 'Home',
+							value: 'home',
+						},
+						{
+							name: 'Other',
+							value: 'other',
+						},
+					],
+					default: 'work',
+					description: 'The type of phone number',
+				},
+			],
+		},
+	],
+	description: 'The phone numbers of the person',
+};
+
+const addressField: INodeProperties = {
+	displayName: 'Address',
+	name: 'address',
+	type: 'fixedCollection',
+	typeOptions: {
+		multipleValues: true,
+	},
+	default: {},
+	options: [
+		{
+			displayName: 'Address',
+			name: 'address',
+			values: [
+				{
+					displayName: 'Street',
+					name: 'street',
+					type: 'string',
+					default: '',
+					description: 'The street address',
+				},
+				{
+					displayName: 'City',
+					name: 'city',
+					type: 'string',
+					default: '',
+				},
+				{
+					displayName: 'State',
+					name: 'state',
+					type: 'string',
+					default: '',
+					description: 'The state/province',
+				},
+				{
+					displayName: 'District',
+					name: 'district',
+					type: 'string',
+					default: '',
+				},
+				{
+					displayName: 'Country',
+					name: 'country',
+					type: 'string',
+					default: '',
+				},
+				{
+					displayName: 'Zip',
+					name: 'zip',
+					type: 'string',
+					default: '',
+					description: 'The postal code',
+				},
+				{
+					displayName: 'Type',
+					name: 'type',
+					type: 'options',
+					options: [
+						{
+							name: 'Work',
+							value: 'work',
+						},
+						{
+							name: 'Home',
+							value: 'home',
+						},
+						{
+							name: 'Other',
+							value: 'other',
+						},
+					],
+					default: 'work',
+					description: 'The type of address',
+				},
+			],
+		},
+	],
+	description: 'The addresses of the person',
+};
+
+// Basic field definitions
+const basicFields = {
+	cpf: {
+		displayName: 'CPF',
+		name: 'cpf',
+		type: 'string',
+		default: '',
+		description: 'Brazilian individual taxpayer registration (CPF)',
+	} as INodeProperties,
+	birthDate: {
+		displayName: 'Birth Date',
+		name: 'birth_date',
+		type: 'dateTime',
+		default: '',
+		description: 'Birth date of the person (YYYY-MM-DD format)',
+	} as INodeProperties,
+	position: {
+		displayName: 'Position',
+		name: 'position',
+		type: 'string',
+		default: '',
+		description: 'Job position of the person',
+	} as INodeProperties,
+	companyId: {
+		displayName: 'Company ID',
+		name: 'company_id',
+		type: 'string',
+		default: '',
+		description: 'ID of the company where this person works',
+	} as INodeProperties,
+	tags: {
+		displayName: 'Tags',
+		name: 'tags',
+		type: 'string',
+		default: '',
+		description: 'The tags of the person',
+	} as INodeProperties,
+	userId: {
+		displayName: 'User ID',
+		name: 'user_id',
+		type: 'string',
+		default: '',
+		description: 'The ID of the user assigned to this person',
+	} as INodeProperties,
+	teamId: {
+		displayName: 'Team ID',
+		name: 'team_id',
+		type: 'string',
+		default: '',
+		description: 'The ID of the team assigned to this person',
+	} as INodeProperties,
+};
+
 export const personOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
@@ -77,265 +345,17 @@ export const personFields: INodeProperties[] = [
 		},
 		default: {},
 		options: [
-			{
-				displayName: 'CPF',
-				name: 'cpf',
-				type: 'string',
-				default: '',
-				description: 'Brazilian individual taxpayer registration (CPF)',
-			},
-			{
-				displayName: 'Birth Date',
-				name: 'birth_date',
-				type: 'dateTime',
-				default: '',
-				description: 'Birth date of the person (YYYY-MM-DD format)',
-			},
-			{
-				displayName: 'Position',
-				name: 'position',
-				type: 'string',
-				default: '',
-				description: 'Job position of the person',
-			},
-			{
-				displayName: 'Company ID',
-				name: 'company_id',
-				type: 'string',
-				default: '',
-				description: 'ID of the company where this person works',
-			},
-			{
-				displayName: 'Email',
-				name: 'email',
-				type: 'fixedCollection',
-				typeOptions: {
-					multipleValues: true,
-				},
-				default: {},
-				options: [
-					{
-						displayName: 'Email',
-						name: 'email',
-						values: [
-							{
-								displayName: 'E-Mail Address',
-								name: 'address',
-								type: 'string',
-								default: '',
-								description: 'The email address',
-							},
-							{
-								displayName: 'Type',
-								name: 'type',
-								type: 'options',
-								options: [
-									{
-										name: 'Work',
-										value: 'work',
-									},
-									{
-										name: 'Personal',
-										value: 'personal',
-									},
-									{
-										name: 'Other',
-										value: 'other',
-									},
-								],
-								default: 'work',
-								description: 'The type of email address',
-							},
-						],
-					},
-				],
-				description: 'The email addresses of the person',
-			},
-			{
-				displayName: 'Phone',
-				name: 'phone',
-				type: 'fixedCollection',
-				typeOptions: {
-					multipleValues: true,
-				},
-				default: {},
-				options: [
-					{
-						displayName: 'Phone',
-						name: 'phone',
-						values: [
-							{
-								displayName: 'Number',
-								name: 'number',
-								type: 'string',
-								default: '',
-								description: 'The phone number',
-							},
-							{
-								displayName: 'Type',
-								name: 'type',
-								type: 'options',
-								options: [
-									{
-										name: 'Work',
-										value: 'work',
-									},
-									{
-										name: 'Mobile',
-										value: 'mobile',
-									},
-									{
-										name: 'Home',
-										value: 'home',
-									},
-									{
-										name: 'Other',
-										value: 'other',
-									},
-								],
-								default: 'work',
-								description: 'The type of phone number',
-							},
-						],
-					},
-				],
-				description: 'The phone numbers of the person',
-			},
-            {
-				displayName: 'Tags',
-				name: 'tags',
-				type: 'string',
-				default: '',
-				description: 'The tags of the person',
-			},
-            {
-				displayName: 'User ID',
-				name: 'user_id',
-				type: 'string',
-				default: '',
-				description: 'The user ID owner of the person',
-			},
-            {
-				displayName: 'Team ID',
-				name: 'team_id',
-				type: 'string',
-				default: '',
-				description: 'The team ID owner of the person',
-			},            
-			{
-				displayName: 'Address',
-				name: 'address',
-				type: 'fixedCollection',
-				typeOptions: {
-					multipleValues: true,
-				},
-				default: {},
-				options: [
-					{
-						displayName: 'Address',
-						name: 'address',
-						values: [
-							{
-								displayName: 'Street',
-								name: 'street',
-								type: 'string',
-								default: '',
-								description: 'The street address',
-							},
-							{
-								displayName: 'City',
-								name: 'city',
-								type: 'string',
-								default: '',
-							},
-							{
-								displayName: 'State',
-								name: 'state',
-								type: 'string',
-								default: '',
-								description: 'The state/province',
-							},
-							{
-								displayName: 'District',
-								name: 'district',
-								type: 'string',
-								default: '',
-							},
-							{
-								displayName: 'Country',
-								name: 'country',
-								type: 'string',
-								default: '',
-							},
-							{
-								displayName: 'Zip',
-								name: 'zip',
-								type: 'string',
-								default: '',
-								description: 'The postal code',
-							},
-							{
-								displayName: 'Type',
-								name: 'type',
-								type: 'options',
-								options: [
-									{
-										name: 'Work',
-										value: 'work',
-									},
-									{
-										name: 'Home',
-										value: 'home',
-									},
-									{
-										name: 'Other',
-										value: 'other',
-									},
-								],
-								default: 'work',
-								description: 'The type of address',
-							},
-						],
-					},
-				],
-				description: 'The addresses of the person',
-			},
-			{
-				displayName: 'Custom Fields',
-				name: 'customFieldsUi',
-				placeholder: 'Add Custom Field',
-				type: 'fixedCollection',
-				typeOptions: {
-					multipleValues: true,
-				},
-				default: {},
-				options: [
-					{
-						name: 'customFieldsValues',
-						displayName: 'Custom Field',
-						values: [
-							{
-								displayName: 'Field Name or ID',
-								name: 'field',
-								type: 'options',
-								typeOptions: {
-									loadOptionsMethod: 'getPersonCustomFields',
-								},
-								default: '',
-								description: 'Name of the custom field. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
-							},
-							{
-								displayName: 'Value',
-								name: 'value',
-								type: 'string',
-								default: '',
-								description: 'Value of the custom field',
-							},
-						],
-					},
-				],
-				description: 'Custom fields for the person',
-			},
+			basicFields.cpf,
+			basicFields.birthDate,
+			basicFields.position,
+			basicFields.companyId,
+			emailField,
+			phoneField,
+			basicFields.tags,
+			basicFields.userId,
+			basicFields.teamId,
+			addressField,
+			customFields,
 		],
 	},
 
@@ -428,10 +448,7 @@ export const personFields: INodeProperties[] = [
 				description: 'Filter by contact name',
 			},
 			{
-				displayName: 'CPF',
-				name: 'cpf',
-				type: 'string',
-				default: '',
+				...basicFields.cpf,
 				description: 'Filter by CPF (Brazilian individual taxpayer registration)',
 			},
 			{
@@ -456,14 +473,14 @@ export const personFields: INodeProperties[] = [
 				default: '',
 				description: 'Filter by district',
 			},
-            {
+			{
 				displayName: 'Zip Code',
 				name: 'zip_code',
 				type: 'string',
 				default: '',
 				description: 'Filter by ZIP code',
 			},
-            {
+			{
 				displayName: 'City',
 				name: 'city',
 				type: 'string',
@@ -485,31 +502,19 @@ export const personFields: INodeProperties[] = [
 				description: 'Filter by country',
 			},
 			{
-				displayName: 'Tags',
-				name: 'tags',
-				type: 'string',
-				default: '',
+				...basicFields.tags,
 				description: 'Filter by tags (comma-separated)',
 			},
 			{
-				displayName: 'Company ID',
-				name: 'company_id',
-				type: 'string',
-				default: '',
+				...basicFields.companyId,
 				description: 'Filter by company ID',
 			},
 			{
-				displayName: 'User ID',
-				name: 'user_id',
-				type: 'string',
-				default: '',
+				...basicFields.userId,
 				description: 'Filter by user ID',
 			},
-            {
-				displayName: 'Team ID',
-				name: 'team_id',
-				type: 'string',
-				default: '',
+			{
+				...basicFields.teamId,
 				description: 'Filter by team ID',
 			},
 			{
@@ -592,265 +597,17 @@ export const personFields: INodeProperties[] = [
 				default: '',
 				description: 'The name of the person',
 			},
-			{
-				displayName: 'CPF',
-				name: 'cpf',
-				type: 'string',
-				default: '',
-				description: 'Brazilian individual taxpayer registration (CPF)',
-			},
-			{
-				displayName: 'Birth Date',
-				name: 'birth_date',
-				type: 'dateTime',
-				default: '',
-				description: 'Birth date of the person (YYYY-MM-DD format)',
-			},
-			{
-				displayName: 'Position',
-				name: 'position',
-				type: 'string',
-				default: '',
-				description: 'Job position of the person',
-			},
-			{
-				displayName: 'Company ID',
-				name: 'company_id',
-				type: 'string',
-				default: '',
-				description: 'ID of the company where this person works',
-			},
-			{
-				displayName: 'Email',
-				name: 'email',
-				type: 'fixedCollection',
-				typeOptions: {
-					multipleValues: true,
-				},
-				default: {},
-				options: [
-					{
-						displayName: 'Email',
-						name: 'email',
-						values: [
-							{
-								displayName: 'E-Mail Address',
-								name: 'address',
-								type: 'string',
-								default: '',
-								description: 'The email address',
-							},
-							{
-								displayName: 'Type',
-								name: 'type',
-								type: 'options',
-								options: [
-									{
-										name: 'Work',
-										value: 'work',
-									},
-									{
-										name: 'Personal',
-										value: 'personal',
-									},
-									{
-										name: 'Other',
-										value: 'other',
-									},
-								],
-								default: 'work',
-								description: 'The type of email address',
-							},
-						],
-					},
-				],
-				description: 'The email addresses of the person',
-			},
-			{
-				displayName: 'Phone',
-				name: 'phone',
-				type: 'fixedCollection',
-				typeOptions: {
-					multipleValues: true,
-				},
-				default: {},
-				options: [
-					{
-						displayName: 'Phone',
-						name: 'phone',
-						values: [
-							{
-								displayName: 'Number',
-								name: 'number',
-								type: 'string',
-								default: '',
-								description: 'The phone number',
-							},
-							{
-								displayName: 'Type',
-								name: 'type',
-								type: 'options',
-								options: [
-									{
-										name: 'Work',
-										value: 'work',
-									},
-									{
-										name: 'Mobile',
-										value: 'mobile',
-									},
-									{
-										name: 'Home',
-										value: 'home',
-									},
-									{
-										name: 'Other',
-										value: 'other',
-									},
-								],
-								default: 'work',
-								description: 'The type of phone number',
-							},
-						],
-					},
-				],
-				description: 'The phone numbers of the person',
-			},
-            {
-				displayName: 'Tags',
-				name: 'tags',
-				type: 'string',
-				default: '',
-				description: 'The tags of the person',
-			},
-            {
-				displayName: 'User ID',
-				name: 'user_id',
-				type: 'string',
-				default: '',
-				description: 'The user ID owner of the person',
-			},
-            {
-				displayName: 'Team ID',
-				name: 'team_id',
-				type: 'string',
-				default: '',
-				description: 'The team ID owner of the person',
-			},
-			{
-				displayName: 'Address',
-				name: 'address',
-				type: 'fixedCollection',
-				typeOptions: {
-					multipleValues: true,
-				},
-				default: {},
-				options: [
-					{
-						displayName: 'Address',
-						name: 'address',
-						values: [
-							{
-								displayName: 'Street',
-								name: 'street',
-								type: 'string',
-								default: '',
-								description: 'The street address',
-							},
-							{
-								displayName: 'City',
-								name: 'city',
-								type: 'string',
-								default: '',
-							},
-							{
-								displayName: 'State',
-								name: 'state',
-								type: 'string',
-								default: '',
-								description: 'The state/province',
-							},
-							{
-								displayName: 'District',
-								name: 'district',
-								type: 'string',
-								default: '',
-							},
-							{
-								displayName: 'Country',
-								name: 'country',
-								type: 'string',
-								default: '',
-							},
-							{
-								displayName: 'Zip',
-								name: 'zip',
-								type: 'string',
-								default: '',
-								description: 'The postal code',
-							},
-							{
-								displayName: 'Type',
-								name: 'type',
-								type: 'options',
-								options: [
-									{
-										name: 'Work',
-										value: 'work',
-									},
-									{
-										name: 'Home',
-										value: 'home',
-									},
-									{
-										name: 'Other',
-										value: 'other',
-									},
-								],
-								default: 'work',
-								description: 'The type of address',
-							},
-						],
-					},
-				],
-				description: 'The addresses of the person',
-			},
-			{
-				displayName: 'Custom Fields',
-				name: 'customFieldsUi',
-				placeholder: 'Add Custom Field',
-				type: 'fixedCollection',
-				typeOptions: {
-					multipleValues: true,
-				},
-				default: {},
-				options: [
-					{
-						name: 'customFieldsValues',
-						displayName: 'Custom Field',
-						values: [
-							{
-								displayName: 'Field Name or ID',
-								name: 'field',
-								type: 'options',
-								typeOptions: {
-									loadOptionsMethod: 'getPersonCustomFields',
-								},
-								default: '',
-								description: 'Name of the custom field. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
-							},
-							{
-								displayName: 'Value',
-								name: 'value',
-								type: 'string',
-								default: '',
-								description: 'Value of the custom field',
-							},
-						],
-					},
-				],
-				description: 'Custom fields for the person',
-			},
+			basicFields.cpf,
+			basicFields.birthDate,
+			basicFields.position,
+			basicFields.companyId,
+			emailField,
+			phoneField,
+			basicFields.tags,
+			basicFields.userId,
+			basicFields.teamId,
+			addressField,
+			customFields,
 		],
 	},
 ]; 
