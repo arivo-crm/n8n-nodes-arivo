@@ -265,8 +265,8 @@ export const taskFields: INodeProperties[] = [
 		description: 'Max number of results to return',
 	},
 	{
-		displayName: 'Additional Fields',
-		name: 'additionalFields',
+		displayName: 'Filters',
+		name: 'filters',
 		type: 'collection',
 		displayOptions: {
 			show: {
@@ -277,11 +277,19 @@ export const taskFields: INodeProperties[] = [
 		default: {},
 		options: [
 			{
-				displayName: 'Name',
-				name: 'name',
-				type: 'string',
+				...taskFieldDefinitions.contactId,
+				description: 'Filter by contact ID',
+			},
+			{
+				displayName: 'Creator ID',
+				name: 'creator_id',
+				type: 'number',
 				default: '',
-				description: 'Filter by task name (partial match)',
+				description: 'Filter by creator user ID',
+			},
+			{
+				...taskFieldDefinitions.dealId,
+				description: 'Filter by deal ID',
 			},
 			{
 				displayName: 'Done',
@@ -301,56 +309,62 @@ export const taskFields: INodeProperties[] = [
 				description: 'Filter by completion status',
 			},
 			{
-				...taskFieldDefinitions.taskType,
-				description: 'Filter by task type',
-			},
-			{
-				...taskFieldDefinitions.contactId,
-				description: 'Filter by contact ID',
-			},
-			{
-				...taskFieldDefinitions.dealId,
-				description: 'Filter by deal ID',
-			},
-			{
-				...taskFieldDefinitions.userId,
-				description: 'Filter by user ID',
-			},
-			{
-				displayName: 'Creator ID',
-				name: 'creator_id',
-				type: 'number',
+				displayName: 'Name',
+				name: 'name',
+				type: 'string',
 				default: '',
-				description: 'Filter by creator user ID',
-			},
-			{
-				...taskFieldDefinitions.teamId,
-				description: 'Filter by team ID',
+				description: 'Filter by task name (partial match)',
 			},
 			{
 				...taskFieldDefinitions.tags,
 				description: 'Filter by tags (comma-separated)',
 			},
 			{
+				...taskFieldDefinitions.taskType,
+				description: 'Filter by task type',
+			},
+			{
+				...taskFieldDefinitions.teamId,
+				description: 'Filter by team ID',
+			},
+			{
+				...taskFieldDefinitions.userId,
+				description: 'Filter by user ID',
+			},
+		],
+	},
+	{
+		displayName: 'Options',
+		name: 'options',
+		type: 'collection',
+		displayOptions: {
+			show: {
+				operation: ['getMany'],
+				resource: ['task'],
+			},
+		},
+		default: {},
+		options: [
+			{
 				displayName: 'Sort By',
 				name: 'sort_field',
 				type: 'options',
 				options: [
 					{
-						name: 'Created At',
-						value: 'created_at',
+						name: 'Completed At',
+						value: 'completed_at',
 					},
 					{
-						name: 'Updated At',
-						value: 'updated_at',
+						name: 'Created At',
+						value: 'created_at',
 					},
 					{
 						name: 'Due Date',
 						value: 'due_date',
 					},
 					{
-						name: 'Completed At',
-						value: 'completed_at',
+						name: 'Updated At',
+						value: 'updated_at',
 					},
 				],
 				default: 'updated_at',
@@ -371,7 +385,7 @@ export const taskFields: INodeProperties[] = [
 					},
 				],
 				default: 'desc',
-				description: 'Sort order for results',
+				description: 'Order to sort results by',
 			},
 		],
 	},

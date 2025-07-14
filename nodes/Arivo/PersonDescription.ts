@@ -429,8 +429,8 @@ export const personFields: INodeProperties[] = [
 		description: 'Max number of results to return',
 	},
 	{
-		displayName: 'Additional Fields',
-		name: 'additionalFields',
+		displayName: 'Filters',
+		name: 'filters',
 		type: 'collection',
 		displayOptions: {
 			show: {
@@ -441,15 +441,33 @@ export const personFields: INodeProperties[] = [
 		default: {},
 		options: [
 			{
-				displayName: 'Name',
-				name: 'name',
+				displayName: 'City',
+				name: 'city',
 				type: 'string',
 				default: '',
-				description: 'Filter by contact name',
+				description: 'Filter by city',
+			},
+			{
+				...basicFields.companyId,
+				description: 'Filter by company ID',
+			},
+			{
+				displayName: 'Country',
+				name: 'country',
+				type: 'string',
+				default: '',
+				description: 'Filter by country',
 			},
 			{
 				...basicFields.cpf,
 				description: 'Filter by CPF (Brazilian individual taxpayer registration)',
+			},
+			{
+				displayName: 'District',
+				name: 'district',
+				type: 'string',
+				default: '',
+				description: 'Filter by district',
 			},
 			{
 				displayName: 'Email',
@@ -460,32 +478,18 @@ export const personFields: INodeProperties[] = [
 				description: 'Filter by email address',
 			},
 			{
+				displayName: 'Name',
+				name: 'name',
+				type: 'string',
+				default: '',
+				description: 'Filter by contact name',
+			},
+			{
 				displayName: 'Phone',
 				name: 'phone',
 				type: 'string',
 				default: '',
 				description: 'Filter by phone number',
-			},
-			{
-				displayName: 'District',
-				name: 'district',
-				type: 'string',
-				default: '',
-				description: 'Filter by district',
-			},
-			{
-				displayName: 'Zip Code',
-				name: 'zip_code',
-				type: 'string',
-				default: '',
-				description: 'Filter by ZIP code',
-			},
-			{
-				displayName: 'City',
-				name: 'city',
-				type: 'string',
-				default: '',
-				description: 'Filter by city',
 			},
 			{
 				displayName: 'State',
@@ -495,28 +499,38 @@ export const personFields: INodeProperties[] = [
 				description: 'Filter by state/province',
 			},
 			{
-				displayName: 'Country',
-				name: 'country',
-				type: 'string',
-				default: '',
-				description: 'Filter by country',
-			},
-			{
 				...basicFields.tags,
 				description: 'Filter by tags (comma-separated)',
 			},
 			{
-				...basicFields.companyId,
-				description: 'Filter by company ID',
+				...basicFields.teamId,
+				description: 'Filter by team ID',
 			},
 			{
 				...basicFields.userId,
 				description: 'Filter by user ID',
 			},
 			{
-				...basicFields.teamId,
-				description: 'Filter by team ID',
+				displayName: 'Zip Code',
+				name: 'zip_code',
+				type: 'string',
+				default: '',
+				description: 'Filter by ZIP code',
 			},
+		],
+	},
+	{
+		displayName: 'Options',
+		name: 'options',
+		type: 'collection',
+		displayOptions: {
+			show: {
+				operation: ['getMany'],
+				resource: ['person'],
+			},
+		},
+		default: {},
+		options: [
 			{
 				displayName: 'Sort By',
 				name: 'sort_field',
@@ -527,20 +541,20 @@ export const personFields: INodeProperties[] = [
 						value: 'created_at',
 					},
 					{
-						name: 'Updated At',
-						value: 'updated_at',
+						name: 'Email',
+						value: 'email',
 					},
 					{
 						name: 'Name',
 						value: 'name',
 					},
 					{
-						name: 'Email',
-						value: 'email',
+						name: 'Updated At',
+						value: 'updated_at',
 					},
 				],
 				default: 'created_at',
-				description: 'Field to sort by',
+				description: 'Field to sort results by',
 			},
 			{
 				displayName: 'Sort Order',
@@ -557,6 +571,7 @@ export const personFields: INodeProperties[] = [
 					},
 				],
 				default: 'desc',
+				description: 'Order to sort results by',
 			},
 		],
 	},

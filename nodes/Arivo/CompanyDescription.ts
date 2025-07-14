@@ -421,8 +421,8 @@ export const companyFields: INodeProperties[] = [
 		description: 'Max number of results to return',
 	},
 	{
-		displayName: 'Additional Fields',
-		name: 'additionalFields',
+		displayName: 'Filters',
+		name: 'filters',
 		type: 'collection',
 		displayOptions: {
 			show: {
@@ -433,15 +433,29 @@ export const companyFields: INodeProperties[] = [
 		default: {},
 		options: [
 			{
-				displayName: 'Name',
-				name: 'name',
+				displayName: 'City',
+				name: 'city',
 				type: 'string',
 				default: '',
-				description: 'Filter by company name',
+				description: 'Filter by city',
 			},
 			{
 				...companyFieldDefinitions.cnpj,
 				description: 'Filter by CNPJ (Brazilian company taxpayer registration)',
+			},
+			{
+				displayName: 'Country',
+				name: 'country',
+				type: 'string',
+				default: '',
+				description: 'Filter by country',
+			},
+			{
+				displayName: 'District',
+				name: 'district',
+				type: 'string',
+				default: '',
+				description: 'Filter by district',
 			},
 			{
 				displayName: 'Email',
@@ -452,32 +466,18 @@ export const companyFields: INodeProperties[] = [
 				description: 'Filter by email address',
 			},
 			{
+				displayName: 'Name',
+				name: 'name',
+				type: 'string',
+				default: '',
+				description: 'Filter by company name',
+			},
+			{
 				displayName: 'Phone',
 				name: 'phone',
 				type: 'string',
 				default: '',
 				description: 'Filter by phone number',
-			},
-			{
-				displayName: 'District',
-				name: 'district',
-				type: 'string',
-				default: '',
-				description: 'Filter by district',
-			},
-			{
-				displayName: 'Zip Code',
-				name: 'zip_code',
-				type: 'string',
-				default: '',
-				description: 'Filter by ZIP code',
-			},
-			{
-				displayName: 'City',
-				name: 'city',
-				type: 'string',
-				default: '',
-				description: 'Filter by city',
 			},
 			{
 				displayName: 'State',
@@ -487,24 +487,38 @@ export const companyFields: INodeProperties[] = [
 				description: 'Filter by state/province',
 			},
 			{
-				displayName: 'Country',
-				name: 'country',
-				type: 'string',
-				default: '',
-				description: 'Filter by country',
-			},
-			{
 				...companyFieldDefinitions.tags,
 				description: 'Filter by tags (comma-separated)',
+			},
+			{
+				...companyFieldDefinitions.teamId,
+				description: 'Filter by team ID',
 			},
 			{
 				...companyFieldDefinitions.userId,
 				description: 'Filter by user ID',
 			},
 			{
-				...companyFieldDefinitions.teamId,
-				description: 'Filter by team ID',
+				displayName: 'Zip Code',
+				name: 'zip_code',
+				type: 'string',
+				default: '',
+				description: 'Filter by ZIP code',
 			},
+		],
+	},
+	{
+		displayName: 'Options',
+		name: 'options',
+		type: 'collection',
+		displayOptions: {
+			show: {
+				operation: ['getMany'],
+				resource: ['company'],
+			},
+		},
+		default: {},
+		options: [
 			{
 				displayName: 'Sort By',
 				name: 'sort_field',
@@ -515,20 +529,20 @@ export const companyFields: INodeProperties[] = [
 						value: 'created_at',
 					},
 					{
-						name: 'Updated At',
-						value: 'updated_at',
+						name: 'Email',
+						value: 'email',
 					},
 					{
 						name: 'Name',
 						value: 'name',
 					},
 					{
-						name: 'Email',
-						value: 'email',
+						name: 'Updated At',
+						value: 'updated_at',
 					},
 				],
 				default: 'created_at',
-				description: 'Field to sort by',
+				description: 'Field to sort results by',
 			},
 			{
 				displayName: 'Sort Order',
@@ -545,6 +559,7 @@ export const companyFields: INodeProperties[] = [
 					},
 				],
 				default: 'desc',
+				description: 'Order to sort results by',
 			},
 		],
 	},

@@ -350,8 +350,8 @@ export const dealFields: INodeProperties[] = [
 		description: 'Max number of results to return',
 	},
 	{
-		displayName: 'Additional Fields',
-		name: 'additionalFields',
+		displayName: 'Filters',
+		name: 'filters',
 		type: 'collection',
 		displayOptions: {
 			show: {
@@ -362,19 +362,19 @@ export const dealFields: INodeProperties[] = [
 		default: {},
 		options: [
 			{
+				...dealFieldDefinitions.companyId,
+				description: 'Filter by company ID',
+			},
+			{
+				...dealFieldDefinitions.contactId,
+				description: 'Filter by contact ID',
+			},
+			{
 				displayName: 'Name',
 				name: 'name',
 				type: 'string',
 				default: '',
 				description: 'Filter by deal name',
-			},
-			{
-				...dealFieldDefinitions.status,
-				description: 'Filter by deal status',
-			},
-			{
-				...dealFieldDefinitions.temperature,
-				description: 'Filter by deal temperature',
 			},
 			{
 				...dealFieldDefinitions.pipelineId,
@@ -385,25 +385,39 @@ export const dealFields: INodeProperties[] = [
 				description: 'Filter by pipeline step ID',
 			},
 			{
-				...dealFieldDefinitions.companyId,
-				description: 'Filter by company ID',
-			},
-			{
-				...dealFieldDefinitions.contactId,
-				description: 'Filter by contact ID',
+				...dealFieldDefinitions.status,
+				description: 'Filter by deal status',
 			},
 			{
 				...dealFieldDefinitions.tags,
 				description: 'Filter by tags (comma-separated)',
 			},
 			{
-				...dealFieldDefinitions.userId,
-				description: 'Filter by user ID',
-			},
-			{
 				...dealFieldDefinitions.teamId,
 				description: 'Filter by team ID',
 			},
+			{
+				...dealFieldDefinitions.temperature,
+				description: 'Filter by deal temperature',
+			},
+			{
+				...dealFieldDefinitions.userId,
+				description: 'Filter by user ID',
+			},
+		],
+	},
+	{
+		displayName: 'Options',
+		name: 'options',
+		type: 'collection',
+		displayOptions: {
+			show: {
+				operation: ['getMany'],
+				resource: ['deal'],
+			},
+		},
+		default: {},
+		options: [
 			{
 				displayName: 'Sort By',
 				name: 'sort_field',
@@ -414,28 +428,28 @@ export const dealFields: INodeProperties[] = [
 						value: 'created_at',
 					},
 					{
-						name: 'Updated At',
-						value: 'updated_at',
+						name: 'Estimated Close Date',
+						value: 'estimated_close_date',
 					},
 					{
 						name: 'Name',
 						value: 'name',
 					},
 					{
-						name: 'Value',
-						value: 'value',
-					},
-					{
 						name: 'Opened At',
 						value: 'opened_at',
 					},
 					{
-						name: 'Estimated Close Date',
-						value: 'estimated_close_date',
+						name: 'Updated At',
+						value: 'updated_at',
+					},
+					{
+						name: 'Value',
+						value: 'value',
 					},
 				],
 				default: 'created_at',
-				description: 'Field to sort by',
+				description: 'Field to sort results by',
 			},
 			{
 				displayName: 'Sort Order',
@@ -452,6 +466,7 @@ export const dealFields: INodeProperties[] = [
 					},
 				],
 				default: 'desc',
+				description: 'Order to sort results by',
 			},
 		],
 	},

@@ -193,8 +193,8 @@ export const noteFields: INodeProperties[] = [
 		description: 'Max number of results to return',
 	},
 	{
-		displayName: 'Additional Fields',
-		name: 'additionalFields',
+		displayName: 'Filters',
+		name: 'filters',
 		type: 'collection',
 		displayOptions: {
 			show: {
@@ -224,6 +224,20 @@ export const noteFields: INodeProperties[] = [
 				...noteFieldDefinitions.teamId,
 				description: 'Filter by team ID',
 			},
+		],
+	},
+	{
+		displayName: 'Options',
+		name: 'options',
+		type: 'collection',
+		displayOptions: {
+			show: {
+				operation: ['getMany'],
+				resource: ['note'],
+			},
+		},
+		default: {},
+		options: [
 			{
 				displayName: 'Sort By',
 				name: 'sort_field',
@@ -239,7 +253,7 @@ export const noteFields: INodeProperties[] = [
 					},
 				],
 				default: 'updated_at',
-				description: 'Field to sort by',
+				description: 'Field to sort results by',
 			},
 			{
 				displayName: 'Sort Order',
@@ -256,6 +270,7 @@ export const noteFields: INodeProperties[] = [
 					},
 				],
 				default: 'desc',
+				description: 'Order to sort results by',
 			},
 		],
 	},
