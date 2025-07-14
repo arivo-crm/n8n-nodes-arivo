@@ -78,6 +78,10 @@ describe('Arivo Node', () => {
 					name: 'Product',
 					value: 'product',
 				},
+				{
+					name: 'Product Category',
+					value: 'productCategory',
+				},
 			]);
 			expect(resourceProperty?.default).toBe('person');
 		});

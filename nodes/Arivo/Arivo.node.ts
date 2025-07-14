@@ -11,12 +11,14 @@ import { dealOperations, dealFields } from './DealDescription';
 import { noteOperations, noteFields } from './NoteDescription';
 import { taskOperations, taskFields } from './TaskDescription';
 import { productOperations, productFields } from './ProductDescription';
+import { productCategoryOperations, productCategoryFields } from './ProductCategoryDescription';
 import { createPerson, getPerson, getPersons, updatePerson, deletePerson } from './PersonOperations';
 import { createCompany, getCompany, getCompanies, updateCompany, deleteCompany } from './CompanyOperations';
 import { createDeal, getDeal, getDeals, updateDeal, deleteDeal } from './DealOperations';
 import { createNote, getNote, getNotes, updateNote, deleteNote } from './NoteOperations';
 import { createTask, getTask, getTasks, updateTask, deleteTask } from './TaskOperations';
 import { createProduct, getProduct, getProducts, updateProduct, deleteProduct } from './ProductOperations';
+import { createProductCategory, getProductCategory, getProductCategories as getProductCategoriesOperation, updateProductCategory, deleteProductCategory } from './ProductCategoryOperations';
 import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductCategories } from './loadOptions';
 
 export class Arivo implements INodeType {
@@ -70,6 +72,10 @@ export class Arivo implements INodeType {
 						name: 'Product',
 						value: 'product',
 					},
+					{
+						name: 'Product Category',
+						value: 'productCategory',
+					},
 				],
 				default: 'person',
 			},
@@ -85,6 +91,8 @@ export class Arivo implements INodeType {
 			...personFields,
 			...productOperations,
 			...productFields,
+			...productCategoryOperations,
+			...productCategoryFields,
 		],
 	};
 
@@ -215,6 +223,24 @@ export class Arivo implements INodeType {
 						continue;
 					} else if (operation === 'update') {
 						response = await updateProduct.call(this, i);
+					}
+					returnData.push({ json: response, pairedItem: { item: i } });
+				} else if (resource === 'productCategory') {
+					let response: IDataObject = {};
+					if (operation === 'create') {
+						response = await createProductCategory.call(this, i);
+					} else if (operation === 'delete') {
+						response = await deleteProductCategory.call(this, i);
+					} else if (operation === 'get') {
+						response = await getProductCategory.call(this, i);
+					} else if (operation === 'getMany') {
+						const responseArray = await getProductCategoriesOperation.call(this, i);
+						for (const productCategory of responseArray) {
+							returnData.push({ json: productCategory, pairedItem: { item: i } });
+						}
+						continue;
+					} else if (operation === 'update') {
+						response = await updateProductCategory.call(this, i);
 					}
 					returnData.push({ json: response, pairedItem: { item: i } });
 				}
