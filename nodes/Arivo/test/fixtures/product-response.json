@@ -1,0 +1,13 @@
+{
+  "id": "1",
+  "object": "product",
+  "created_at": "2012-06-25T04:08:00-03:00",
+  "updated_at": "2012-06-25T04:08:00-03:00",
+  "name": "Bumerangue elétrico",
+  "code": "77A",
+  "description": "Arma que pode ser lançada e retornar para quem o lançou. Pode ser carregada com energia elétrica.",
+  "price": "205.4",
+  "available": true,
+  "product_category_id": "1",
+  "tags": []
+}

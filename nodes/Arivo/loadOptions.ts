@@ -188,3 +188,26 @@ export async function getDealPipelineSteps(this: ILoadOptionsFunctions): Promise
     
     return returnData;
 }
+
+export async function getProductCategories(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+    const responseData = await arivoApiRequest.call(this, 'GET', '/product_categories');
+
+    if (!responseData) {
+        throw new NodeOperationError(this.getNode(), 'No data got returned');
+    }
+
+    const returnData: INodePropertyOptions[] = [];
+    
+    // The response is an array of product categories
+    if (Array.isArray(responseData)) {
+        for (const category of responseData) {
+            const categoryData = category as { id: string; name: string };
+            returnData.push({
+                name: categoryData.name,
+                value: categoryData.id,
+            });
+        }
+    }
+    
+    return returnData;
+}

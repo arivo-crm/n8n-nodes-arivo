@@ -74,6 +74,10 @@ describe('Arivo Node', () => {
 					name: 'Person',
 					value: 'person',
 				},
+				{
+					name: 'Product',
+					value: 'product',
+				},
 			]);
 			expect(resourceProperty?.default).toBe('person');
 		});
@@ -88,6 +92,7 @@ describe('Arivo Node', () => {
 			expect(loadOptionsMethods).toContain('getPipelines');
 			expect(loadOptionsMethods).toContain('getPipelineSteps');
 			expect(loadOptionsMethods).toContain('getDealPipelineSteps');
+			expect(loadOptionsMethods).toContain('getProductCategories');
 		});
 	});
 
