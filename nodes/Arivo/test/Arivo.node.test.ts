@@ -85,6 +85,9 @@ describe('Arivo Node', () => {
 			expect(loadOptionsMethods).toContain('getTaskTypes');
 			expect(loadOptionsMethods).toContain('getCompanyCustomFields');
 			expect(loadOptionsMethods).toContain('getDealCustomFields');
+			expect(loadOptionsMethods).toContain('getPipelines');
+			expect(loadOptionsMethods).toContain('getPipelineSteps');
+			expect(loadOptionsMethods).toContain('getDealPipelineSteps');
 		});
 	});
 

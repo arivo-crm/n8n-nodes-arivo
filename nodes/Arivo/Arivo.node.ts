@@ -15,7 +15,7 @@ import { createCompany, getCompany, getCompanies, updateCompany, deleteCompany }
 import { createDeal, getDeal, getDeals, updateDeal, deleteDeal } from './DealOperations';
 import { createNote, getNote, getNotes, updateNote, deleteNote } from './NoteOperations';
 import { createTask, getTask, getTasks, updateTask, deleteTask } from './TaskOperations';
-import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes } from './loadOptions';
+import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps } from './loadOptions';
 
 export class Arivo implements INodeType {
 	description: INodeTypeDescription = {
@@ -86,6 +86,9 @@ export class Arivo implements INodeType {
 			getCompanyCustomFields,
 			getDealCustomFields,
 			getPersonCustomFields,
+			getPipelines,
+			getPipelineSteps,
+			getDealPipelineSteps,
 		},
 	};
 
