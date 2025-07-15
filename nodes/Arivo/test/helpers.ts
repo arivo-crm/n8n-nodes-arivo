@@ -462,6 +462,79 @@ export const mockActivityTypes = [
 	},
 ];
 
+// Common test data for phone operations
+export const mockPhoneData = {
+	id: '1',
+	object: 'phone',
+	created_at: '2024-01-15T10:30:00-03:00',
+	updated_at: '2024-01-15T10:30:00-03:00',
+	number: '(11) 99999-9999',
+	phone_type: 'cell',
+	contact_id: '123',
+};
+
+// Common test data for email operations
+export const mockEmailData = {
+	id: '1',
+	object: 'email',
+	created_at: '2024-01-15T10:30:00-03:00',
+	updated_at: '2024-01-15T10:30:00-03:00',
+	address: 'john.doe@example.com',
+	email_type: 'work',
+	contact_id: '123',
+};
+
+// Common test data for address operations
+export const mockAddressData = {
+	id: '1',
+	object: 'address',
+	created_at: '2024-01-15T10:30:00-03:00',
+	updated_at: '2024-01-15T10:30:00-03:00',
+	street: '123 Main Street',
+	number: '456',
+	complement: 'Apt 101',
+	zip_code: '01234-567',
+	district: 'Centro',
+	city: 'São Paulo',
+	state: 'SP',
+	country: 'Brazil',
+	contact_id: '123',
+};
+
+// Mock API response for getMany phones operation
+export const mockPhonesListResponse = [
+	mockPhoneData,
+	{
+		...mockPhoneData,
+		id: '2',
+		number: '(11) 88888-8888',
+		phone_type: 'work',
+	},
+];
+
+// Mock API response for getMany emails operation
+export const mockEmailsListResponse = [
+	mockEmailData,
+	{
+		...mockEmailData,
+		id: '2',
+		address: 'jane.doe@example.com',
+		email_type: 'home',
+	},
+];
+
+// Mock API response for getMany addresses operation
+export const mockAddressesListResponse = [
+	mockAddressData,
+	{
+		...mockAddressData,
+		id: '2',
+		street: '456 Another Street',
+		city: 'Rio de Janeiro',
+		state: 'RJ',
+	},
+];
+
 // Mock API response headers
 export const mockApiHeaders = {
 	'x-total': '2',

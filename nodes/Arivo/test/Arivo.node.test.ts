@@ -55,6 +55,10 @@ describe('Arivo Node', () => {
 			expect(resourceProperty).toBeDefined();
 			expect(resourceProperty?.options).toEqual([
 				{
+					name: 'Address',
+					value: 'address',
+				},
+				{
 					name: 'Company',
 					value: 'company',
 				},
@@ -67,12 +71,20 @@ describe('Arivo Node', () => {
 					value: 'dealItem',
 				},
 				{
+					name: 'Email',
+					value: 'email',
+				},
+				{
 					name: 'Note',
 					value: 'note',
 				},
 				{
 					name: 'Person',
 					value: 'person',
+				},
+				{
+					name: 'Phone',
+					value: 'phone',
 				},
 				{
 					name: 'Product',

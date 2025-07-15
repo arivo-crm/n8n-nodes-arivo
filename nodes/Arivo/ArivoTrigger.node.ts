@@ -46,24 +46,24 @@ export class ArivoTrigger implements INodeType {
 						value: 'contact.created',
 					},
 					{
-						name: 'Contact Updated',
-						value: 'contact.updated',
-					},
-					{
 						name: 'Contact Deleted',
 						value: 'contact.deleted',
+					},
+					{
+						name: 'Contact Updated',
+						value: 'contact.updated',
 					},
 					{
 						name: 'Deal Created',
 						value: 'deal.created',
 					},
 					{
-						name: 'Deal Updated',
-						value: 'deal.updated',
-					},
-					{
 						name: 'Deal Deleted',
 						value: 'deal.deleted',
+					},
+					{
+						name: 'Deal Updated',
+						value: 'deal.updated',
 					},
 				],
 				default: 'contact.created',

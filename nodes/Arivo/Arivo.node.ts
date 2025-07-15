@@ -9,6 +9,9 @@ import { personOperations, personFields } from './PersonDescription';
 import { companyOperations, companyFields } from './CompanyDescription';
 import { dealOperations, dealFields } from './DealDescription';
 import { dealItemOperations, dealItemFields } from './DealItemDescription';
+import { phoneOperations, phoneFields } from './PhoneDescription';
+import { emailOperations, emailFields } from './EmailDescription';
+import { addressOperations, addressFields } from './AddressDescription';
 import { noteOperations, noteFields } from './NoteDescription';
 import { taskOperations, taskFields } from './TaskDescription';
 import { productOperations, productFields } from './ProductDescription';
@@ -17,6 +20,9 @@ import { createPerson, getPerson, getPersons, updatePerson, deletePerson } from 
 import { createCompany, getCompany, getCompanies, updateCompany, deleteCompany } from './CompanyOperations';
 import { createDeal, getDeal, getDeals, updateDeal, deleteDeal } from './DealOperations';
 import { createDealItem, getDealItem, getDealItems, updateDealItem, deleteDealItem } from './DealItemOperations';
+import { createPhone, getPhone, getPhones, updatePhone, deletePhone } from './PhoneOperations';
+import { createEmail, getEmail, getEmails, updateEmail, deleteEmail } from './EmailOperations';
+import { createAddress, getAddress, getAddresses, updateAddress, deleteAddress } from './AddressOperations';
 import { createNote, getNote, getNotes, updateNote, deleteNote } from './NoteOperations';
 import { createTask, getTask, getTasks, updateTask, deleteTask } from './TaskOperations';
 import { createProduct, getProduct, getProducts, updateProduct, deleteProduct } from './ProductOperations';
@@ -51,6 +57,10 @@ export class Arivo implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
+						name: 'Address',
+						value: 'address',
+					},
+					{
 						name: 'Company',
 						value: 'company',
 					},
@@ -63,12 +73,20 @@ export class Arivo implements INodeType {
 						value: 'dealItem',
 					},
 					{
+						name: 'Email',
+						value: 'email',
+					},
+					{
 						name: 'Note',
 						value: 'note',
 					},
 					{
 						name: 'Person',
 						value: 'person',
+					},
+					{
+						name: 'Phone',
+						value: 'phone',
 					},
 					{
 						name: 'Product',
@@ -93,6 +111,12 @@ export class Arivo implements INodeType {
 			...dealFields,
 			...dealItemOperations,
 			...dealItemFields,
+			...phoneOperations,
+			...phoneFields,
+			...emailOperations,
+			...emailFields,
+			...addressOperations,
+			...addressFields,
 			...noteOperations,
 			...noteFields,
 			...personOperations,
@@ -196,6 +220,60 @@ export class Arivo implements INodeType {
 						continue;
 					} else if (operation === 'update') {
 						response = await updateDealItem.call(this, i);
+					}
+					returnData.push({ json: response, pairedItem: { item: i } });
+				} else if (resource === 'phone') {
+					let response: IDataObject = {};
+					if (operation === 'create') {
+						response = await createPhone.call(this, i);
+					} else if (operation === 'delete') {
+						response = await deletePhone.call(this, i);
+					} else if (operation === 'get') {
+						response = await getPhone.call(this, i);
+					} else if (operation === 'getMany') {
+						const responseArray = await getPhones.call(this, i);
+						for (const phone of responseArray) {
+							returnData.push({ json: phone, pairedItem: { item: i } });
+						}
+						continue;
+					} else if (operation === 'update') {
+						response = await updatePhone.call(this, i);
+					}
+					returnData.push({ json: response, pairedItem: { item: i } });
+				} else if (resource === 'email') {
+					let response: IDataObject = {};
+					if (operation === 'create') {
+						response = await createEmail.call(this, i);
+					} else if (operation === 'delete') {
+						response = await deleteEmail.call(this, i);
+					} else if (operation === 'get') {
+						response = await getEmail.call(this, i);
+					} else if (operation === 'getMany') {
+						const responseArray = await getEmails.call(this, i);
+						for (const email of responseArray) {
+							returnData.push({ json: email, pairedItem: { item: i } });
+						}
+						continue;
+					} else if (operation === 'update') {
+						response = await updateEmail.call(this, i);
+					}
+					returnData.push({ json: response, pairedItem: { item: i } });
+				} else if (resource === 'address') {
+					let response: IDataObject = {};
+					if (operation === 'create') {
+						response = await createAddress.call(this, i);
+					} else if (operation === 'delete') {
+						response = await deleteAddress.call(this, i);
+					} else if (operation === 'get') {
+						response = await getAddress.call(this, i);
+					} else if (operation === 'getMany') {
+						const responseArray = await getAddresses.call(this, i);
+						for (const address of responseArray) {
+							returnData.push({ json: address, pairedItem: { item: i } });
+						}
+						continue;
+					} else if (operation === 'update') {
+						response = await updateAddress.call(this, i);
 					}
 					returnData.push({ json: response, pairedItem: { item: i } });
 				} else if (resource === 'note') {
