@@ -8,6 +8,7 @@ import {
 import { personOperations, personFields } from './PersonDescription';
 import { companyOperations, companyFields } from './CompanyDescription';
 import { dealOperations, dealFields } from './DealDescription';
+import { dealItemOperations, dealItemFields } from './DealItemDescription';
 import { noteOperations, noteFields } from './NoteDescription';
 import { taskOperations, taskFields } from './TaskDescription';
 import { productOperations, productFields } from './ProductDescription';
@@ -15,11 +16,12 @@ import { productCategoryOperations, productCategoryFields } from './ProductCateg
 import { createPerson, getPerson, getPersons, updatePerson, deletePerson } from './PersonOperations';
 import { createCompany, getCompany, getCompanies, updateCompany, deleteCompany } from './CompanyOperations';
 import { createDeal, getDeal, getDeals, updateDeal, deleteDeal } from './DealOperations';
+import { createDealItem, getDealItem, getDealItems, updateDealItem, deleteDealItem } from './DealItemOperations';
 import { createNote, getNote, getNotes, updateNote, deleteNote } from './NoteOperations';
 import { createTask, getTask, getTasks, updateTask, deleteTask } from './TaskOperations';
 import { createProduct, getProduct, getProducts, updateProduct, deleteProduct } from './ProductOperations';
 import { createProductCategory, getProductCategory, getProductCategories as getProductCategoriesOperation, updateProductCategory, deleteProductCategory } from './ProductCategoryOperations';
-import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductCategories } from './loadOptions';
+import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductOptions, getProductCategories } from './loadOptions';
 
 export class Arivo implements INodeType {
 	description: INodeTypeDescription = {
@@ -49,16 +51,16 @@ export class Arivo implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
-						name: 'Task',
-						value: 'task',
-					},
-					{
 						name: 'Company',
 						value: 'company',
 					},
 					{
 						name: 'Deal',
 						value: 'deal',
+					},
+					{
+						name: 'Deal Item',
+						value: 'dealItem',
 					},
 					{
 						name: 'Note',
@@ -76,6 +78,10 @@ export class Arivo implements INodeType {
 						name: 'Product Category',
 						value: 'productCategory',
 					},
+					{
+						name: 'Task',
+						value: 'task',
+					},
 				],
 				default: 'person',
 			},
@@ -85,6 +91,8 @@ export class Arivo implements INodeType {
 			...companyFields,
 			...dealOperations,
 			...dealFields,
+			...dealItemOperations,
+			...dealItemFields,
 			...noteOperations,
 			...noteFields,
 			...personOperations,
@@ -105,6 +113,7 @@ export class Arivo implements INodeType {
 			getPipelines,
 			getPipelineSteps,
 			getDealPipelineSteps,
+			getProducts: getProductOptions,
 			getProductCategories,
 		},
 	};
@@ -169,6 +178,24 @@ export class Arivo implements INodeType {
 						continue;
 					} else if (operation === 'update') {
 						response = await updateDeal.call(this, i);
+					}
+					returnData.push({ json: response, pairedItem: { item: i } });
+				} else if (resource === 'dealItem') {
+					let response: IDataObject = {};
+					if (operation === 'create') {
+						response = await createDealItem.call(this, i);
+					} else if (operation === 'delete') {
+						response = await deleteDealItem.call(this, i);
+					} else if (operation === 'get') {
+						response = await getDealItem.call(this, i);
+					} else if (operation === 'getMany') {
+						const responseArray = await getDealItems.call(this, i);
+						for (const dealItem of responseArray) {
+							returnData.push({ json: dealItem, pairedItem: { item: i } });
+						}
+						continue;
+					} else if (operation === 'update') {
+						response = await updateDealItem.call(this, i);
 					}
 					returnData.push({ json: response, pairedItem: { item: i } });
 				} else if (resource === 'note') {

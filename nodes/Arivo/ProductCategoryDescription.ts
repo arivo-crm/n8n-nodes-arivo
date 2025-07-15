@@ -168,7 +168,6 @@ export const productCategoryFields: INodeProperties[] = [
 		},
 		typeOptions: {
 			minValue: 1,
-			maxValue: 200,
 		},
 		default: 50,
 		description: 'Max number of results to return',

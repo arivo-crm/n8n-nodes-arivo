@@ -1,4 +1,4 @@
-import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps } from '../loadOptions';
+import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductOptions, getProductCategories } from '../loadOptions';
 import { createMockLoadOptionsFunctions } from './helpers';
 import { arivoApiRequest } from '../GenericFunctions';
 import customFieldsResponse from './fixtures/custom-fields-response.json';
@@ -652,6 +652,96 @@ describe('getPipelineSteps', () => {
 			await expect(getDealPipelineSteps.call(mockLoadOptionsFunction)).rejects.toThrow(
 				'No pipeline steps found for the deal pipeline'
 			);
+		});
+	});
+
+	describe('getProductOptions', () => {
+		it('should return products from API', async () => {
+			const mockProducts = [
+				{ id: '1', name: 'Laptop' },
+				{ id: '2', name: 'Mouse' },
+			];
+
+			mockArivoApiRequest.mockResolvedValue(mockProducts);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getProductOptions.call(mockLoadOptionsFunction);
+
+			expect(result).toEqual([
+				{ name: 'Laptop', value: '1' },
+				{ name: 'Mouse', value: '2' },
+			]);
+			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/products');
+		});
+
+		it('should handle API errors gracefully', async () => {
+			mockArivoApiRequest.mockRejectedValue(new Error('API Error'));
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getProductOptions.call(mockLoadOptionsFunction)).rejects.toThrow('API Error');
+		});
+
+		it('should handle empty response', async () => {
+			mockArivoApiRequest.mockResolvedValue([]);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getProductOptions.call(mockLoadOptionsFunction);
+
+			expect(result).toEqual([]);
+		});
+
+		it('should handle null/undefined response', async () => {
+			mockArivoApiRequest.mockResolvedValue(null);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getProductOptions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+		});
+	});
+
+	describe('getProductCategories', () => {
+		it('should return product categories from API', async () => {
+			const mockProductCategories = [
+				{ id: '1', name: 'Electronics' },
+				{ id: '2', name: 'Clothing' },
+			];
+
+			mockArivoApiRequest.mockResolvedValue(mockProductCategories);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getProductCategories.call(mockLoadOptionsFunction);
+
+			expect(result).toEqual([
+				{ name: 'Electronics', value: '1' },
+				{ name: 'Clothing', value: '2' },
+			]);
+			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/product_categories');
+		});
+
+		it('should handle API errors gracefully', async () => {
+			mockArivoApiRequest.mockRejectedValue(new Error('API Error'));
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getProductCategories.call(mockLoadOptionsFunction)).rejects.toThrow('API Error');
+		});
+
+		it('should handle empty response', async () => {
+			mockArivoApiRequest.mockResolvedValue([]);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getProductCategories.call(mockLoadOptionsFunction);
+
+			expect(result).toEqual([]);
+		});
+
+		it('should handle null/undefined response', async () => {
+			mockArivoApiRequest.mockResolvedValue(null);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getProductCategories.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
 		});
 	});
 });
