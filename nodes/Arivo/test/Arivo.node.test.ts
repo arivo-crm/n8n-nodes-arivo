@@ -63,6 +63,10 @@ describe('Arivo Node', () => {
 					value: 'company',
 				},
 				{
+					name: 'Custom Record',
+					value: 'customRecord',
+				},
+				{
 					name: 'Deal',
 					value: 'deal',
 				},
@@ -113,6 +117,8 @@ describe('Arivo Node', () => {
 			expect(loadOptionsMethods).toContain('getTaskTypes');
 			expect(loadOptionsMethods).toContain('getCompanyCustomFields');
 			expect(loadOptionsMethods).toContain('getDealCustomFields');
+			expect(loadOptionsMethods).toContain('getCustomRecordDefinitions');
+			expect(loadOptionsMethods).toContain('getCustomRecordCustomFields');
 			expect(loadOptionsMethods).toContain('getPipelines');
 			expect(loadOptionsMethods).toContain('getPipelineSteps');
 			expect(loadOptionsMethods).toContain('getDealPipelineSteps');

@@ -17,6 +17,7 @@ import { taskOperations, taskFields } from './TaskDescription';
 import { productOperations, productFields } from './ProductDescription';
 import { productCategoryOperations, productCategoryFields } from './ProductCategoryDescription';
 import { fileOperations, fileFields } from './FileDescription';
+import { customRecordOperations, customRecordFields } from './CustomRecordDescription';
 import { createPerson, getPerson, getPersons, updatePerson, deletePerson } from './PersonOperations';
 import { createCompany, getCompany, getCompanies, updateCompany, deleteCompany } from './CompanyOperations';
 import { createDeal, getDeal, getDeals, updateDeal, deleteDeal } from './DealOperations';
@@ -29,7 +30,8 @@ import { createTask, getTask, getTasks, updateTask, deleteTask } from './TaskOpe
 import { createProduct, getProduct, getProducts, updateProduct, deleteProduct } from './ProductOperations';
 import { createProductCategory, getProductCategory, getProductCategories as getProductCategoriesOperation, updateProductCategory, deleteProductCategory } from './ProductCategoryOperations';
 import { getFile, getFiles, deleteFile } from './FileOperations';
-import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductOptions, getProductCategories, getUserOptions, getTeamOptions } from './loadOptions';
+import { createCustomRecord, getCustomRecord, getCustomRecords, updateCustomRecord, deleteCustomRecord } from './CustomRecordOperations';
+import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductOptions, getProductCategories, getUserOptions, getTeamOptions, getCustomRecordDefinitions, getCustomRecordCustomFields } from './loadOptions';
 
 export class Arivo implements INodeType {
 	description: INodeTypeDescription = {
@@ -65,6 +67,10 @@ export class Arivo implements INodeType {
 					{
 						name: 'Company',
 						value: 'company',
+					},
+					{
+						name: 'Custom Record',
+						value: 'customRecord',
 					},
 					{
 						name: 'Deal',
@@ -113,6 +119,8 @@ export class Arivo implements INodeType {
 			...taskFields,
 			...companyOperations,
 			...companyFields,
+			...customRecordOperations,
+			...customRecordFields,
 			...dealOperations,
 			...dealFields,
 			...dealItemOperations,
@@ -142,6 +150,8 @@ export class Arivo implements INodeType {
 			getCompanyCustomFields,
 			getDealCustomFields,
 			getPersonCustomFields,
+			getCustomRecordDefinitions,
+			getCustomRecordCustomFields,
 			getPipelines,
 			getPipelineSteps,
 			getDealPipelineSteps,
@@ -194,6 +204,24 @@ export class Arivo implements INodeType {
 						continue;
 					} else if (operation === 'update') {
 						response = await updateCompany.call(this, i);
+					}
+					returnData.push({ json: response, pairedItem: { item: i } });
+				} else if (resource === 'customRecord') {
+					let response: IDataObject = {};
+					if (operation === 'create') {
+						response = await createCustomRecord.call(this, i);
+					} else if (operation === 'delete') {
+						response = await deleteCustomRecord.call(this, i);
+					} else if (operation === 'get') {
+						response = await getCustomRecord.call(this, i);
+					} else if (operation === 'getMany') {
+						const responseArray = await getCustomRecords.call(this, i);
+						for (const customRecord of responseArray) {
+							returnData.push({ json: customRecord, pairedItem: { item: i } });
+						}
+						continue;
+					} else if (operation === 'update') {
+						response = await updateCustomRecord.call(this, i);
 					}
 					returnData.push({ json: response, pairedItem: { item: i } });
 				} else if (resource === 'deal') {

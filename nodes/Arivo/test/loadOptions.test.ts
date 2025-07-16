@@ -1,4 +1,4 @@
-import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductOptions, getProductCategories, getUserOptions, getTeamOptions } from '../loadOptions';
+import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductOptions, getProductCategories, getUserOptions, getTeamOptions, getCustomRecordDefinitions, getCustomRecordCustomFields } from '../loadOptions';
 import { createMockLoadOptionsFunctions } from './helpers';
 import { arivoApiRequest } from '../GenericFunctions';
 import customFieldsResponse from './fixtures/custom-fields-response.json';
@@ -832,6 +832,136 @@ describe('getPipelineSteps', () => {
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
 			await expect(getTeamOptions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+		});
+	});
+
+	describe('getCustomRecordDefinitions', () => {
+		it('should return custom record definitions', async () => {
+			const mockDefinitions = [
+				{
+					id: '1',
+					name: 'Contratos',
+					definitions: {}
+				},
+				{
+					id: '2',
+					name: 'Notas Fiscais',
+					definitions: {}
+				}
+			];
+
+			mockArivoApiRequest.mockResolvedValue(mockDefinitions);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getCustomRecordDefinitions.call(mockLoadOptionsFunction);
+
+			expect(result).toEqual([
+				{ name: 'Contratos', value: '1' },
+				{ name: 'Notas Fiscais', value: '2' },
+			]);
+			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/custom_record_definitions');
+		});
+
+		it('should handle API errors gracefully', async () => {
+			mockArivoApiRequest.mockRejectedValue(new Error('API Error'));
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getCustomRecordDefinitions.call(mockLoadOptionsFunction)).rejects.toThrow('API Error');
+		});
+
+		it('should handle null/undefined response', async () => {
+			mockArivoApiRequest.mockResolvedValue(null);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getCustomRecordDefinitions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+		});
+	});
+
+	describe('getCustomRecordCustomFields', () => {
+		it('should return custom fields for selected definition', async () => {
+			const mockDefinition = {
+				id: '1',
+				name: 'Contratos',
+				definitions: {
+					custom_data_validade: {
+						label: 'Data de validade',
+						field_type: 'date'
+					},
+					custom_nome_signatario: {
+						label: 'Signatário',
+						field_type: 'string'
+					}
+				}
+			};
+
+			mockArivoApiRequest.mockResolvedValue(mockDefinition);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			mockLoadOptionsFunction.getCurrentNodeParameter = jest.fn()
+				.mockImplementation((path: string) => {
+					if (path === 'customRecordDefinitionId') return '1';
+					throw new Error('Parameter not found');
+				});
+
+			const result = await getCustomRecordCustomFields.call(mockLoadOptionsFunction);
+
+			expect(result).toEqual([
+				{ name: 'Data de validade', value: 'custom_data_validade' },
+				{ name: 'Signatário', value: 'custom_nome_signatario' },
+			]);
+			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/custom_record_definitions/1');
+		});
+
+		it('should return empty array when no definition ID is provided', async () => {
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			mockLoadOptionsFunction.getCurrentNodeParameter = jest.fn()
+				.mockImplementation(() => {
+					throw new Error('Parameter not found');
+				});
+
+			const result = await getCustomRecordCustomFields.call(mockLoadOptionsFunction);
+
+			expect(result).toEqual([]);
+			expect(mockArivoApiRequest).not.toHaveBeenCalled();
+		});
+
+		it('should handle API errors gracefully', async () => {
+			const error = new Error('Definition API request failed');
+			mockArivoApiRequest.mockRejectedValue(error);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			mockLoadOptionsFunction.getCurrentNodeParameter = jest.fn()
+				.mockImplementation((path: string) => {
+					if (path === 'customRecordDefinitionId') return '1';
+					throw new Error('Parameter not found');
+				});
+
+			await expect(getCustomRecordCustomFields.call(mockLoadOptionsFunction)).rejects.toThrow(
+				'Definition API request failed'
+			);
+		});
+
+		it('should handle definition without custom fields', async () => {
+			const definitionResponse = {
+				id: '1',
+				name: 'Empty Definition',
+				definitions: null
+			};
+
+			mockArivoApiRequest.mockResolvedValue(definitionResponse);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			mockLoadOptionsFunction.getCurrentNodeParameter = jest.fn()
+				.mockImplementation((path: string) => {
+					if (path === 'customRecordDefinitionId') return '1';
+					throw new Error('Parameter not found');
+				});
+
+			await expect(getCustomRecordCustomFields.call(mockLoadOptionsFunction)).rejects.toThrow(
+				'No custom fields found for the selected definition'
+			);
 		});
 	});
 });

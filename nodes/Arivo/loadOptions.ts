@@ -280,3 +280,71 @@ export async function getTeamOptions(this: ILoadOptionsFunctions): Promise<INode
     
     return returnData;
 }
+
+export async function getCustomRecordDefinitions(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+    const responseData = await arivoApiRequest.call(this, 'GET', '/custom_record_definitions');
+
+    if (!responseData) {
+        throw new NodeOperationError(this.getNode(), 'No data got returned');
+    }
+
+    const returnData: INodePropertyOptions[] = [];
+    
+    // The response is an array of custom record definitions
+    if (Array.isArray(responseData)) {
+        for (const definition of responseData) {
+            const definitionData = definition as { id: string; name: string };
+            returnData.push({
+                name: definitionData.name,
+                value: definitionData.id,
+            });
+        }
+    }
+    
+    return returnData;
+}
+
+export async function getCustomRecordCustomFields(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+    let definitionId: string | undefined;
+    
+    // Try to get the definition ID from different contexts
+    const possiblePaths = [
+        'customRecordDefinitionId',
+        'definitionId',
+    ];
+    
+    for (const path of possiblePaths) {
+        try {
+            definitionId = this.getCurrentNodeParameter(path) as string;
+            if (definitionId) {
+                break;
+            }
+        } catch (error) {
+            // Field might not exist in this collection, try next path
+            continue;
+        }
+    }
+    
+    if (!definitionId) {
+        return [];
+    }
+
+    const definition = await arivoApiRequest.call(this, 'GET', `/custom_record_definitions/${definitionId}`);
+
+    if (!definition || !definition.definitions) {
+        throw new NodeOperationError(this.getNode(), 'No custom fields found for the selected definition');
+    }
+
+    const returnData: INodePropertyOptions[] = [];
+    
+    // The definitions object contains field keys as properties
+    for (const [fieldKey, fieldData] of Object.entries(definition.definitions)) {
+        const field = fieldData as { label: string; field_type: string };
+        returnData.push({
+            name: field.label || fieldKey,
+            value: fieldKey,
+        });
+    }
+    
+    return returnData;
+}
