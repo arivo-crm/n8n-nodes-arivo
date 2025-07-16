@@ -535,6 +535,41 @@ export const mockAddressesListResponse = [
 	},
 ];
 
+// Common test data for file operations
+export const mockFileData = {
+	id: '1',
+	object: 'attachment_file',
+	created_at: '2024-01-15T10:30:00-03:00',
+	updated_at: '2024-01-15T10:30:00-03:00',
+	name: 'test-document.pdf',
+	size: 1024,
+	sha256: 'a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456',
+	download_url: 'https://upload.arivo.com.br/uploads/98?access_token=later&expires=1340608380&upload_type=attachment&signature=test%3D&format=original',
+	contact_id: '123',
+	deal_id: null,
+	note_id: null,
+	team_id: '2',
+	user_id: '1',
+};
+
+// Mock API response for getMany files operation
+export const mockFilesListResponse = [
+	mockFileData,
+	{
+		...mockFileData,
+		id: '2',
+		name: 'contract.docx',
+		size: 2048,
+		sha256: 'b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456a',
+		download_url: 'https://upload.arivo.com.br/uploads/99?access_token=later&expires=1340608380&upload_type=attachment&signature=test2%3D&format=original',
+		contact_id: null,
+		deal_id: '456',
+		note_id: null,
+		team_id: '1',
+		user_id: '2',
+	},
+];
+
 // Mock API response headers
 export const mockApiHeaders = {
 	'x-total': '2',

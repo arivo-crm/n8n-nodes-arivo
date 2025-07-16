@@ -75,6 +75,10 @@ describe('Arivo Node', () => {
 					value: 'email',
 				},
 				{
+					name: 'File',
+					value: 'file',
+				},
+				{
 					name: 'Note',
 					value: 'note',
 				},
