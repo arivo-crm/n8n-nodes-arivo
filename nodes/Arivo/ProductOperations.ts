@@ -4,12 +4,8 @@ import { arivoApiRequest, arivoApiRequestAllItems } from './GenericFunctions';
 
 function buildCommonProductBody(body: IDataObject, fields: IDataObject): void {
 	// Handle tags conversion from string to array
-	if (fields.tags && typeof fields.tags === 'string') {
-		const tagsString = fields.tags as string;
-		if (tagsString.trim()) {
-			body.tags = tagsString.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag);
-		}
-		delete body.tags;
+	if (body.tags && typeof body.tags === 'string') {
+		body.tags = (body.tags as string).split(',').map(tag => tag.trim()).filter(tag => tag !== '');
 	}
 
 	// Handle price conversion to number

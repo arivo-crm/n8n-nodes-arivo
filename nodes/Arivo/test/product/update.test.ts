@@ -62,6 +62,7 @@ describe('Arivo Product Update Operation', () => {
 			price: 299.99,
 			available: false,
 			product_category_id: 2,
+			tags: ['updated', 'product', 'test'],
 		});
 		expect(result).toEqual(productResponse);
 	});
@@ -133,7 +134,9 @@ describe('Arivo Product Update Operation', () => {
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		await updateProduct.call(mockExecuteFunction, 0);
 
-		expect(mockArivoApiRequest).toHaveBeenCalledWith('PUT', '/products/123', {});
+		expect(mockArivoApiRequest).toHaveBeenCalledWith('PUT', '/products/123', {
+			tags: ['tag1', 'tag2', 'tag3'],
+		});
 	});
 
 	it('should filter out empty tags', async () => {
@@ -149,7 +152,9 @@ describe('Arivo Product Update Operation', () => {
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		await updateProduct.call(mockExecuteFunction, 0);
 
-		expect(mockArivoApiRequest).toHaveBeenCalledWith('PUT', '/products/123', {});
+		expect(mockArivoApiRequest).toHaveBeenCalledWith('PUT', '/products/123', {
+			tags: ['tag1', 'tag2'],
+		});
 	});
 
 	it('should handle empty update fields', async () => {

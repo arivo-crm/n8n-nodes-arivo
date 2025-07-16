@@ -36,6 +36,12 @@ function buildCommonPersonBody(body: IDataObject, fields: IDataObject): IDataObj
 		}
 		delete body.customFieldsUi;
 	}
+
+	// Handle tags - convert comma-separated string to array
+	if (body.tags && typeof body.tags === 'string') {
+		body.tags = (body.tags as string).split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+	}
+
 	return body;
 }
 

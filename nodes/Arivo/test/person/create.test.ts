@@ -56,7 +56,7 @@ describe('Arivo Person Create Operation', () => {
 			birth_date: '1990-01-01',
 			position: 'Software Engineer',
 			company_id: '456',
-			tags: 'tag1,tag2',
+			tags: ['tag1', 'tag2'],
 			user_id: '789',
 			team_id: '101',
 		};

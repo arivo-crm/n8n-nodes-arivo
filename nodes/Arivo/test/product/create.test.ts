@@ -59,6 +59,7 @@ describe('Arivo Product Create Operation', () => {
 			price: 199.99,
 			available: true,
 			product_category_id: 1,
+			tags: ['electronics', 'advanced', 'tech'],
 		});
 		expect(result).toEqual(productResponse);
 	});
@@ -135,6 +136,7 @@ describe('Arivo Product Create Operation', () => {
 
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('POST', '/products', {
 			name: 'Tags Test Product',
+			tags: ['tag1', 'tag2', 'tag3'],
 		});
 	});
 
@@ -153,6 +155,7 @@ describe('Arivo Product Create Operation', () => {
 
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('POST', '/products', {
 			name: 'Empty Tags Test Product',
+			tags: ['tag1', 'tag2'],
 		});
 	});
 

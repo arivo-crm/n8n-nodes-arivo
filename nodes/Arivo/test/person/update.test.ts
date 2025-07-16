@@ -78,7 +78,7 @@ describe('Arivo Person Update Operation', () => {
 			birth_date: '1985-06-15',
 			position: 'Senior Engineer',
 			company_id: '999',
-			tags: 'senior,engineer',
+			tags: ['senior', 'engineer'],
 			user_id: '888',
 			team_id: '202',
 		};
@@ -380,7 +380,7 @@ describe('Arivo Person Update Operation', () => {
 			custom_fields: {
 				custom_field_1: 'All Updated',
 			},
-			tags: 'updated,lead',
+			tags: ['updated', 'lead'],
 			user_id: '555',
 			team_id: '303',
 		};
