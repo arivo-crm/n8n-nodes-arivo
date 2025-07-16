@@ -1,4 +1,4 @@
-import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductOptions, getProductCategories } from '../loadOptions';
+import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductOptions, getProductCategories, getUserOptions, getTeamOptions } from '../loadOptions';
 import { createMockLoadOptionsFunctions } from './helpers';
 import { arivoApiRequest } from '../GenericFunctions';
 import customFieldsResponse from './fixtures/custom-fields-response.json';
@@ -742,6 +742,96 @@ describe('getPipelineSteps', () => {
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
 			await expect(getProductCategories.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+		});
+	});
+
+	describe('getUserOptions', () => {
+		it('should return users from API', async () => {
+			const mockUsers = [
+				{ id: '1', name: 'Tony Stark', email: 'tstark@avengers.com' },
+				{ id: '2', name: 'Steve Rogers', email: 'srogers@avengers.com' },
+			];
+
+			mockArivoApiRequest.mockResolvedValue(mockUsers);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getUserOptions.call(mockLoadOptionsFunction);
+
+			expect(result).toEqual([
+				{ name: 'Tony Stark', value: '1' },
+				{ name: 'Steve Rogers', value: '2' },
+			]);
+			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/users');
+		});
+
+		it('should handle API errors gracefully', async () => {
+			mockArivoApiRequest.mockRejectedValue(new Error('API Error'));
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getUserOptions.call(mockLoadOptionsFunction)).rejects.toThrow('API Error');
+		});
+
+		it('should handle empty response', async () => {
+			mockArivoApiRequest.mockResolvedValue([]);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getUserOptions.call(mockLoadOptionsFunction);
+
+			expect(result).toEqual([]);
+		});
+
+		it('should handle null/undefined response', async () => {
+			mockArivoApiRequest.mockResolvedValue(null);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getUserOptions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+		});
+	});
+
+	describe('getTeamOptions', () => {
+		it('should return teams from API', async () => {
+			const mockTeams = [
+				{ id: '1', name: 'Sua equipe' },
+				{ id: '2', name: 'Irmandade de Mutantes' },
+			];
+
+			mockArivoApiRequest.mockResolvedValue(mockTeams);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getTeamOptions.call(mockLoadOptionsFunction);
+
+			expect(result).toEqual([
+				{ name: 'Sua equipe', value: '1' },
+				{ name: 'Irmandade de Mutantes', value: '2' },
+			]);
+			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/teams');
+		});
+
+		it('should handle API errors gracefully', async () => {
+			mockArivoApiRequest.mockRejectedValue(new Error('API Error'));
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getTeamOptions.call(mockLoadOptionsFunction)).rejects.toThrow('API Error');
+		});
+
+		it('should handle empty response', async () => {
+			mockArivoApiRequest.mockResolvedValue([]);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+			const result = await getTeamOptions.call(mockLoadOptionsFunction);
+
+			expect(result).toEqual([]);
+		});
+
+		it('should handle null/undefined response', async () => {
+			mockArivoApiRequest.mockResolvedValue(null);
+
+			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
+
+			await expect(getTeamOptions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
 		});
 	});
 });

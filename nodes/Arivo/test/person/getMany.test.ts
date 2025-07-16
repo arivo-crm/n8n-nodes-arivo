@@ -16,7 +16,8 @@ describe('Arivo Person GetMany Operation', () => {
 
 	it('should get all persons with default filter', async () => {
 		const nodeParameters = {
-			additionalFields: {},
+			filters: {},
+			options: {},
 		};
 
 		const expectedQuery = {
@@ -35,9 +36,10 @@ describe('Arivo Person GetMany Operation', () => {
 
 	it('should get persons with name filter', async () => {
 		const nodeParameters = {
-			additionalFields: {
+			filters: {
 				name: 'John',
 			},
+			options: {},
 		};
 
 		const expectedQuery = {
@@ -56,9 +58,10 @@ describe('Arivo Person GetMany Operation', () => {
 
 	it('should get persons with CPF filter', async () => {
 		const nodeParameters = {
-			additionalFields: {
+			filters: {
 				cpf: '123.456.789-00',
 			},
+			options: {},
 		};
 
 		const expectedQuery = {
@@ -77,9 +80,10 @@ describe('Arivo Person GetMany Operation', () => {
 
 	it('should get persons with email filter', async () => {
 		const nodeParameters = {
-			additionalFields: {
+			filters: {
 				email: 'john.doe@example.com',
 			},
+			options: {},
 		};
 
 		const expectedQuery = {
@@ -98,9 +102,10 @@ describe('Arivo Person GetMany Operation', () => {
 
 	it('should get persons with phone filter', async () => {
 		const nodeParameters = {
-			additionalFields: {
+			filters: {
 				phone: '+55 11 99999-9999',
 			},
+			options: {},
 		};
 
 		const expectedQuery = {
@@ -119,13 +124,14 @@ describe('Arivo Person GetMany Operation', () => {
 
 	it('should get persons with location filters', async () => {
 		const nodeParameters = {
-			additionalFields: {
+			filters: {
 				city: 'São Paulo',
 				state: 'SP',
 				country: 'Brazil',
 				district: 'Centro',
 				zip_code: '01234-567',
 			},
+			options: {},
 		};
 
 		const expectedQuery = {
@@ -148,11 +154,12 @@ describe('Arivo Person GetMany Operation', () => {
 
 	it('should get persons with organization filters', async () => {
 		const nodeParameters = {
-			additionalFields: {
+			filters: {
 				company_id: '456',
 				user_id: '789',
 				team_id: '101',
 			},
+			options: {},
 		};
 
 		const expectedQuery = {
@@ -173,9 +180,10 @@ describe('Arivo Person GetMany Operation', () => {
 
 	it('should get persons with tags filter', async () => {
 		const nodeParameters = {
-			additionalFields: {
+			filters: {
 				tags: 'tag1,tag2',
 			},
+			options: {},
 		};
 
 		const expectedQuery = {
@@ -194,10 +202,11 @@ describe('Arivo Person GetMany Operation', () => {
 
 	it('should get persons with sorting options', async () => {
 		const nodeParameters = {
-			additionalFields: {
+			filters: {
 				sort_field: 'name',
 				sort_order: 'asc',
 			},
+			options: {},
 		};
 
 		const expectedQuery = {
@@ -217,13 +226,14 @@ describe('Arivo Person GetMany Operation', () => {
 
 	it('should get persons with multiple filters', async () => {
 		const nodeParameters = {
-			additionalFields: {
+			filters: {
 				name: 'John',
 				email: 'john@example.com',
 				city: 'São Paulo',
 				sort_field: 'created_at',
 				sort_order: 'desc',
 			},
+			options: {},
 		};
 
 		const expectedQuery = {
@@ -246,12 +256,13 @@ describe('Arivo Person GetMany Operation', () => {
 
 	it('should ignore empty filter values', async () => {
 		const nodeParameters = {
-			additionalFields: {
+			filters: {
 				name: 'John',
 				email: '', // Empty value should be ignored
 				city: undefined, // Undefined value should be ignored
 				phone: null, // Null value should be ignored
 			},
+			options: {},
 		};
 
 		const expectedQuery = {

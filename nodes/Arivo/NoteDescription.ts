@@ -34,18 +34,24 @@ const noteFieldDefinitions = {
 		description: 'ID of the task/activity to link this note to',
 	} as INodeProperties,
 	userId: {
-		displayName: 'User ID',
+		displayName: 'User',
 		name: 'user_id',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getUserOptions',
+		},
 		default: '',
-		description: 'ID of the user responsible for this note',
+		description: 'The user responsible for this note',
 	} as INodeProperties,
 	teamId: {
-		displayName: 'Team ID',
+		displayName: 'Team',
 		name: 'team_id',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getTeamOptions',
+		},
 		default: '',
-		description: 'ID of the team responsible for this note',
+		description: 'The team responsible for this note',
 	} as INodeProperties,
 };
 

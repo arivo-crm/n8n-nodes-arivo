@@ -17,6 +17,8 @@ describe('Arivo Task GetMany Operation', () => {
 	it('should get tasks with default limit', async () => {
 		const nodeParameters = {
 			limit: 50,
+			filters: {},
+			options: {},
 		};
 
 		mockArivoApiRequestAllItems.mockResolvedValue(mockTasksListResponse.data);
@@ -47,9 +49,10 @@ describe('Arivo Task GetMany Operation', () => {
 	it('should filter tasks by name', async () => {
 		const nodeParameters = {
 			limit: 50,
-			additionalFields: {
+			filters: {
 				name: 'contrato',
 			},
+			options: {},
 		};
 
 		const filteredResponse = [mockTasksListResponse.data[0]];
@@ -67,9 +70,10 @@ describe('Arivo Task GetMany Operation', () => {
 	it('should filter tasks by done status', async () => {
 		const nodeParameters = {
 			limit: 50,
-			additionalFields: {
+			filters: {
 				done: 'true',
 			},
+			options: {},
 		};
 
 		const filteredResponse = [mockTasksListResponse.data[1]]; // Second task is done
@@ -87,9 +91,10 @@ describe('Arivo Task GetMany Operation', () => {
 	it('should filter tasks by task type', async () => {
 		const nodeParameters = {
 			limit: 50,
-			additionalFields: {
+			filters: {
 				task_type_id: 1,
 			},
+			options: {},
 		};
 
 		const filteredResponse = [mockTasksListResponse.data[0]];
@@ -107,9 +112,10 @@ describe('Arivo Task GetMany Operation', () => {
 	it('should filter tasks by contact_id', async () => {
 		const nodeParameters = {
 			limit: 50,
-			additionalFields: {
+			filters: {
 				contact_id: 123,
 			},
+			options: {},
 		};
 
 		const filteredResponse = [mockTasksListResponse.data[0]];
@@ -127,9 +133,10 @@ describe('Arivo Task GetMany Operation', () => {
 	it('should filter tasks by deal_id', async () => {
 		const nodeParameters = {
 			limit: 50,
-			additionalFields: {
+			filters: {
 				deal_id: 456,
 			},
+			options: {},
 		};
 
 		const filteredResponse = [mockTasksListResponse.data[1]];
@@ -147,12 +154,13 @@ describe('Arivo Task GetMany Operation', () => {
 	it('should filter tasks by multiple criteria', async () => {
 		const nodeParameters = {
 			limit: 50,
-			additionalFields: {
+			filters: {
 				done: 'false',
 				user_id: 1,
 				team_id: 2,
 				task_type_id: 1,
 			},
+			options: {},
 		};
 
 		const filteredResponse = [mockTasksListResponse.data[0]];
@@ -173,9 +181,10 @@ describe('Arivo Task GetMany Operation', () => {
 	it('should filter tasks by tags', async () => {
 		const nodeParameters = {
 			limit: 50,
-			additionalFields: {
+			filters: {
 				tags: 'urgent,documentation',
 			},
+			options: {},
 		};
 
 		const filteredResponse = [mockTasksListResponse.data[1]];
@@ -193,10 +202,11 @@ describe('Arivo Task GetMany Operation', () => {
 	it('should sort tasks by due_date descending', async () => {
 		const nodeParameters = {
 			limit: 50,
-			additionalFields: {
+			filters: {
 				sort_field: 'due_date',
 				sort_order: 'desc',
 			},
+			options: {},
 		};
 
 		mockArivoApiRequestAllItems.mockResolvedValue(mockTasksListResponse.data);
@@ -214,7 +224,7 @@ describe('Arivo Task GetMany Operation', () => {
 	it('should handle empty filters object', async () => {
 		const nodeParameters = {
 			limit: 50,
-			additionalFields: {},
+			filters: {},
 		};
 
 		mockArivoApiRequestAllItems.mockResolvedValue(mockTasksListResponse.data);
@@ -229,6 +239,8 @@ describe('Arivo Task GetMany Operation', () => {
 	it('should handle API errors gracefully', async () => {
 		const nodeParameters = {
 			limit: 50,
+			filters: {},
+			options: {},
 		};
 
 		const apiError = new Error('API request failed');
@@ -244,6 +256,8 @@ describe('Arivo Task GetMany Operation', () => {
 	it('should return empty array for no results', async () => {
 		const nodeParameters = {
 			limit: 50,
+			filters: {},
+			options: {},
 		};
 
 		mockArivoApiRequestAllItems.mockResolvedValue([]);

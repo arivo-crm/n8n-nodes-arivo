@@ -234,3 +234,49 @@ export async function getProductCategories(this: ILoadOptionsFunctions): Promise
     
     return returnData;
 }
+
+export async function getUserOptions(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+    const responseData = await arivoApiRequest.call(this, 'GET', '/users');
+
+    if (!responseData) {
+        throw new NodeOperationError(this.getNode(), 'No data got returned');
+    }
+
+    const returnData: INodePropertyOptions[] = [];
+    
+    // The response is an array of users
+    if (Array.isArray(responseData)) {
+        for (const user of responseData) {
+            const userData = user as { id: string; name: string; email?: string };
+            returnData.push({
+                name: userData.name,
+                value: userData.id,
+            });
+        }
+    }
+    
+    return returnData;
+}
+
+export async function getTeamOptions(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+    const responseData = await arivoApiRequest.call(this, 'GET', '/teams');
+
+    if (!responseData) {
+        throw new NodeOperationError(this.getNode(), 'No data got returned');
+    }
+
+    const returnData: INodePropertyOptions[] = [];
+    
+    // The response is an array of teams
+    if (Array.isArray(responseData)) {
+        for (const team of responseData) {
+            const teamData = team as { id: string; name: string };
+            returnData.push({
+                name: teamData.name,
+                value: teamData.id,
+            });
+        }
+    }
+    
+    return returnData;
+}

@@ -32,18 +32,24 @@ const fileFieldDefinitions = {
 		description: 'ID of the note linked to this file',
 	} as INodeProperties,
 	userId: {
-		displayName: 'User ID',
+		displayName: 'User',
 		name: 'user_id',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getUserOptions',
+		},
 		default: '',
-		description: 'ID of the user responsible for this file',
+		description: 'The user responsible for this file',
 	} as INodeProperties,
 	teamId: {
-		displayName: 'Team ID',
+		displayName: 'Team',
 		name: 'team_id',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getTeamOptions',
+		},
 		default: '',
-		description: 'ID of the team responsible for this file',
+		description: 'The team responsible for this file',
 	} as INodeProperties,
 };
 

@@ -246,18 +246,24 @@ const companyFieldDefinitions = {
 		description: 'The tags of the company',
 	} as INodeProperties,
 	userId: {
-		displayName: 'User ID',
+		displayName: 'User',
 		name: 'user_id',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getUserOptions',
+		},
 		default: '',
-		description: 'The ID of the user assigned to this company',
+		description: 'The user assigned to this company',
 	} as INodeProperties,
 	teamId: {
-		displayName: 'Team ID',
+		displayName: 'Team',
 		name: 'team_id',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getTeamOptions',
+		},
 		default: '',
-		description: 'The ID of the team assigned to this company',
+		description: 'The team assigned to this company',
 	} as INodeProperties,
 };
 

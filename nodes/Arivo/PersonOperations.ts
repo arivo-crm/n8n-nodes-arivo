@@ -79,15 +79,24 @@ export async function getPersons(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject[]> {
-	const additionalFields = this.getNodeParameter('additionalFields', index, {}) as IDataObject;
+	const filters = this.getNodeParameter('filters', index, {}) as IDataObject;
+	const options = this.getNodeParameter('options', index, {}) as IDataObject;
 
 	const query: IDataObject = {
 		contact_type: 'person', // Automatically filter for person contacts only
 	};
 	
-	// Add all additional fields to query if they have values
-	Object.keys(additionalFields).forEach(key => {
-		const value = additionalFields[key];
+	// Add all filters to query if they have values
+	Object.keys(filters).forEach(key => {
+		const value = filters[key];
+		if (value !== undefined && value !== '' && value !== null) {
+			query[key] = value;
+		}
+	});
+
+	// Add all options to query if they have values
+	Object.keys(options).forEach(key => {
+		const value = options[key];
 		if (value !== undefined && value !== '' && value !== null) {
 			query[key] = value;
 		}

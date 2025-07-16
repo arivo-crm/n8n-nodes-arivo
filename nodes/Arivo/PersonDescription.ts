@@ -253,18 +253,24 @@ const basicFields = {
 		description: 'The tags of the person',
 	} as INodeProperties,
 	userId: {
-		displayName: 'User ID',
+		displayName: 'User',
 		name: 'user_id',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getUserOptions',
+		},
 		default: '',
-		description: 'The ID of the user assigned to this person',
+		description: 'The user assigned to this person',
 	} as INodeProperties,
 	teamId: {
-		displayName: 'Team ID',
+		displayName: 'Team',
 		name: 'team_id',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getTeamOptions',
+		},
 		default: '',
-		description: 'The ID of the team assigned to this person',
+		description: 'The team assigned to this person',
 	} as INodeProperties,
 };
 

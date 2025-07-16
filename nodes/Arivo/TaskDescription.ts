@@ -82,18 +82,24 @@ const taskFieldDefinitions = {
 		description: 'ID of the deal/opportunity related to this task',
 	} as INodeProperties,
 	userId: {
-		displayName: 'User ID',
+		displayName: 'User',
 		name: 'user_id',
-		type: 'number',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getUserOptions',
+		},
 		default: '',
-		description: 'ID of the user responsible for this task',
+		description: 'The user responsible for this task',
 	} as INodeProperties,
 	teamId: {
-		displayName: 'Team ID',
+		displayName: 'Team',
 		name: 'team_id',
-		type: 'number',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getTeamOptions',
+		},
 		default: '',
-		description: 'ID of the team responsible for this task',
+		description: 'The team responsible for this task',
 	} as INodeProperties,
 	tags: {
 		displayName: 'Tags',

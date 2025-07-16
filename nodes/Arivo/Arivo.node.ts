@@ -29,7 +29,7 @@ import { createTask, getTask, getTasks, updateTask, deleteTask } from './TaskOpe
 import { createProduct, getProduct, getProducts, updateProduct, deleteProduct } from './ProductOperations';
 import { createProductCategory, getProductCategory, getProductCategories as getProductCategoriesOperation, updateProductCategory, deleteProductCategory } from './ProductCategoryOperations';
 import { getFile, getFiles, deleteFile } from './FileOperations';
-import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductOptions, getProductCategories } from './loadOptions';
+import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductOptions, getProductCategories, getUserOptions, getTeamOptions } from './loadOptions';
 
 export class Arivo implements INodeType {
 	description: INodeTypeDescription = {
@@ -147,6 +147,8 @@ export class Arivo implements INodeType {
 			getDealPipelineSteps,
 			getProducts: getProductOptions,
 			getProductCategories,
+			getUserOptions: getUserOptions,
+			getTeamOptions,
 		},
 	};
 
