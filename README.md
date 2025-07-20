@@ -22,34 +22,95 @@ Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes
 
 ### Action Node
 
-- Contact
+- Contact (Person)
   - Create
   - Get
   - Get All
   - Update
+  - Delete
+- Contact (Company)
+  - Create
+  - Get
+  - Get All
+  - Update
+  - Delete
 - Deal
   - Create
   - Get
   - Get All
   - Update
-- Organization
+  - Delete
+- Note
   - Create
   - Get
   - Get All
   - Update
+  - Delete
+- Task
+  - Create
+  - Get
+  - Get All
+  - Update
+  - Delete
+- Product
+  - Create
+  - Get
+  - Get All
+  - Update
+  - Delete
+- Product Category
+  - Create
+  - Get
+  - Get All
+  - Update
+  - Delete
+- File
+  - Get
+  - Get All
+  - Delete
+- Custom Record
+  - Create
+  - Get
+  - Get All
+  - Update
+  - Delete
 
 ### Trigger Node
 
-- Contact Created
-- Contact Updated
-- Contact Deleted
+- Person Created
+- Person Updated
+- Person Deleted
+- Company Created
+- Company Updated
+- Company Deleted
 - Deal Created
 - Deal Updated
 - Deal Deleted
+- Note Created
+- Note Updated
+- Note Deleted
+- Task Created
+- Task Updated
+- Task Done
+- Task Updated to Not Done
+- Task Deleted
 
 ## Credentials
 
-_If users need to authenticate with the app/service, provide details here. You should include prerequisites (such as signing up with the service), available authentication methods, and how to set them up._
+To use this node, you need to configure Arivo API credentials:
+
+### Prerequisites
+1. Sign up for an Arivo CRM account at [arivo.com.br](https://arivo.com.br)
+2. Log in to your Arivo CRM account
+3. Navigate to API Keys management at [arivo.com.br/api_keys](https://arivo.com.br/api_keys)
+4. Generate a new API key for n8n integration
+
+### Configuration
+1. In n8n, create a new credential of type "Arivo API"
+2. Enter your API key in the "API Key" field
+3. Test the connection to verify the credentials work correctly
+
+The API key will be used for authentication using the Token method as described in the [Arivo API documentation](https://arivo.docs.apiary.io).
 
 ## Resources
 
@@ -58,8 +119,11 @@ _If users need to authenticate with the app/service, provide details here. You s
 
 ## Version history
 
-### 0.1.0
+### 1.0.0
 
 - Initial release
-- Basic CRUD operations for contacts, deals, and organizations
-- Webhook triggers for contact and deal events 
+- Complete CRUD operations for contacts (persons and companies), deals, notes, tasks, products, product categories, files, and custom records
+- Comprehensive webhook triggers for all major events
+- Support for phone, email, and address management
+- Custom fields and load options support
+- Extensive test coverage with 390+ tests 

@@ -21,13 +21,6 @@ export class ArivoApi implements ICredentialType {
 			placeholder: 'key1234567890abcdefkey1234567890',
 			required: true,
 		},
-		// {
-		// 	displayName: 'API URL',
-		// 	name: 'apiUrl',
-		// 	type: 'string',
-		// 	default: 'https://arivo.com.br/api/v2/',
-		// 	required: true,
-		// },
 	];
 
 	authenticate: IAuthenticateGeneric = {
