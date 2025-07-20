@@ -47,7 +47,8 @@ export async function deleteDeal(
 ): Promise<IDataObject> {
 	const dealId = this.getNodeParameter('dealId', index) as string;
 
-	return await arivoApiRequest.call(this, 'DELETE', `/deals/${dealId}`);
+	await arivoApiRequest.call(this, 'DELETE', `/deals/${dealId}`);
+	return { deleted: true };
 }
 
 export async function getDeal(

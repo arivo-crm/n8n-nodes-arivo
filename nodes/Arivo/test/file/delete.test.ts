@@ -19,15 +19,15 @@ describe('Arivo File Delete Operation', () => {
 			fileId: '1',
 		};
 
-		const deleteResponse = { success: true, message: 'File deleted successfully' };
-		mockArivoApiRequest.mockResolvedValue(deleteResponse);
+		const expectedResponse = { deleted: true };
+		mockArivoApiRequest.mockResolvedValue({});
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		const result = await deleteFile.call(mockExecuteFunction, 0);
 
 		expect(mockArivoApiRequest).toHaveBeenCalledTimes(1);
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('DELETE', '/attachment_files/1');
-		expect(result).toEqual(deleteResponse);
+		expect(result).toEqual(expectedResponse);
 	});
 
 	it('should delete a file with different ID', async () => {
@@ -35,15 +35,15 @@ describe('Arivo File Delete Operation', () => {
 			fileId: '123',
 		};
 
-		const deleteResponse = { success: true, message: 'File deleted successfully' };
-		mockArivoApiRequest.mockResolvedValue(deleteResponse);
+		const expectedResponse = { deleted: true };
+		mockArivoApiRequest.mockResolvedValue({});
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		const result = await deleteFile.call(mockExecuteFunction, 0);
 
 		expect(mockArivoApiRequest).toHaveBeenCalledTimes(1);
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('DELETE', '/attachment_files/123');
-		expect(result).toEqual(deleteResponse);
+		expect(result).toEqual(expectedResponse);
 	});
 
 	it('should handle API errors gracefully', async () => {
@@ -66,15 +66,15 @@ describe('Arivo File Delete Operation', () => {
 			fileId: 456,
 		};
 
-		const deleteResponse = { success: true, message: 'File deleted successfully' };
-		mockArivoApiRequest.mockResolvedValue(deleteResponse);
+		const expectedResponse = { deleted: true };
+		mockArivoApiRequest.mockResolvedValue({});
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		const result = await deleteFile.call(mockExecuteFunction, 0);
 
 		expect(mockArivoApiRequest).toHaveBeenCalledTimes(1);
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('DELETE', '/attachment_files/456');
-		expect(result).toEqual(deleteResponse);
+		expect(result).toEqual(expectedResponse);
 	});
 
 	it('should handle empty response from API', async () => {
@@ -82,6 +82,7 @@ describe('Arivo File Delete Operation', () => {
 			fileId: '1',
 		};
 
+		const expectedResponse = { deleted: true };
 		mockArivoApiRequest.mockResolvedValue({});
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
@@ -89,7 +90,7 @@ describe('Arivo File Delete Operation', () => {
 
 		expect(mockArivoApiRequest).toHaveBeenCalledTimes(1);
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('DELETE', '/attachment_files/1');
-		expect(result).toEqual({});
+		expect(result).toEqual(expectedResponse);
 	});
 
 	it('should handle 404 not found error', async () => {
@@ -142,15 +143,15 @@ describe('Arivo File Delete Operation', () => {
 			fileId: '',
 		};
 
-		const deleteResponse = { success: true, message: 'File deleted successfully' };
-		mockArivoApiRequest.mockResolvedValue(deleteResponse);
+		const expectedResponse = { deleted: true };
+		mockArivoApiRequest.mockResolvedValue({});
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		const result = await deleteFile.call(mockExecuteFunction, 0);
 
 		expect(mockArivoApiRequest).toHaveBeenCalledTimes(1);
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('DELETE', '/attachment_files/');
-		expect(result).toEqual(deleteResponse);
+		expect(result).toEqual(expectedResponse);
 	});
 
 	it('should handle 204 No Content response', async () => {
@@ -158,7 +159,8 @@ describe('Arivo File Delete Operation', () => {
 			fileId: '1',
 		};
 
-		// 204 responses typically have no content
+		// 204 responses typically have no content, but operation returns {deleted: true}
+		const expectedResponse = { deleted: true };
 		mockArivoApiRequest.mockResolvedValue(undefined);
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
@@ -166,6 +168,6 @@ describe('Arivo File Delete Operation', () => {
 
 		expect(mockArivoApiRequest).toHaveBeenCalledTimes(1);
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('DELETE', '/attachment_files/1');
-		expect(result).toBeUndefined();
+		expect(result).toEqual(expectedResponse);
 	});
 });

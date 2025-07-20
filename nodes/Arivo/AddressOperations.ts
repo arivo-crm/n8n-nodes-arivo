@@ -22,7 +22,8 @@ export async function deleteAddress(
 	const contactId = this.getNodeParameter('contactId', index) as string;
 	const addressId = this.getNodeParameter('addressId', index) as string;
 
-	return await arivoApiRequest.call(this, 'DELETE', `/contacts/${contactId}/addresses/${addressId}`);
+	await arivoApiRequest.call(this, 'DELETE', `/contacts/${contactId}/addresses/${addressId}`);
+	return { deleted: true };
 }
 
 export async function getAddress(

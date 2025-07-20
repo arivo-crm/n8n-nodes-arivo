@@ -22,7 +22,8 @@ export async function deleteNote(
 ): Promise<IDataObject> {
 	const noteId = this.getNodeParameter('noteId', index) as string;
 
-	return await arivoApiRequest.call(this, 'DELETE', `/notes/${noteId}`);
+	await arivoApiRequest.call(this, 'DELETE', `/notes/${noteId}`);
+	return { deleted: true };
 }
 
 export async function getNote(

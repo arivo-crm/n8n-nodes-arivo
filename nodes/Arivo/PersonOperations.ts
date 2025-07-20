@@ -69,7 +69,8 @@ export async function deletePerson(
 ): Promise<IDataObject> {
 	const personId = this.getNodeParameter('personId', index) as string;
 
-	return await arivoApiRequest.call(this, 'DELETE', `/contacts/${personId}`);
+	await arivoApiRequest.call(this, 'DELETE', `/contacts/${personId}`);
+	return { deleted: true };
 }
 
 export async function getPerson(

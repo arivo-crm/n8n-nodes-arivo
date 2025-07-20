@@ -19,15 +19,15 @@ describe('Arivo Note Delete Operation', () => {
 			noteId: '1',
 		};
 
-		const deleteResponse = { success: true, message: 'Note deleted successfully' };
-		mockArivoApiRequest.mockResolvedValue(deleteResponse);
+		const expectedResponse = { deleted: true };
+		mockArivoApiRequest.mockResolvedValue({});
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		const result = await deleteNote.call(mockExecuteFunction, 0);
 
 		expect(mockArivoApiRequest).toHaveBeenCalledTimes(1);
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('DELETE', '/notes/1');
-		expect(result).toEqual(deleteResponse);
+		expect(result).toEqual(expectedResponse);
 	});
 
 	it('should delete a note with different ID', async () => {
@@ -35,18 +35,14 @@ describe('Arivo Note Delete Operation', () => {
 			noteId: '456',
 		};
 
-		const deleteResponse = { 
-			success: true, 
-			message: 'Note 456 deleted successfully',
-			deleted_id: '456',
-		};
-		mockArivoApiRequest.mockResolvedValue(deleteResponse);
+		const expectedResponse = { deleted: true };
+		mockArivoApiRequest.mockResolvedValue({});
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		const result = await deleteNote.call(mockExecuteFunction, 0);
 
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('DELETE', '/notes/456');
-		expect(result).toEqual(deleteResponse);
+		expect(result).toEqual(expectedResponse);
 	});
 
 	it('should handle API errors gracefully', async () => {
@@ -69,14 +65,14 @@ describe('Arivo Note Delete Operation', () => {
 			noteId: 123,
 		};
 
-		const deleteResponse = { success: true };
-		mockArivoApiRequest.mockResolvedValue(deleteResponse);
+		const expectedResponse = { deleted: true };
+		mockArivoApiRequest.mockResolvedValue({});
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		const result = await deleteNote.call(mockExecuteFunction, 0);
 
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('DELETE', '/notes/123');
-		expect(result).toEqual(deleteResponse);
+		expect(result).toEqual(expectedResponse);
 	});
 
 	it('should handle empty response from API', async () => {
@@ -84,13 +80,14 @@ describe('Arivo Note Delete Operation', () => {
 			noteId: '1',
 		};
 
+		const expectedResponse = { deleted: true };
 		mockArivoApiRequest.mockResolvedValue({});
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		const result = await deleteNote.call(mockExecuteFunction, 0);
 
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('DELETE', '/notes/1');
-		expect(result).toEqual({});
+		expect(result).toEqual(expectedResponse);
 	});
 
 	it('should handle 404 not found error', async () => {

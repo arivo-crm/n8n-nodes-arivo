@@ -25,7 +25,8 @@ export async function deleteDealItem(
 	const dealId = this.getNodeParameter('dealId', index) as string;
 	const itemId = this.getNodeParameter('itemId', index) as string;
 
-	return await arivoApiRequest.call(this, 'DELETE', `/deals/${dealId}/quote_items/${itemId}`);
+	await arivoApiRequest.call(this, 'DELETE', `/deals/${dealId}/quote_items/${itemId}`);
+	return { deleted: true };
 }
 
 export async function getDealItem(

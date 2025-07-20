@@ -329,8 +329,8 @@ describe('Address Operations', () => {
 				addressId: '1',
 			};
 
-			const deleteResponse = { success: true, message: 'Address deleted successfully' };
-			mockArivoApiRequest.mockResolvedValue(deleteResponse);
+			const expectedResponse = { deleted: true };
+			mockArivoApiRequest.mockResolvedValue({});
 
 			const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 			const result = await AddressOperations.deleteAddress.call(mockExecuteFunction, 0);
@@ -339,7 +339,7 @@ describe('Address Operations', () => {
 				'DELETE',
 				'/contacts/123/addresses/1'
 			);
-			expect(result).toEqual(deleteResponse);
+			expect(result).toEqual(expectedResponse);
 		});
 
 		it('should handle delete errors', async () => {
