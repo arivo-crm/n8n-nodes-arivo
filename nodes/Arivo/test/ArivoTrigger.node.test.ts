@@ -1,6 +1,12 @@
 import { ArivoTrigger } from '../ArivoTrigger.node';
 import { createMockHookFunction } from './helpers';
 import { IWebhookFunctions } from 'n8n-workflow';
+import * as GenericFunctions from '../GenericFunctions';
+
+// Mock the arivoApiRequest function
+jest.mock('../GenericFunctions', () => ({
+	arivoApiRequest: jest.fn(),
+}));
 
 describe('ArivoTrigger Node', () => {
 	let arivoTrigger: ArivoTrigger;
@@ -8,6 +14,9 @@ describe('ArivoTrigger Node', () => {
 	beforeEach(() => {
 		arivoTrigger = new ArivoTrigger();
 		jest.clearAllMocks();
+		// Clear the mocked arivoApiRequest
+		const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+		mockApiRequest.mockReset();
 	});
 
 	describe('Node Properties', () => {
@@ -42,16 +51,32 @@ describe('ArivoTrigger Node', () => {
 			);
 			expect(eventProperty).toBeDefined();
 			expect(eventProperty?.options).toContainEqual({
-				name: 'Contact Created',
-				value: 'contact.created',
+				name: 'Person Created',
+				value: 'contact.person.created',
 			});
 			expect(eventProperty?.options).toContainEqual({
-				name: 'Contact Updated',
-				value: 'contact.updated',
+				name: 'Person Updated',
+				value: 'contact.person.updated',
 			});
 			expect(eventProperty?.options).toContainEqual({
-				name: 'Contact Deleted',
-				value: 'contact.deleted',
+				name: 'Person Deleted',
+				value: 'contact.person.deleted',
+			});
+			expect(eventProperty?.options).toContainEqual({
+				name: 'Company Created',
+				value: 'contact.company.created',
+			});
+			expect(eventProperty?.options).toContainEqual({
+				name: 'Deal Created',
+				value: 'deal.created',
+			});
+			expect(eventProperty?.options).toContainEqual({
+				name: 'Task Created',
+				value: 'task.created',
+			});
+			expect(eventProperty?.options).toContainEqual({
+				name: 'Note Created',
+				value: 'note.created',
 			});
 		});
 	});
@@ -60,7 +85,7 @@ describe('ArivoTrigger Node', () => {
 		describe('checkExists', () => {
 			it('should return true if webhook already exists', async () => {
 				const nodeParameters = {
-					event: 'contact.created',
+					event: 'contact.person.created',
 				};
 
 				const webhookUrl = 'https://test-webhook.n8n.cloud/webhook/default';
@@ -69,34 +94,29 @@ describe('ArivoTrigger Node', () => {
 				mockHookFunction.getNodeWebhookUrl = jest.fn().mockReturnValue(webhookUrl);
 				mockHookFunction.getWorkflowStaticData = jest.fn().mockReturnValue(webhookData);
 
-				// Mock helpers.request (not arivoApiRequest) as that's what ArivoTrigger uses
-				const mockRequest = jest.fn().mockResolvedValue({
-					data: [
-						{
-							id: '123',
-							url: webhookUrl,
-							events: ['contact.created'],
-							active: true,
-						},
-					],
-				});
-				mockHookFunction.helpers.request = mockRequest;
+				// Mock arivoApiRequest to return direct array (not wrapped in data)
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+				mockApiRequest.mockResolvedValue([
+					{
+						id: '123',
+						callback_url: webhookUrl,
+						event: 'contact.person.created',
+						status: 'active',
+					},
+				]);
 
 				const result = await arivoTrigger.webhookMethods!.default.checkExists!.call(
 					mockHookFunction,
 				);
 
 				expect(result).toBe(true);
-				expect(mockRequest).toHaveBeenCalledWith({
-					method: 'GET',
-					url: '/webhooks',
-				});
+				expect(mockApiRequest).toHaveBeenCalledWith('GET', '/webhooks');
 				expect(webhookData).toHaveProperty('webhookId', '123');
 			});
 
 			it('should return false if webhook does not exist', async () => {
 				const nodeParameters = {
-					event: 'contact.created',
+					event: 'contact.person.created',
 				};
 
 				const webhookUrl = 'https://test-webhook.n8n.cloud/webhook/default';
@@ -104,18 +124,16 @@ describe('ArivoTrigger Node', () => {
 				mockHookFunction.getNodeWebhookUrl = jest.fn().mockReturnValue(webhookUrl);
 				mockHookFunction.getWorkflowStaticData = jest.fn().mockReturnValue({});
 
-				// Mock helpers.request with no matching webhook
-				const mockRequest = jest.fn().mockResolvedValue({
-					data: [
-						{
-							id: '456',
-							url: 'https://other-webhook.example.com',
-							events: ['deal.created'],
-							active: true,
-						},
-					],
-				});
-				mockHookFunction.helpers.request = mockRequest;
+				// Mock arivoApiRequest with no matching webhook
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+				mockApiRequest.mockResolvedValue([
+					{
+						id: '456',
+						callback_url: 'https://other-webhook.example.com',
+						event: 'deal.created',
+						status: 'active',
+					},
+				]);
 
 				const result = await arivoTrigger.webhookMethods!.default.checkExists!.call(
 					mockHookFunction,
@@ -126,16 +144,16 @@ describe('ArivoTrigger Node', () => {
 
 			it('should return false if no webhooks exist', async () => {
 				const nodeParameters = {
-					event: 'contact.created',
+					event: 'contact.person.created',
 				};
 
 				const mockHookFunction = createMockHookFunction(nodeParameters);
 				mockHookFunction.getNodeWebhookUrl = jest.fn().mockReturnValue('https://test-webhook.n8n.cloud/webhook/default');
 				mockHookFunction.getWorkflowStaticData = jest.fn().mockReturnValue({});
 
-				// Mock helpers.request with empty data
-				const mockRequest = jest.fn().mockResolvedValue({ data: [] });
-				mockHookFunction.helpers.request = mockRequest;
+				// Mock arivoApiRequest with empty array
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+				mockApiRequest.mockResolvedValue([]);
 
 				const result = await arivoTrigger.webhookMethods!.default.checkExists!.call(
 					mockHookFunction,
@@ -148,7 +166,7 @@ describe('ArivoTrigger Node', () => {
 		describe('create', () => {
 			it('should create a new webhook', async () => {
 				const nodeParameters = {
-					event: 'contact.created',
+					event: 'contact.person.created',
 				};
 
 				const webhookUrl = 'https://test-webhook.n8n.cloud/webhook/default';
@@ -159,27 +177,23 @@ describe('ArivoTrigger Node', () => {
 
 				const expectedWebhookData = {
 					id: '789',
-					url: webhookUrl,
-					event: 'contact.created',
-					active: true,
+					callback_url: webhookUrl,
+					event: 'contact.person.created',
+					status: 'active',
 				};
 
-				// Mock helpers.request (not arivoApiRequest)
-				const mockRequest = jest.fn().mockResolvedValue(expectedWebhookData);
-				mockHookFunction.helpers.request = mockRequest;
+				// Mock arivoApiRequest
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+				mockApiRequest.mockResolvedValue(expectedWebhookData);
 
 				const result = await arivoTrigger.webhookMethods!.default.create!.call(
 					mockHookFunction,
 				);
 
 				expect(result).toBe(true);
-				expect(mockRequest).toHaveBeenCalledWith({
-					method: 'POST',
-					url: '/webhooks',
-					body: {
-						url: webhookUrl,
-						event: 'contact.created',
-					},
+				expect(mockApiRequest).toHaveBeenCalledWith('POST', '/webhooks', {
+					callback_url: webhookUrl,
+					event: 'contact.person.created',
 				});
 
 				// Verify that webhook ID is stored in static data
@@ -199,27 +213,23 @@ describe('ArivoTrigger Node', () => {
 
 				const expectedWebhookData = {
 					id: '101',
-					url: webhookUrl,
+					callback_url: webhookUrl,
 					event: 'contact.deleted',
-					active: true,
+					status: 'active',
 				};
 
-				// Mock helpers.request (not arivoApiRequest)
-				const mockRequest = jest.fn().mockResolvedValue(expectedWebhookData);
-				mockHookFunction.helpers.request = mockRequest;
+				// Mock arivoApiRequest
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+				mockApiRequest.mockResolvedValue(expectedWebhookData);
 
 				const result = await arivoTrigger.webhookMethods!.default.create!.call(
 					mockHookFunction,
 				);
 
 				expect(result).toBe(true);
-				expect(mockRequest).toHaveBeenCalledWith({
-					method: 'POST',
-					url: '/webhooks',
-					body: {
-						url: webhookUrl,
-						event: 'contact.deleted',
-					},
+				expect(mockApiRequest).toHaveBeenCalledWith('POST', '/webhooks', {
+					callback_url: webhookUrl,
+					event: 'contact.deleted',
 				});
 			});
 		});
@@ -227,55 +237,52 @@ describe('ArivoTrigger Node', () => {
 		describe('delete', () => {
 			it('should delete existing webhook', async () => {
 				const nodeParameters = {
-					event: 'contact.created',
+					event: 'contact.person.created',
 				};
 
 				const mockHookFunction = createMockHookFunction(nodeParameters);
 				const staticData = { webhookId: '123' };
 				mockHookFunction.getWorkflowStaticData = jest.fn().mockReturnValue(staticData);
 
-				// Mock helpers.request (not arivoApiRequest)
-				const mockRequest = jest.fn().mockResolvedValue({ success: true });
-				mockHookFunction.helpers.request = mockRequest;
+				// Mock arivoApiRequest
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+				mockApiRequest.mockResolvedValue({ success: true });
 
 				const result = await arivoTrigger.webhookMethods!.default.delete!.call(
 					mockHookFunction,
 				);
 
 				expect(result).toBe(true);
-				expect(mockRequest).toHaveBeenCalledWith({
-					method: 'DELETE',
-					url: '/webhooks/123',
-				});
+				expect(mockApiRequest).toHaveBeenCalledWith('DELETE', '/webhooks/123');
 			});
 
 			it('should handle missing webhook ID gracefully', async () => {
 				const nodeParameters = {
-					event: 'contact.created',
+					event: 'contact.person.created',
 				};
 
 				const mockHookFunction = createMockHookFunction(nodeParameters);
 				mockHookFunction.getWorkflowStaticData = jest.fn().mockReturnValue({});
 
-				// Mock helpers.request
-				const mockRequest = jest.fn();
-				mockHookFunction.helpers.request = mockRequest;
+				// Mock arivoApiRequest
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+				mockApiRequest.mockResolvedValue({ success: true });
 
 				const result = await arivoTrigger.webhookMethods!.default.delete!.call(
 					mockHookFunction,
 				);
 
 				expect(result).toBe(true);
-				expect(mockRequest).not.toHaveBeenCalled();
+				expect(mockApiRequest).not.toHaveBeenCalled();
 			});
 		});
 	});
 
 	describe('Webhook Execution', () => {
-		it('should process contact.created webhook payload', async () => {
+		it('should process contact.person.created webhook payload', async () => {
 			const mockWebhookFunction = {
 				getBodyData: jest.fn().mockReturnValue({
-					event: 'contact.created',
+					event: 'contact.person.created',
 					data: {
 						id: 123,
 						name: 'John Doe',
@@ -284,7 +291,7 @@ describe('ArivoTrigger Node', () => {
 					},
 				}),
 				getHeaderData: jest.fn().mockReturnValue({
-					'x-arivo-event': 'contact.created',
+					'x-arivo-event': 'contact.person.created',
 					'x-arivo-signature': 'test-signature',
 				}),
 				helpers: {
@@ -301,7 +308,7 @@ describe('ArivoTrigger Node', () => {
 					[
 						{
 							json: {
-								event: 'contact.created',
+								event: 'contact.person.created',
 								data: {
 									id: 123,
 									name: 'John Doe',

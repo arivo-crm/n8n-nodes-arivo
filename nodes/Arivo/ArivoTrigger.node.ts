@@ -6,6 +6,8 @@ import {
 	IHookFunctions,
 } from 'n8n-workflow';
 
+import { arivoApiRequest } from './GenericFunctions';
+
 export class ArivoTrigger implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Arivo Trigger',
@@ -42,16 +44,28 @@ export class ArivoTrigger implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
-						name: 'Contact Created',
-						value: 'contact.created',
+						name: 'Person Created',
+						value: 'contact.person.created',
 					},
 					{
-						name: 'Contact Deleted',
-						value: 'contact.deleted',
+						name: 'Person Deleted',
+						value: 'contact.person.deleted',
 					},
 					{
-						name: 'Contact Updated',
-						value: 'contact.updated',
+						name: 'Person Updated',
+						value: 'contact.person.updated',
+					},
+					{
+						name: 'Company Created',
+						value: 'contact.company.created',
+					},
+					{
+						name: 'Company Deleted',
+						value: 'contact.company.deleted',
+					},
+					{
+						name: 'Company Updated',
+						value: 'contact.company.updated',
 					},
 					{
 						name: 'Deal Created',
@@ -65,8 +79,40 @@ export class ArivoTrigger implements INodeType {
 						name: 'Deal Updated',
 						value: 'deal.updated',
 					},
+					{
+						name: 'Task Created',
+						value: 'task.created',
+					},
+					{
+						name: 'Task Deleted',
+						value: 'task.deleted',
+					},
+					{
+						name: 'Task Updated',
+						value: 'task.updated',
+					},
+					{
+						name: 'Task Done',
+						value: 'task.done',
+					},
+					{
+						name: 'Task Updated to Not Done',
+						value: 'task.undone',
+					},
+					{
+						name: 'Note Created',
+						value: 'note.created',
+					},
+					{
+						name: 'Note Deleted',
+						value: 'note.deleted',
+					},
+					{
+						name: 'Note Updated',
+						value: 'note.updated',
+					},
 				],
-				default: 'contact.created',
+				default: 'contact.person.created',
 			},
 		],
 	};
@@ -79,16 +125,12 @@ export class ArivoTrigger implements INodeType {
 				const webhookData = this.getWorkflowStaticData('node');
 
 				try {
-					const response = await this.helpers.request({
-						method: 'GET',
-						url: '/webhooks',
-					});
+					const response = await arivoApiRequest.call(this, 'GET', '/webhooks');
 
-					if (response.data && Array.isArray(response.data)) {
-						const existingWebhook = response.data.find((webhook: any) => 
-							webhook.url === webhookUrl && 
-							webhook.events && 
-							webhook.events.includes(event)
+					if (response && Array.isArray(response)) {
+						const existingWebhook = response.find((webhook: any) => 
+							webhook.callback_url === webhookUrl && 
+							webhook.event === event
 						);
 
 						if (existingWebhook) {
@@ -108,13 +150,9 @@ export class ArivoTrigger implements INodeType {
 				const event = this.getNodeParameter('event') as string;
 				const webhookData = this.getWorkflowStaticData('node');
 
-				const response = await this.helpers.request({
-					method: 'POST',
-					url: '/webhooks',
-					body: {
-						url: webhookUrl,
-						event: event,
-					},
+				const response = await arivoApiRequest.call(this, 'POST', '/webhooks', {
+					callback_url: webhookUrl,
+					event: event,
 				});
 				
 				if (!response.id) {
@@ -128,10 +166,7 @@ export class ArivoTrigger implements INodeType {
 				const webhookData = this.getWorkflowStaticData('node');
 				if (webhookData.webhookId) {
 					try {
-						await this.helpers.request({
-							method: 'DELETE',
-							url: `/webhooks/${webhookData.webhookId}`,
-						});
+						await arivoApiRequest.call(this, 'DELETE', `/webhooks/${webhookData.webhookId}`);
 						delete webhookData.webhookId;
 					} catch (error) {
 						// It's possible the webhook was already deleted, so we'll ignore errors here.
