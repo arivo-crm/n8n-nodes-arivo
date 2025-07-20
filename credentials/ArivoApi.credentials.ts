@@ -21,6 +21,15 @@ export class ArivoApi implements ICredentialType {
 			placeholder: 'key1234567890abcdefkey1234567890',
 			required: true,
 		},
+		{
+			displayName: 'API URL',
+			name: 'apiUrl',
+			type: 'string',
+			default: 'https://arivo.com.br/api/v2',
+			description: 'The base URL for your Arivo CRM instance',
+			placeholder: 'https://arivo.com.br/api/v2',
+			required: true,
+		},
 	];
 
 	authenticate: IAuthenticateGeneric = {
@@ -35,7 +44,7 @@ export class ArivoApi implements ICredentialType {
 
 	test: ICredentialTestRequest = {
 		request: {
-			baseURL: (globalThis as any).process?.env?.ARIVO_BASE_URL || 'https://arivo.com.br/api/v2/',
+			baseURL: '={{$credentials.apiUrl}}',
 			url: '/teams?per_page=1',
 		},
 	};

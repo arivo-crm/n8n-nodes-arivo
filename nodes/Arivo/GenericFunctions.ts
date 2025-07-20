@@ -28,7 +28,8 @@ export async function arivoApiRequest(
 	query: IDataObject = {},
 	option: IDataObject = {},
 ): Promise<any> {
-	const baseUrl = (globalThis as any).process?.env?.ARIVO_BASE_URL || 'https://arivo.com.br/api/v2';
+	const credentials = await this.getCredentials('arivoApi');
+	const baseUrl = credentials.apiUrl as string;
 	
 	const options: IHttpRequestOptions = {
 		method,
@@ -169,7 +170,8 @@ export async function arivoApiRequestAllItems(
 
 		// Extract the path from the full URL for the next request
 		// Remove the base URL to get just the path and query string
-		const baseUrl = (globalThis as any).process?.env?.ARIVO_BASE_URL || 'https://arivo.com.br/api/v2';
+		const credentials = await this.getCredentials('arivoApi');
+		const baseUrl = credentials.apiUrl as string;
 		currentUrl = nextPageUrl.replace(baseUrl, '');
 
 		// Rate limiting: check headers and wait if needed

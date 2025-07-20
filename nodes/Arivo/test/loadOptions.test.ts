@@ -224,15 +224,15 @@ describe('Load Options', () => {
 			const taskTypesResponse = [
 				{
 					id: 7,
-					label: 'Tarefa',
+					label: 'Task',
 				},
 				{
 					id: 8,
-					label: 'Visita',
+					label: 'Visit',
 				},
 				{
 					id: 9,
-					label: 'Ligação',
+					label: 'Call',
 				},
 			];
 
@@ -244,15 +244,15 @@ describe('Load Options', () => {
 			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/task_types');
 			expect(result).toEqual([
 				{
-					name: 'Tarefa',
+					name: 'Task',
 					value: 7,
 				},
 				{
-					name: 'Visita',
+					name: 'Visit',
 					value: 8,
 				},
 				{
-					name: 'Ligação',
+					name: 'Call',
 					value: 9,
 				},
 			]);
@@ -893,7 +893,7 @@ describe('getPipelineSteps', () => {
 						field_type: 'date'
 					},
 					custom_nome_signatario: {
-						label: 'Signatário',
+						label: 'Signatory',
 						field_type: 'string'
 					}
 				}
@@ -913,7 +913,7 @@ describe('getPipelineSteps', () => {
 			expect(result).toEqual([
 				// eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
 				{ name: 'Data de validade', value: 'custom_data_validade' },
-				{ name: 'Signatário', value: 'custom_nome_signatario' },
+				{ name: 'Signatory', value: 'custom_nome_signatario' },
 			]);
 			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/custom_record_definitions/1');
 		});

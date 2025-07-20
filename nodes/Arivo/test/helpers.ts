@@ -65,7 +65,7 @@ export const createMockExecuteFunction = (
 
 		getCredentials: jest.fn().mockResolvedValue({
 			apiKey: 'test-api-key',
-			baseUrl: 'https://test.arivo.com.br/api/v2',
+			apiUrl: 'https://test.arivo.com.br/api/v2',
 		}),
 	} as unknown as IExecuteFunctions;
 
@@ -121,7 +121,7 @@ export const createMockLoadOptionsFunctions = (
 
 		getCredentials: jest.fn().mockResolvedValue({
 			apiKey: 'test-api-key',
-			baseUrl: 'https://test.arivo.com.br/api/v2',
+			apiUrl: 'https://test.arivo.com.br/api/v2',
 		}),
 
 		helpers: {
@@ -442,15 +442,15 @@ export const mockTasksListResponse = {
 export const mockActivityTypes = [
 	{
 		id: 7,
-		label: 'Tarefa',
+		label: 'Task',
 	},
 	{
 		id: 8,
-		label: 'Visita',
+		label: 'Visit',
 	},
 	{
 		id: 9,
-		label: 'Ligação',
+		label: 'Call',
 	},
 	{
 		id: 10,
@@ -458,7 +458,7 @@ export const mockActivityTypes = [
 	},
 	{
 		id: 11,
-		label: 'Reunião',
+		label: 'Meeting',
 	},
 ];
 

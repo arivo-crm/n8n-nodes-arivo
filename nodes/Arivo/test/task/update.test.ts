@@ -263,7 +263,7 @@ describe('Arivo Task Update Operation', () => {
 		const nodeParameters = {
 			taskId: '1',
 			updateFields: {
-				task_type_id: 9, // Change to "Ligação" (call)
+				task_type_id: 9, // Change to "Call"
 				comment: 'Changed to phone call task',
 			},
 		};
