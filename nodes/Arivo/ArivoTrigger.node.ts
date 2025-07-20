@@ -44,18 +44,6 @@ export class ArivoTrigger implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
-						name: 'Person Created',
-						value: 'contact.person.created',
-					},
-					{
-						name: 'Person Deleted',
-						value: 'contact.person.deleted',
-					},
-					{
-						name: 'Person Updated',
-						value: 'contact.person.updated',
-					},
-					{
 						name: 'Company Created',
 						value: 'contact.company.created',
 					},
@@ -80,26 +68,6 @@ export class ArivoTrigger implements INodeType {
 						value: 'deal.updated',
 					},
 					{
-						name: 'Task Created',
-						value: 'task.created',
-					},
-					{
-						name: 'Task Deleted',
-						value: 'task.deleted',
-					},
-					{
-						name: 'Task Updated',
-						value: 'task.updated',
-					},
-					{
-						name: 'Task Done',
-						value: 'task.done',
-					},
-					{
-						name: 'Task Updated to Not Done',
-						value: 'task.undone',
-					},
-					{
 						name: 'Note Created',
 						value: 'note.created',
 					},
@@ -110,6 +78,38 @@ export class ArivoTrigger implements INodeType {
 					{
 						name: 'Note Updated',
 						value: 'note.updated',
+					},
+					{
+						name: 'Person Created',
+						value: 'contact.person.created',
+					},
+					{
+						name: 'Person Deleted',
+						value: 'contact.person.deleted',
+					},
+					{
+						name: 'Person Updated',
+						value: 'contact.person.updated',
+					},
+					{
+						name: 'Task Created',
+						value: 'task.created',
+					},
+					{
+						name: 'Task Deleted',
+						value: 'task.deleted',
+					},
+					{
+						name: 'Task Done',
+						value: 'task.done',
+					},
+					{
+						name: 'Task Updated',
+						value: 'task.updated',
+					},
+					{
+						name: 'Task Updated to Not Done',
+						value: 'task.undone',
 					},
 				],
 				default: 'contact.person.created',

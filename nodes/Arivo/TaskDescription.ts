@@ -82,24 +82,24 @@ const taskFieldDefinitions = {
 		description: 'ID of the deal/opportunity related to this task',
 	} as INodeProperties,
 	userId: {
-		displayName: 'User',
+		displayName: 'User Name or ID',
 		name: 'user_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getUserOptions',
 		},
 		default: '',
-		description: 'The user responsible for this task',
+		description: 'The user responsible for this task. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 	teamId: {
-		displayName: 'Team',
+		displayName: 'Team Name or ID',
 		name: 'team_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getTeamOptions',
 		},
 		default: '',
-		description: 'The team responsible for this task',
+		description: 'The team responsible for this task. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 	tags: {
 		displayName: 'Tags',

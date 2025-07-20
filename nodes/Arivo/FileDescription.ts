@@ -32,24 +32,24 @@ const fileFieldDefinitions = {
 		description: 'ID of the note linked to this file',
 	} as INodeProperties,
 	userId: {
-		displayName: 'User',
+		displayName: 'User Name or ID',
 		name: 'user_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getUserOptions',
 		},
 		default: '',
-		description: 'The user responsible for this file',
+		description: 'The user responsible for this file. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 	teamId: {
-		displayName: 'Team',
+		displayName: 'Team Name or ID',
 		name: 'team_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getTeamOptions',
 		},
 		default: '',
-		description: 'The team responsible for this file',
+		description: 'The team responsible for this file. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 };
 
@@ -146,9 +146,8 @@ export const fileFields: INodeProperties[] = [
 		},
 		typeOptions: {
 			minValue: 1,
-			maxValue: 200,
 		},
-		default: 20,
+		default: 50,
 		description: 'Max number of results to return',
 	},
 	{
@@ -239,7 +238,6 @@ export const fileFields: INodeProperties[] = [
 					},
 				],
 				default: 'desc',
-				description: 'Sort order',
 			},
 		],
 	},

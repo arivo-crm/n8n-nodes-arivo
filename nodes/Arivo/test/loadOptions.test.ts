@@ -61,6 +61,7 @@ describe('Load Options', () => {
 
 			expect(result).toEqual([
 				{
+					// eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
 					name: 'custom_field_1', // Falls back to field key when no label
 					value: 'custom_field_1',
 				},
@@ -803,7 +804,9 @@ describe('getPipelineSteps', () => {
 			const result = await getTeamOptions.call(mockLoadOptionsFunction);
 
 			expect(result).toEqual([
+				// eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
 				{ name: 'Sua equipe', value: '1' },
+				// eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
 				{ name: 'Irmandade de Mutantes', value: '2' },
 			]);
 			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/teams');
@@ -908,6 +911,7 @@ describe('getPipelineSteps', () => {
 			const result = await getCustomRecordCustomFields.call(mockLoadOptionsFunction);
 
 			expect(result).toEqual([
+				// eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
 				{ name: 'Data de validade', value: 'custom_data_validade' },
 				{ name: 'Signatário', value: 'custom_nome_signatario' },
 			]);
