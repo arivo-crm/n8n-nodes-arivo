@@ -1,19 +1,19 @@
 {
   "name": "n8n-nodes-arivo",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "n8n community node for Arivo CRM",
   "keywords": [
     "n8n-community-node-package"
   ],
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://arivo.com.br",
   "author": {
     "name": "Elcio Nakashima",
     "email": "contato@arivo.com.br"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/n8n-io/n8n-nodes-arivo.git"
+    "url": "https://github.com/arivo-crm/n8n-nodes-arivo"
   },
   "engines": {
     "node": ">=20.15"
