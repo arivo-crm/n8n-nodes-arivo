@@ -1,0 +1,22 @@
+[
+  {
+    "id": 7,
+    "label": "Tarefa"
+  },
+  {
+    "id": 8,
+    "label": "Visita"
+  },
+  {
+    "id": 9,
+    "label": "Ligação"
+  },
+  {
+    "id": 10,
+    "label": "Email"
+  },
+  {
+    "id": 11,
+    "label": "Reunião"
+  }
+]

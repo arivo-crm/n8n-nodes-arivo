@@ -2,10 +2,11 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	IWebhookFunctions,
-	IDataObject,
 	IWebhookResponseData,
 	IHookFunctions,
 } from 'n8n-workflow';
+
+import { arivoApiRequest } from './GenericFunctions';
 
 export class ArivoTrigger implements INodeType {
 	description: INodeTypeDescription = {
@@ -43,49 +44,115 @@ export class ArivoTrigger implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
-						name: 'Contact Created',
-						value: 'contact.created',
+						name: 'Person Created',
+						value: 'contact.person.created',
 					},
 					{
-						name: 'Contact Updated',
-						value: 'contact.updated',
+						name: 'Person Deleted',
+						value: 'contact.person.deleted',
 					},
 					{
-						name: 'Contact Deleted',
-						value: 'contact.deleted',
+						name: 'Person Updated',
+						value: 'contact.person.updated',
+					},
+					{
+						name: 'Company Created',
+						value: 'contact.company.created',
+					},
+					{
+						name: 'Company Deleted',
+						value: 'contact.company.deleted',
+					},
+					{
+						name: 'Company Updated',
+						value: 'contact.company.updated',
 					},
 					{
 						name: 'Deal Created',
 						value: 'deal.created',
 					},
 					{
+						name: 'Deal Deleted',
+						value: 'deal.deleted',
+					},
+					{
 						name: 'Deal Updated',
 						value: 'deal.updated',
 					},
 					{
-						name: 'Deal Deleted',
-						value: 'deal.deleted',
+						name: 'Task Created',
+						value: 'task.created',
+					},
+					{
+						name: 'Task Deleted',
+						value: 'task.deleted',
+					},
+					{
+						name: 'Task Updated',
+						value: 'task.updated',
+					},
+					{
+						name: 'Task Done',
+						value: 'task.done',
+					},
+					{
+						name: 'Task Updated to Not Done',
+						value: 'task.undone',
+					},
+					{
+						name: 'Note Created',
+						value: 'note.created',
+					},
+					{
+						name: 'Note Deleted',
+						value: 'note.deleted',
+					},
+					{
+						name: 'Note Updated',
+						value: 'note.updated',
 					},
 				],
-				default: 'contact.created',
+				default: 'contact.person.created',
 			},
 		],
 	};
 
 	webhookMethods = {
 		default: {
+			async checkExists(this: IHookFunctions): Promise<boolean> {
+				const webhookUrl = this.getNodeWebhookUrl('default');
+				const event = this.getNodeParameter('event') as string;
+				const webhookData = this.getWorkflowStaticData('node');
+
+				try {
+					const response = await arivoApiRequest.call(this, 'GET', '/webhooks');
+
+					if (response && Array.isArray(response)) {
+						const existingWebhook = response.find((webhook: any) => 
+							webhook.callback_url === webhookUrl && 
+							webhook.event === event
+						);
+
+						if (existingWebhook) {
+							webhookData.webhookId = existingWebhook.id;
+							return true;
+						}
+					}
+				} catch (error) {
+					// If we can't check, assume it doesn't exist
+					return false;
+				}
+
+				return false;
+			},
 			async create(this: IHookFunctions) {
 				const webhookUrl = this.getNodeWebhookUrl('default');
 				const event = this.getNodeParameter('event') as string;
 				const webhookData = this.getWorkflowStaticData('node');
 
-				const response = await this.helpers.request({
-					method: 'POST',
-					url: '/webhooks',
-					body: {
-						url: webhookUrl,
-						event: event,
-					},
+				const response = await arivoApiRequest.call(this, 'POST', '/webhooks', {
+					callback_url: webhookUrl,
+					event: event,
 				});
 				
 				if (!response.id) {
@@ -99,10 +166,7 @@ export class ArivoTrigger implements INodeType {
 				const webhookData = this.getWorkflowStaticData('node');
 				if (webhookData.webhookId) {
 					try {
-						await this.helpers.request({
-							method: 'DELETE',
-							url: `/webhooks/${webhookData.webhookId}`,
-						});
+						await arivoApiRequest.call(this, 'DELETE', `/webhooks/${webhookData.webhookId}`);
 						delete webhookData.webhookId;
 					} catch (error) {
 						// It's possible the webhook was already deleted, so we'll ignore errors here.
@@ -115,10 +179,9 @@ export class ArivoTrigger implements INodeType {
 	};
 
 	async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
-		const req = this.getRequestObject();
-		const bodyArray = Array.isArray(req.body) ? req.body : [req.body];
+		const bodyData = this.getBodyData();
 		return {
-			workflowData: [this.helpers.returnJsonArray(bodyArray as IDataObject[])],
+			workflowData: [this.helpers.returnJsonArray([bodyData])],
 		};
 	}
 } 

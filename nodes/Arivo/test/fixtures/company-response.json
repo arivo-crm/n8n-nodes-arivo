@@ -1,0 +1,56 @@
+{
+  "id": "456",
+  "object": "contact",
+  "created_at": "2024-01-15T10:30:00-03:00",
+  "updated_at": "2024-01-15T10:30:00-03:00",
+  "contact_type": "company",
+  "name": "Acme Corporation",
+  "cnpj": "12.345.678/0001-90",
+  "main_contact_id": "123",
+  "website": "https://acme.com",
+  "emails": [
+    {
+      "id": "10",
+      "object": "email",
+      "created_at": "2024-01-15T10:30:00-03:00",
+      "updated_at": "2024-01-15T10:30:00-03:00",
+      "address": "contact@acme.com",
+      "email_type": "work",
+      "contact_id": "456"
+    }
+  ],
+  "phones": [
+    {
+      "id": "20",
+      "object": "phone",
+      "created_at": "2024-01-15T10:30:00-03:00",
+      "updated_at": "2024-01-15T10:30:00-03:00",
+      "number": "(11) 1234-5678",
+      "phone_type": "work",
+      "contact_id": "456"
+    }
+  ],
+  "addresses": [
+    {
+      "id": "30",
+      "object": "address",
+      "created_at": "2024-01-15T10:30:00-03:00",
+      "updated_at": "2024-01-15T10:30:00-03:00",
+      "street": "123 Business Ave",
+      "city": "São Paulo",
+      "state": "SP",
+      "district": "Centro",
+      "country": "Brazil",
+      "zip": "01234-567",
+      "address_type": "work",
+      "contact_id": "456"
+    }
+  ],
+  "tags": ["corporate", "technology"],
+  "custom_fields": {
+    "industry": "Technology",
+    "employees": "100-500"
+  },
+  "user_id": "1",
+  "team_id": "2"
+}

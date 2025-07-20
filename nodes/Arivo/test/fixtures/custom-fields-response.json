@@ -1,0 +1,18 @@
+{
+  "custom_field_1": {
+    "label": "Department",
+    "field_type": "text",
+    "required": false
+  },
+  "custom_field_2": {
+    "label": "Salary Range",
+    "field_type": "select",
+    "required": false,
+    "options": ["Under 50k", "50k-100k", "100k+"]
+  },
+  "custom_field_3": {
+    "label": "Start Date",
+    "field_type": "date",
+    "required": false
+  }
+}

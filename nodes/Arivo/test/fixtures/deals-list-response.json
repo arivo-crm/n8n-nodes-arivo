@@ -1,0 +1,65 @@
+{
+  "data": [
+    {
+      "id": "100",
+      "object": "deal",
+      "created_at": "2024-01-15T10:30:00-03:00",
+      "updated_at": "2024-01-15T10:30:00-03:00",
+      "name": "Big Software Deal",
+      "description": "Large enterprise software implementation project",
+      "value": 150000.00,
+      "company_id": "456",
+      "contact_id": "123",
+      "status": "open",
+      "temperature": "hot",
+      "opened_at": "2024-01-15T10:30:00-03:00",
+      "estimated_close_date": "2024-03-15T00:00:00-03:00",
+      "closed_at": null,
+      "pipeline_id": "1",
+      "pipeline_step_id": "3",
+      "quote_items": [],
+      "tags": ["enterprise", "software"],
+      "custom_fields": {},
+      "user_id": "1",
+      "team_id": "2"
+    },
+    {
+      "id": "101",
+      "object": "deal",
+      "created_at": "2024-01-16T14:20:00-03:00",
+      "updated_at": "2024-01-16T14:20:00-03:00",
+      "name": "Consulting Project",
+      "description": "Strategic consulting engagement",
+      "value": 75000.00,
+      "company_id": "789",
+      "contact_id": "124",
+      "status": "open",
+      "temperature": "warm",
+      "opened_at": "2024-01-16T14:20:00-03:00",
+      "estimated_close_date": "2024-02-28T00:00:00-03:00",
+      "closed_at": null,
+      "pipeline_id": "1",
+      "pipeline_step_id": "2",
+      "quote_items": [],
+      "tags": ["consulting", "strategy"],
+      "custom_fields": {},
+      "user_id": "2",
+      "team_id": "1"
+    }
+  ],
+  "links": {
+    "first": "https://arivo.com.br/api/v2/deals?page=1",
+    "last": "https://arivo.com.br/api/v2/deals?page=1",
+    "prev": null,
+    "next": null
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 1,
+    "path": "https://arivo.com.br/api/v2/deals",
+    "per_page": 50,
+    "to": 2,
+    "total": 2
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "id": 123,
+  "object": "contact",
+  "contact_type": "person",
+  "name": "John Doe",
+  "birth_date": "1990-01-01",
+  "cpf": "123.456.789-00",
+  "position": "Software Engineer",
+  "company_id": 456,
+  "emails": [
+    {
+      "address": "john.doe@example.com",
+      "type": "work"
+    }
+  ],
+  "phones": [
+    {
+      "number": "+55 11 99999-9999",
+      "type": "mobile"
+    }
+  ],
+  "addresses": [
+    {
+      "street": "123 Main St",
+      "city": "São Paulo",
+      "state": "SP",
+      "district": "Centro",
+      "country": "Brazil",
+      "zip": "01234-567",
+      "type": "work"
+    }
+  ],
+  "custom_fields": {
+    "custom_field_1": "Custom Value 1"
+  },
+  "tags": ["tag1", "tag2"],
+  "user_id": 789,
+  "team_id": 101,
+  "created_at": "2023-01-01T10:00:00-03:00",
+  "updated_at": "2023-01-02T10:00:00-03:00"
+}

@@ -1,0 +1,94 @@
+{
+  "data": [
+    {
+      "id": 123,
+      "object": "contact",
+      "contact_type": "person",
+      "name": "John Doe",
+      "birth_date": "1990-01-01",
+      "cpf": "123.456.789-00",
+      "position": "Software Engineer",
+      "company_id": 456,
+      "emails": [
+        {
+          "address": "john.doe@example.com",
+          "type": "work"
+        }
+      ],
+      "phones": [
+        {
+          "number": "+55 11 99999-9999",
+          "type": "mobile"
+        }
+      ],
+      "addresses": [
+        {
+          "street": "123 Main St",
+          "city": "São Paulo",
+          "state": "SP",
+          "district": "Centro",
+          "country": "Brazil",
+          "zip": "01234-567",
+          "type": "work"
+        }
+      ],
+      "custom_fields": {
+        "custom_field_1": "Custom Value 1"
+      },
+      "tags": ["tag1", "tag2"],
+      "user_id": 789,
+      "team_id": 101,
+      "created_at": "2023-01-01T10:00:00-03:00",
+      "updated_at": "2023-01-02T10:00:00-03:00"
+    },
+    {
+      "id": 124,
+      "object": "contact",
+      "contact_type": "person",
+      "name": "Jane Smith",
+      "birth_date": "1985-06-15",
+      "cpf": "987.654.321-00",
+      "position": "Product Manager",
+      "company_id": 456,
+      "emails": [
+        {
+          "address": "jane.smith@example.com",
+          "type": "work"
+        }
+      ],
+      "phones": [
+        {
+          "number": "+55 11 88888-8888",
+          "type": "work"
+        }
+      ],
+      "addresses": [
+        {
+          "street": "456 Second Ave",
+          "city": "Rio de Janeiro",
+          "state": "RJ",
+          "district": "Copacabana",
+          "country": "Brazil",
+          "zip": "22070-000",
+          "type": "home"
+        }
+      ],
+      "custom_fields": {
+        "custom_field_1": "Custom Value 2"
+      },
+      "tags": ["tag2", "tag3"],
+      "user_id": 790,
+      "team_id": 102,
+      "created_at": "2023-01-03T10:00:00-03:00",
+      "updated_at": "2023-01-04T10:00:00-03:00"
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "current_page": 1,
+      "per_page": 20,
+      "total": 2,
+      "total_pages": 1
+    }
+  }
+}

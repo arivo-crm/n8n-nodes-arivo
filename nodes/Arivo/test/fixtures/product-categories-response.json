@@ -1,0 +1,26 @@
+[
+  {
+    "id": "3",
+    "object": "product_category",
+    "created_at": "2012-06-25T04:08:00-03:00",
+    "updated_at": "2012-06-25T04:08:00-03:00",
+    "name": "Armaduras tecnológicas",
+    "code": null
+  },
+  {
+    "id": "1",
+    "object": "product_category",
+    "created_at": "2012-06-25T04:08:00-03:00",
+    "updated_at": "2012-06-25T04:08:00-03:00",
+    "name": "Armas de baixa tecnologia",
+    "code": "7A"
+  },
+  {
+    "id": "2",
+    "object": "product_category",
+    "created_at": "2012-06-25T04:08:00-03:00",
+    "updated_at": "2012-06-25T04:08:00-03:00",
+    "name": "Veículos",
+    "code": null
+  }
+]
