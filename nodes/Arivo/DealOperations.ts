@@ -41,6 +41,50 @@ export async function createDeal(
 	return await arivoApiRequest.call(this, 'POST', '/deals', body);
 }
 
+export async function createOrUpdateDeal(
+	this: IExecuteFunctions,
+	index: number,
+): Promise<IDataObject> {
+	const dealName = this.getNodeParameter('dealName', index) as string;
+	const additionalFields = this.getNodeParameter('additionalFields', index, {}) as IDataObject;
+
+	const body: IDataObject = {
+		name: dealName,
+		...additionalFields,
+	};
+
+	buildCommonDealBody(body, additionalFields);
+
+	// Search for existing deal by name
+	let existingDeal: IDataObject | null = null;
+	
+	try {
+		const searchResults = await arivoApiRequestAllItems.call(this, 'GET', '/deals', {}, { name: dealName });
+		if (searchResults && searchResults.length > 0) {
+			existingDeal = searchResults[0];
+		}
+	} catch (error) {
+		// If search fails, we'll create a new deal
+	}
+
+	if (existingDeal) {
+		// Update existing deal
+		const dealId = existingDeal.id as string;
+		const updatedDeal = await arivoApiRequest.call(this, 'PUT', `/deals/${dealId}`, body);
+		return {
+			...updatedDeal,
+			__n8n_operation: 'updated',
+		};
+	} else {
+		// Create new deal
+		const newDeal = await arivoApiRequest.call(this, 'POST', '/deals', body);
+		return {
+			...newDeal,
+			__n8n_operation: 'created',
+		};
+	}
+}
+
 export async function deleteDeal(
 	this: IExecuteFunctions,
 	index: number,

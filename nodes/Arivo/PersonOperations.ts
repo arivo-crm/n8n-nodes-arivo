@@ -63,6 +63,82 @@ export async function createPerson(
 	return await arivoApiRequest.call(this, 'POST', '/contacts', body);
 }
 
+export async function createOrUpdatePerson(
+	this: IExecuteFunctions,
+	index: number,
+): Promise<IDataObject> {
+	const personName = this.getNodeParameter('personName', index) as string;
+	const matchField = this.getNodeParameter('matchField', index) as string;
+	const additionalFields = this.getNodeParameter('additionalFields', index, {}) as IDataObject;
+
+	const body: IDataObject = {
+		name: personName,
+		contact_type: 'person',
+		...additionalFields,
+	};
+
+	buildCommonPersonBody(body, additionalFields);
+
+	// Search for existing person by the selected field
+	let existingPerson: IDataObject | null = null;
+	let searchValue: string | undefined;
+
+	// Determine the search value based on the selected match field
+	if (matchField === 'name') {
+		searchValue = personName;
+	} else if (matchField === 'email') {
+		// Get the first email address from the emails array
+		if (body.emails && Array.isArray(body.emails) && body.emails.length > 0) {
+			const firstEmail = body.emails[0];
+			if (firstEmail && firstEmail.address) {
+				searchValue = firstEmail.address;
+			}
+		}
+	} else if (matchField === 'cpf') {
+		searchValue = body.cpf as string;
+	} else if (matchField === 'phone') {
+		// Get the first phone number from the phones array
+		if (body.phones && Array.isArray(body.phones) && body.phones.length > 0) {
+			const firstPhone = body.phones[0];
+			if (firstPhone && firstPhone.number) {
+				searchValue = firstPhone.number;
+			}
+		}
+	}
+
+	// Only search if we have a value to search for
+	if (searchValue) {
+		try {
+			const searchQuery: IDataObject = { contact_type: 'person' };
+			searchQuery[matchField] = searchValue;
+			
+			const searchResults = await arivoApiRequestAllItems.call(this, 'GET', '/contacts', {}, searchQuery);
+			if (searchResults && searchResults.length > 0) {
+				existingPerson = searchResults[0];
+			}
+		} catch (error) {
+			// If search fails, continue with creating new person
+		}
+	}
+
+	if (existingPerson) {
+		// Update existing person
+		const personId = existingPerson.id as string;
+		const updatedPerson = await arivoApiRequest.call(this, 'PUT', `/contacts/${personId}`, body);
+		return {
+			...updatedPerson,
+			__n8n_operation: 'updated',
+		};
+	} else {
+		// Create new person
+		const newPerson = await arivoApiRequest.call(this, 'POST', '/contacts', body);
+		return {
+			...newPerson,
+			__n8n_operation: 'created',
+		};
+	}
+}
+
 export async function deletePerson(
 	this: IExecuteFunctions,
 	index: number,

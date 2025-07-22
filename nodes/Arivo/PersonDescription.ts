@@ -302,6 +302,12 @@ export const personOperations: INodeProperties[] = [
 				action: 'Create a person',
 			},
 			{
+				name: 'Create or Update',
+				value: 'createOrUpdate',
+				description: 'Create a new person, or update the current one if it already exists (upsert)',
+				action: 'Create or update a person',
+			},
+			{
 				name: 'Delete',
 				value: 'delete',
 				description: 'Delete a person permanently',
@@ -356,6 +362,85 @@ export const personFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['create'],
+				resource: ['person'],
+			},
+		},
+		default: {},
+		options: [
+			basicFields.cpf,
+			basicFields.birthDate,
+			basicFields.position,
+			basicFields.companyId,
+			emailField,
+			phoneField,
+			basicFields.tags,
+			basicFields.userId,
+			basicFields.teamId,
+			addressField,
+			customFields,
+		],
+	},
+
+	// ----------------------------------
+	//         person:createOrUpdate
+	// ----------------------------------
+	{
+		displayName: 'Person Name',
+		name: 'personName',
+		type: 'string',
+		placeholder: 'e.g. Nathan Smith',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
+				resource: ['person'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'The name of the person',
+	},
+	{
+		displayName: 'Field to Match On',
+		name: 'matchField',
+		type: 'options',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
+				resource: ['person'],
+			},
+		},
+		options: [
+			{
+				name: 'Name',
+				value: 'name',
+				description: 'Match persons by name',
+			},
+			{
+				name: 'Email',
+				value: 'email',
+				description: 'Match persons by email address',
+			},
+			{
+				name: 'CPF',
+				value: 'cpf',
+				description: 'Match persons by CPF (Brazilian individual taxpayer registration)',
+			},
+			{
+				name: 'Phone',
+				value: 'phone',
+				description: 'Match persons by phone number',
+			},
+		],
+		default: 'email',
+		description: 'The field to use for finding existing persons to update',
+	},
+	{
+		displayName: 'Additional Fields',
+		name: 'additionalFields',
+		type: 'collection',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
 				resource: ['person'],
 			},
 		},
