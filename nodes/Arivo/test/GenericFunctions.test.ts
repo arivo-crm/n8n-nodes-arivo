@@ -254,7 +254,7 @@ describe('GenericFunctions', () => {
 				mockExecuteFunction,
 				'GET',
 				'/contacts',
-			)).rejects.toThrow('Could not complete API request. Maximum number of rate-limit retries reached.');
+			)).rejects.toThrow('Arivo CRM API rate limit exceeded and maximum retries reached');
 
 			expect(mockRequestWithAuthentication).toHaveBeenCalledTimes(3);
 

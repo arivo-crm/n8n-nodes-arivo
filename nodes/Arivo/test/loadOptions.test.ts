@@ -98,7 +98,7 @@ describe('Load Options', () => {
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
 			await expect(getPersonCustomFields.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'No data got returned',
+				'Unable to load custom fields from Arivo CRM',
 			);
 		});
 
@@ -284,7 +284,7 @@ describe('Load Options', () => {
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
 			await expect(getTaskTypes.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'No data got returned',
+				'Unable to load task types from Arivo CRM',
 			);
 		});
 	});
@@ -349,7 +349,7 @@ describe('Load Options', () => {
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
 			await expect(getPipelines.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'No data got returned'
+				'Unable to load pipelines from Arivo CRM'
 			);
 	});
 });
@@ -443,7 +443,7 @@ describe('getPipelineSteps', () => {
 				});
 
 			await expect(getPipelineSteps.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'No pipeline steps found for the selected pipeline'
+				'No pipeline steps available for the selected pipeline'
 			);
 		});
 
@@ -622,7 +622,7 @@ describe('getPipelineSteps', () => {
 				});
 
 			await expect(getDealPipelineSteps.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'Could not determine pipeline for this deal'
+				'Unable to determine which pipeline this deal belongs to'
 			);
 		});
 
@@ -651,7 +651,7 @@ describe('getPipelineSteps', () => {
 				});
 
 			await expect(getDealPipelineSteps.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'No pipeline steps found for the deal pipeline'
+				'No pipeline steps configured for this deal\'s pipeline'
 			);
 		});
 	});
@@ -697,7 +697,7 @@ describe('getPipelineSteps', () => {
 
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
-			await expect(getProductOptions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+			await expect(getProductOptions.call(mockLoadOptionsFunction)).rejects.toThrow('Unable to load products from Arivo CRM');
 		});
 	});
 
@@ -742,7 +742,7 @@ describe('getPipelineSteps', () => {
 
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
-			await expect(getProductCategories.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+			await expect(getProductCategories.call(mockLoadOptionsFunction)).rejects.toThrow('Unable to load product categories from Arivo CRM');
 		});
 	});
 
@@ -787,7 +787,7 @@ describe('getPipelineSteps', () => {
 
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
-			await expect(getUserOptions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+			await expect(getUserOptions.call(mockLoadOptionsFunction)).rejects.toThrow('Unable to load users from Arivo CRM');
 		});
 	});
 
@@ -834,7 +834,7 @@ describe('getPipelineSteps', () => {
 
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
-			await expect(getTeamOptions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+			await expect(getTeamOptions.call(mockLoadOptionsFunction)).rejects.toThrow('Unable to load teams from Arivo CRM');
 		});
 	});
 
@@ -878,7 +878,7 @@ describe('getPipelineSteps', () => {
 
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
-			await expect(getCustomRecordDefinitions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+			await expect(getCustomRecordDefinitions.call(mockLoadOptionsFunction)).rejects.toThrow('Unable to load custom record definitions from Arivo CRM');
 		});
 	});
 
@@ -964,7 +964,7 @@ describe('getPipelineSteps', () => {
 				});
 
 			await expect(getCustomRecordCustomFields.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'No custom fields found for the selected definition'
+				'No custom fields configured for the selected custom record definition'
 			);
 		});
 	});
