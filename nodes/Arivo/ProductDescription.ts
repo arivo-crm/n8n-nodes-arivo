@@ -80,19 +80,19 @@ export const productOperations: INodeProperties[] = [
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a product',
+				description: 'Delete a product permanently',
 				action: 'Delete a product',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a product',
+				description: 'Retrieve a product',
 				action: 'Get a product',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many products',
+				description: 'Retrieve a list of products',
 				action: 'Get many products',
 			},
 			{

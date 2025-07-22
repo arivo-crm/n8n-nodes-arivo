@@ -288,19 +288,19 @@ export const companyOperations: INodeProperties[] = [
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a company',
+				description: 'Delete a company permanently',
 				action: 'Delete a company',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a company',
+				description: 'Retrieve a company',
 				action: 'Get a company',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many companies',
+				description: 'Retrieve a list of companies',
 				action: 'Get many companies',
 			},
 			{

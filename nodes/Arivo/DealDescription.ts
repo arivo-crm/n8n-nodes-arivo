@@ -216,19 +216,19 @@ export const dealOperations: INodeProperties[] = [
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a deal',
+				description: 'Delete a deal permanently',
 				action: 'Delete a deal',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a deal',
+				description: 'Retrieve a deal',
 				action: 'Get a deal',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many deals',
+				description: 'Retrieve a list of deals',
 				action: 'Get many deals',
 			},
 			{

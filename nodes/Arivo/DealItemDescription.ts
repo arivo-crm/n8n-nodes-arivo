@@ -71,25 +71,25 @@ export const dealItemOperations: INodeProperties[] = [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new deal item',
+				description: 'Create a deal item',
 				action: 'Create a deal item',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a deal item',
+				description: 'Delete a deal item permanently',
 				action: 'Delete a deal item',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a deal item',
+				description: 'Retrieve a deal item',
 				action: 'Get a deal item',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many deal items',
+				description: 'Retrieve a list of deal items',
 				action: 'Get many deal items',
 			},
 			{

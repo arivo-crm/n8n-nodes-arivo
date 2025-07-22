@@ -16,25 +16,25 @@ export const customRecordOperations: INodeProperties[] = [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new custom record',
+				description: 'Create a custom record',
 				action: 'Create a custom record',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a custom record',
+				description: 'Delete a custom record permanently',
 				action: 'Delete a custom record',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a custom record',
+				description: 'Retrieve a custom record',
 				action: 'Get a custom record',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many custom records',
+				description: 'Retrieve a list of custom records',
 				action: 'Get many custom records',
 			},
 			{

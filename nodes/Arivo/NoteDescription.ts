@@ -76,19 +76,19 @@ export const noteOperations: INodeProperties[] = [
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a note',
+				description: 'Delete a note permanently',
 				action: 'Delete a note',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a note',
+				description: 'Retrieve a note',
 				action: 'Get a note',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many notes',
+				description: 'Retrieve a list of notes',
 				action: 'Get many notes',
 			},
 			{

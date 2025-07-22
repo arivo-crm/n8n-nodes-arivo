@@ -304,19 +304,19 @@ export const personOperations: INodeProperties[] = [
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a person',
+				description: 'Delete a person permanently',
 				action: 'Delete a person',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a person',
+				description: 'Retrieve a person',
 				action: 'Get a person',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many persons',
+				description: 'Retrieve a list of persons',
 				action: 'Get many persons',
 			},
 			{

@@ -15,25 +15,25 @@ export const addressOperations: INodeProperties[] = [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new address',
+				description: 'Create an address',
 				action: 'Create an address',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete an address',
+				description: 'Delete an address permanently',
 				action: 'Delete an address',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get an address',
+				description: 'Retrieve an address',
 				action: 'Get an address',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many addresses',
+				description: 'Retrieve a list of addresses',
 				action: 'Get many addresses',
 			},
 			{

@@ -15,25 +15,25 @@ export const phoneOperations: INodeProperties[] = [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new phone',
+				description: 'Create a phone',
 				action: 'Create a phone',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a phone',
+				description: 'Delete a phone permanently',
 				action: 'Delete a phone',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a phone',
+				description: 'Retrieve a phone',
 				action: 'Get a phone',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many phones',
+				description: 'Retrieve a list of phones',
 				action: 'Get many phones',
 			},
 			{
