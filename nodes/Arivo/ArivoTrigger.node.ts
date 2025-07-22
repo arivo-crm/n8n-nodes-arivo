@@ -10,7 +10,7 @@ import { arivoApiRequest } from './GenericFunctions';
 
 export class ArivoTrigger implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Arivo Trigger',
+		displayName: 'Arivo CRM Trigger',
 		name: 'arivoTrigger',
 		icon: 'file:arivo.svg',
 		group: ['trigger'],
@@ -18,7 +18,7 @@ export class ArivoTrigger implements INodeType {
 		subtitle: '={{$parameter["event"]}}',
 		description: 'Starts the workflow when Arivo events occur',
 		defaults: {
-			name: 'Arivo Trigger',
+			name: 'Arivo CRM Trigger',
 		},
 		inputs: [],
 		outputs: ['main'],

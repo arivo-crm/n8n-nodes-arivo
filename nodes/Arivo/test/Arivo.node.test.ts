@@ -32,7 +32,7 @@ describe('Arivo Node', () => {
 
 	describe('Node Properties', () => {
 		it('should have correct node properties', () => {
-			expect(arivoNode.description.displayName).toBe('Arivo');
+			expect(arivoNode.description.displayName).toBe('Arivo CRM');
 			expect(arivoNode.description.name).toBe('arivo');
 			expect(arivoNode.description.group).toEqual(['transform']);
 			expect(arivoNode.description.version).toBe(1);

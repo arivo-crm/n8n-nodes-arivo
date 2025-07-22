@@ -21,7 +21,7 @@ describe('ArivoTrigger Node', () => {
 
 	describe('Node Properties', () => {
 		it('should have correct node properties', () => {
-			expect(arivoTrigger.description.displayName).toBe('Arivo Trigger');
+			expect(arivoTrigger.description.displayName).toBe('Arivo CRM Trigger');
 			expect(arivoTrigger.description.name).toBe('arivoTrigger');
 			expect(arivoTrigger.description.group).toEqual(['trigger']);
 			expect(arivoTrigger.description.version).toBe(1);

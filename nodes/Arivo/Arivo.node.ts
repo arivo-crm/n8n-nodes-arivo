@@ -35,7 +35,7 @@ import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, get
 
 export class Arivo implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Arivo',
+		displayName: 'Arivo CRM',
 		name: 'arivo',
 		icon: 'file:arivo.svg',
 		group: ['transform'],
@@ -43,7 +43,7 @@ export class Arivo implements INodeType {
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Create and edit data in Arivo CRM',
 		defaults: {
-			name: 'Arivo',
+			name: 'Arivo CRM',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
