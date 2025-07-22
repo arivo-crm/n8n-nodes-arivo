@@ -110,6 +110,7 @@ export const noteFields: INodeProperties[] = [
 		displayName: 'Text',
 		name: 'text',
 		type: 'string',
+		placeholder: 'e.g. Follow up with client on project requirements',
 		typeOptions: {
 			alwaysOpenEditWindow: true,
 		},

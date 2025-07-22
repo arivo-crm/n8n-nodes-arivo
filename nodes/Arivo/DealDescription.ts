@@ -44,6 +44,7 @@ const dealFieldDefinitions = {
 		displayName: 'Description',
 		name: 'description',
 		type: 'string',
+		placeholder: 'e.g. Annual software license renewal for 100 users',
 		typeOptions: {
 			alwaysOpenEditWindow: true,
 		},
@@ -249,6 +250,7 @@ export const dealFields: INodeProperties[] = [
 		displayName: 'Deal Name',
 		name: 'dealName',
 		type: 'string',
+		placeholder: 'e.g. Software License Deal',
 		displayOptions: {
 			show: {
 				operation: ['create'],
@@ -379,6 +381,7 @@ export const dealFields: INodeProperties[] = [
 				displayName: 'Name',
 				name: 'name',
 				type: 'string',
+				placeholder: 'e.g. Software License',
 				default: '',
 				description: 'Filter by deal name',
 			},
@@ -510,6 +513,7 @@ export const dealFields: INodeProperties[] = [
 				displayName: 'Deal Name',
 				name: 'updateDealName',
 				type: 'string',
+				placeholder: 'e.g. Software License Deal',
 				default: '',
 				description: 'The name of the deal',
 			},

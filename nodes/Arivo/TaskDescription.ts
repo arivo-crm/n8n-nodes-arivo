@@ -125,7 +125,7 @@ export const taskOperations: INodeProperties[] = [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new task',
+				description: 'Create a task',
 				action: 'Create a task',
 			},
 			{
@@ -143,8 +143,8 @@ export const taskOperations: INodeProperties[] = [
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get multiple tasks',
-				action: 'Get multiple tasks',
+				description: 'Get many tasks',
+				action: 'Get many tasks',
 			},
 			{
 				name: 'Update',
@@ -165,6 +165,7 @@ export const taskFields: INodeProperties[] = [
 		displayName: 'Name',
 		name: 'name',
 		type: 'string',
+		placeholder: 'e.g. Follow up call with client',
 		displayOptions: {
 			show: {
 				operation: ['create'],
