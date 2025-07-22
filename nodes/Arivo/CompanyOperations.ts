@@ -69,7 +69,8 @@ export async function deleteCompany(
 ): Promise<IDataObject> {
 	const companyId = this.getNodeParameter('companyId', index) as string;
 
-	return await arivoApiRequest.call(this, 'DELETE', `/contacts/${companyId}`);
+	await arivoApiRequest.call(this, 'DELETE', `/contacts/${companyId}`);
+	return { deleted: true };
 }
 
 export async function getCompany(

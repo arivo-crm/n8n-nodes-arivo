@@ -28,7 +28,8 @@ export async function arivoApiRequest(
 	query: IDataObject = {},
 	option: IDataObject = {},
 ): Promise<any> {
-	const baseUrl = (globalThis as any).process?.env?.ARIVO_BASE_URL || 'https://arivo.com.br/api/v2';
+	const credentials = await this.getCredentials('arivoApi');
+	const baseUrl = credentials.apiUrl as string;
 	
 	const options: IHttpRequestOptions = {
 		method,
@@ -71,7 +72,8 @@ export async function arivoApiRequest(
 
 	// If we've exhausted all retries
 	throw new NodeApiError(this.getNode(), {
-		message: 'Could not complete API request. Maximum number of rate-limit retries reached.',
+		message: 'Arivo CRM API rate limit exceeded and maximum retries reached',
+		description: 'The Arivo CRM API is currently rate limiting requests. Wait a few minutes before trying again, or reduce the frequency of your workflow executions. Check your Arivo CRM account usage if this persists.',
 	} as JsonObject);
 }
 
@@ -169,7 +171,8 @@ export async function arivoApiRequestAllItems(
 
 		// Extract the path from the full URL for the next request
 		// Remove the base URL to get just the path and query string
-		const baseUrl = (globalThis as any).process?.env?.ARIVO_BASE_URL || 'https://arivo.com.br/api/v2';
+		const credentials = await this.getCredentials('arivoApi');
+		const baseUrl = credentials.apiUrl as string;
 		currentUrl = nextPageUrl.replace(baseUrl, '');
 
 		// Rate limiting: check headers and wait if needed

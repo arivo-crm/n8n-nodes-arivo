@@ -24,7 +24,8 @@ export async function deleteEmail(
 	const contactId = this.getNodeParameter('contactId', index) as string;
 	const emailId = this.getNodeParameter('emailId', index) as string;
 
-	return await arivoApiRequest.call(this, 'DELETE', `/contacts/${contactId}/emails/${emailId}`);
+	await arivoApiRequest.call(this, 'DELETE', `/contacts/${contactId}/emails/${emailId}`);
+	return { deleted: true };
 }
 
 export async function getEmail(

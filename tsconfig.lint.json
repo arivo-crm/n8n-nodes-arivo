@@ -1,0 +1,16 @@
+{
+	"extends": "./tsconfig.json",
+	"include": [
+		"credentials/**/*",
+		"nodes/**/*",
+		"nodes/**/*.json",
+		"package.json"
+	],
+	"exclude": [
+		"node_modules",
+		"dist",
+		"coverage",
+		"jest.config.js",
+		"jest.setup.js"
+	]
+}

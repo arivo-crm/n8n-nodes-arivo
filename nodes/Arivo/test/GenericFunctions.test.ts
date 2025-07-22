@@ -56,12 +56,15 @@ describe('GenericFunctions', () => {
 			expect(result).toEqual(expectedResponse);
 		});
 
-		it('should make API request with custom base URL from environment', async () => {
-			const originalEnv = process.env.ARIVO_BASE_URL;
-			process.env.ARIVO_BASE_URL = 'https://custom.arivo.com/api/v2';
-
+		it('should make API request with custom base URL from credentials', async () => {
 			const mockExecuteFunction = createMockExecuteFunction({});
 			mockExecuteFunction.helpers.requestWithAuthentication = mockRequestWithAuthentication;
+			
+			// Override the credentials to use a custom URL
+			mockExecuteFunction.getCredentials = jest.fn().mockResolvedValue({
+				apiKey: 'test-api-key',
+				apiUrl: 'https://custom.arivo.com/api/v2',
+			});
 
 			await arivoApiRequest.call(
 				mockExecuteFunction,
@@ -79,13 +82,6 @@ describe('GenericFunctions', () => {
 				},
 				json: true,
 			});
-
-			// Restore original environment
-			if (originalEnv) {
-				process.env.ARIVO_BASE_URL = originalEnv;
-			} else {
-				delete process.env.ARIVO_BASE_URL;
-			}
 		});
 
 		it('should make API request with body and query parameters', async () => {
@@ -258,7 +254,7 @@ describe('GenericFunctions', () => {
 				mockExecuteFunction,
 				'GET',
 				'/contacts',
-			)).rejects.toThrow('Could not complete API request. Maximum number of rate-limit retries reached.');
+			)).rejects.toThrow('Arivo CRM API rate limit exceeded and maximum retries reached');
 
 			expect(mockRequestWithAuthentication).toHaveBeenCalledTimes(3);
 

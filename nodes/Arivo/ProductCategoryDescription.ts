@@ -33,25 +33,25 @@ export const productCategoryOperations: INodeProperties[] = [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new product category',
+				description: 'Create a product category',
 				action: 'Create a product category',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a product category',
+				description: 'Delete a product category permanently',
 				action: 'Delete a product category',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a product category',
+				description: 'Retrieve a product category',
 				action: 'Get a product category',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many product categories',
+				description: 'Retrieve a list of product categories',
 				action: 'Get many product categories',
 			},
 			{

@@ -44,6 +44,7 @@ const dealFieldDefinitions = {
 		displayName: 'Description',
 		name: 'description',
 		type: 'string',
+		placeholder: 'e.g. Annual software license renewal for 100 users',
 		typeOptions: {
 			alwaysOpenEditWindow: true,
 		},
@@ -173,24 +174,24 @@ const dealFieldDefinitions = {
 		description: 'The tags of the deal',
 	} as INodeProperties,
 	userId: {
-		displayName: 'User',
+		displayName: 'User Name or ID',
 		name: 'user_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getUserOptions',
 		},
 		default: '',
-		description: 'The user assigned to this deal',
+		description: 'The user assigned to this deal. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 	teamId: {
-		displayName: 'Team',
+		displayName: 'Team Name or ID',
 		name: 'team_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getTeamOptions',
 		},
 		default: '',
-		description: 'The team assigned to this deal',
+		description: 'The team assigned to this deal. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 };
 
@@ -215,19 +216,19 @@ export const dealOperations: INodeProperties[] = [
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a deal',
+				description: 'Delete a deal permanently',
 				action: 'Delete a deal',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a deal',
+				description: 'Retrieve a deal',
 				action: 'Get a deal',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many deals',
+				description: 'Retrieve a list of deals',
 				action: 'Get many deals',
 			},
 			{
@@ -249,6 +250,7 @@ export const dealFields: INodeProperties[] = [
 		displayName: 'Deal Name',
 		name: 'dealName',
 		type: 'string',
+		placeholder: 'e.g. Software License Deal',
 		displayOptions: {
 			show: {
 				operation: ['create'],
@@ -379,6 +381,7 @@ export const dealFields: INodeProperties[] = [
 				displayName: 'Name',
 				name: 'name',
 				type: 'string',
+				placeholder: 'e.g. Software License',
 				default: '',
 				description: 'Filter by deal name',
 			},
@@ -510,6 +513,7 @@ export const dealFields: INodeProperties[] = [
 				displayName: 'Deal Name',
 				name: 'updateDealName',
 				type: 'string',
+				placeholder: 'e.g. Software License Deal',
 				default: '',
 				description: 'The name of the deal',
 			},

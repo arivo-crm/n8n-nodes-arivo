@@ -246,24 +246,24 @@ const companyFieldDefinitions = {
 		description: 'The tags of the company',
 	} as INodeProperties,
 	userId: {
-		displayName: 'User',
+		displayName: 'User Name or ID',
 		name: 'user_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getUserOptions',
 		},
 		default: '',
-		description: 'The user assigned to this company',
+		description: 'The user assigned to this company. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 	teamId: {
-		displayName: 'Team',
+		displayName: 'Team Name or ID',
 		name: 'team_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getTeamOptions',
 		},
 		default: '',
-		description: 'The team assigned to this company',
+		description: 'The team assigned to this company. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 };
 
@@ -288,19 +288,19 @@ export const companyOperations: INodeProperties[] = [
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a company',
+				description: 'Delete a company permanently',
 				action: 'Delete a company',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a company',
+				description: 'Retrieve a company',
 				action: 'Get a company',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many companies',
+				description: 'Retrieve a list of companies',
 				action: 'Get many companies',
 			},
 			{

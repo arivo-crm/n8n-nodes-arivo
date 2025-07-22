@@ -38,7 +38,8 @@ export async function deleteTask(
 ): Promise<IDataObject> {
 	const taskId = this.getNodeParameter('taskId', index) as string;
 
-	return await arivoApiRequest.call(this, 'DELETE', `/tasks/${taskId}`);
+	await arivoApiRequest.call(this, 'DELETE', `/tasks/${taskId}`);
+	return { deleted: true };
 }
 
 export async function getTask(

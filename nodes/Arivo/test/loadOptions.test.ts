@@ -61,6 +61,7 @@ describe('Load Options', () => {
 
 			expect(result).toEqual([
 				{
+					// eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
 					name: 'custom_field_1', // Falls back to field key when no label
 					value: 'custom_field_1',
 				},
@@ -97,7 +98,7 @@ describe('Load Options', () => {
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
 			await expect(getPersonCustomFields.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'No data got returned',
+				'Unable to load custom fields from Arivo CRM',
 			);
 		});
 
@@ -223,15 +224,15 @@ describe('Load Options', () => {
 			const taskTypesResponse = [
 				{
 					id: 7,
-					label: 'Tarefa',
+					label: 'Task',
 				},
 				{
 					id: 8,
-					label: 'Visita',
+					label: 'Visit',
 				},
 				{
 					id: 9,
-					label: 'Ligação',
+					label: 'Call',
 				},
 			];
 
@@ -243,15 +244,15 @@ describe('Load Options', () => {
 			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/task_types');
 			expect(result).toEqual([
 				{
-					name: 'Tarefa',
+					name: 'Task',
 					value: 7,
 				},
 				{
-					name: 'Visita',
+					name: 'Visit',
 					value: 8,
 				},
 				{
-					name: 'Ligação',
+					name: 'Call',
 					value: 9,
 				},
 			]);
@@ -283,7 +284,7 @@ describe('Load Options', () => {
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
 			await expect(getTaskTypes.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'No data got returned',
+				'Unable to load task types from Arivo CRM',
 			);
 		});
 	});
@@ -348,7 +349,7 @@ describe('Load Options', () => {
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
 			await expect(getPipelines.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'No data got returned'
+				'Unable to load pipelines from Arivo CRM'
 			);
 	});
 });
@@ -442,7 +443,7 @@ describe('getPipelineSteps', () => {
 				});
 
 			await expect(getPipelineSteps.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'No pipeline steps found for the selected pipeline'
+				'No pipeline steps available for the selected pipeline'
 			);
 		});
 
@@ -621,7 +622,7 @@ describe('getPipelineSteps', () => {
 				});
 
 			await expect(getDealPipelineSteps.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'Could not determine pipeline for this deal'
+				'Unable to determine which pipeline this deal belongs to'
 			);
 		});
 
@@ -650,7 +651,7 @@ describe('getPipelineSteps', () => {
 				});
 
 			await expect(getDealPipelineSteps.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'No pipeline steps found for the deal pipeline'
+				'No pipeline steps configured for this deal\'s pipeline'
 			);
 		});
 	});
@@ -696,7 +697,7 @@ describe('getPipelineSteps', () => {
 
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
-			await expect(getProductOptions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+			await expect(getProductOptions.call(mockLoadOptionsFunction)).rejects.toThrow('Unable to load products from Arivo CRM');
 		});
 	});
 
@@ -741,7 +742,7 @@ describe('getPipelineSteps', () => {
 
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
-			await expect(getProductCategories.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+			await expect(getProductCategories.call(mockLoadOptionsFunction)).rejects.toThrow('Unable to load product categories from Arivo CRM');
 		});
 	});
 
@@ -786,7 +787,7 @@ describe('getPipelineSteps', () => {
 
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
-			await expect(getUserOptions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+			await expect(getUserOptions.call(mockLoadOptionsFunction)).rejects.toThrow('Unable to load users from Arivo CRM');
 		});
 	});
 
@@ -803,7 +804,9 @@ describe('getPipelineSteps', () => {
 			const result = await getTeamOptions.call(mockLoadOptionsFunction);
 
 			expect(result).toEqual([
+				// eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
 				{ name: 'Sua equipe', value: '1' },
+				// eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
 				{ name: 'Irmandade de Mutantes', value: '2' },
 			]);
 			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/teams');
@@ -831,7 +834,7 @@ describe('getPipelineSteps', () => {
 
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
-			await expect(getTeamOptions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+			await expect(getTeamOptions.call(mockLoadOptionsFunction)).rejects.toThrow('Unable to load teams from Arivo CRM');
 		});
 	});
 
@@ -875,7 +878,7 @@ describe('getPipelineSteps', () => {
 
 			const mockLoadOptionsFunction = createMockLoadOptionsFunctions();
 
-			await expect(getCustomRecordDefinitions.call(mockLoadOptionsFunction)).rejects.toThrow('No data got returned');
+			await expect(getCustomRecordDefinitions.call(mockLoadOptionsFunction)).rejects.toThrow('Unable to load custom record definitions from Arivo CRM');
 		});
 	});
 
@@ -890,7 +893,7 @@ describe('getPipelineSteps', () => {
 						field_type: 'date'
 					},
 					custom_nome_signatario: {
-						label: 'Signatário',
+						label: 'Signatory',
 						field_type: 'string'
 					}
 				}
@@ -908,8 +911,9 @@ describe('getPipelineSteps', () => {
 			const result = await getCustomRecordCustomFields.call(mockLoadOptionsFunction);
 
 			expect(result).toEqual([
+				// eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
 				{ name: 'Data de validade', value: 'custom_data_validade' },
-				{ name: 'Signatário', value: 'custom_nome_signatario' },
+				{ name: 'Signatory', value: 'custom_nome_signatario' },
 			]);
 			expect(mockArivoApiRequest).toHaveBeenCalledWith('GET', '/custom_record_definitions/1');
 		});
@@ -960,7 +964,7 @@ describe('getPipelineSteps', () => {
 				});
 
 			await expect(getCustomRecordCustomFields.call(mockLoadOptionsFunction)).rejects.toThrow(
-				'No custom fields found for the selected definition'
+				'No custom fields configured for the selected custom record definition'
 			);
 		});
 	});

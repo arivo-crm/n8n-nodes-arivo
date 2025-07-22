@@ -49,7 +49,8 @@ export async function deleteCustomRecord(
 	const customRecordId = this.getNodeParameter('customRecordId', index) as string;
 
 	const endpoint = `/custom_record_definitions/${definitionId}/custom_records/${customRecordId}`;
-	return await arivoApiRequest.call(this, 'DELETE', endpoint);
+	await arivoApiRequest.call(this, 'DELETE', endpoint);
+	return { deleted: true };
 }
 
 export async function getCustomRecord(

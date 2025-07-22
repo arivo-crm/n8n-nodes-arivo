@@ -208,8 +208,8 @@ describe('Phone Operations', () => {
 				phoneId: '1',
 			};
 
-			const deleteResponse = { success: true, message: 'Phone deleted successfully' };
-			mockArivoApiRequest.mockResolvedValue(deleteResponse);
+			const expectedResponse = { deleted: true };
+			mockArivoApiRequest.mockResolvedValue({});
 
 			const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 			const result = await PhoneOperations.deletePhone.call(mockExecuteFunction, 0);
@@ -218,7 +218,7 @@ describe('Phone Operations', () => {
 				'DELETE',
 				'/contacts/123/phones/1'
 			);
-			expect(result).toEqual(deleteResponse);
+			expect(result).toEqual(expectedResponse);
 		});
 
 		it('should handle delete errors', async () => {

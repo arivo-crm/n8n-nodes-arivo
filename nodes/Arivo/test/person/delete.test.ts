@@ -20,11 +20,10 @@ describe('Arivo Person Delete Operation', () => {
 		};
 
 		const expectedResponse = {
-			success: true,
-			message: 'Person deleted successfully',
+			deleted: true,
 		};
 
-		mockArivoApiRequest.mockResolvedValue(expectedResponse);
+		mockArivoApiRequest.mockResolvedValue({});
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		const result = await deletePerson.deletePerson.call(mockExecuteFunction, 0);
@@ -40,11 +39,10 @@ describe('Arivo Person Delete Operation', () => {
 		};
 
 		const expectedResponse = {
-			success: true,
-			message: 'Person deleted successfully',
+			deleted: true,
 		};
 
-		mockArivoApiRequest.mockResolvedValue(expectedResponse);
+		mockArivoApiRequest.mockResolvedValue({});
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		const result = await deletePerson.deletePerson.call(mockExecuteFunction, 0);
@@ -58,13 +56,17 @@ describe('Arivo Person Delete Operation', () => {
 			personId: '123',
 		};
 
-		// Some APIs return empty response on successful deletion
+		const expectedResponse = {
+			deleted: true,
+		};
+
+		// API returns empty response on successful deletion, but operation returns {deleted: true}
 		mockArivoApiRequest.mockResolvedValue({});
 
 		const mockExecuteFunction = createMockExecuteFunction(nodeParameters);
 		const result = await deletePerson.deletePerson.call(mockExecuteFunction, 0);
 
 		expect(mockArivoApiRequest).toHaveBeenCalledWith('DELETE', '/contacts/123');
-		expect(result).toEqual({});
+		expect(result).toEqual(expectedResponse);
 	});
 });

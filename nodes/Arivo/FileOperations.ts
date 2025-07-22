@@ -16,7 +16,8 @@ export async function deleteFile(
 ): Promise<IDataObject> {
 	const fileId = this.getNodeParameter('fileId', index) as string;
 
-	return await arivoApiRequest.call(this, 'DELETE', `/attachment_files/${fileId}`);
+	await arivoApiRequest.call(this, 'DELETE', `/attachment_files/${fileId}`);
+	return { deleted: true };
 }
 
 export async function getFiles(

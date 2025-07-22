@@ -34,24 +34,24 @@ const noteFieldDefinitions = {
 		description: 'ID of the task/activity to link this note to',
 	} as INodeProperties,
 	userId: {
-		displayName: 'User',
+		displayName: 'User Name or ID',
 		name: 'user_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getUserOptions',
 		},
 		default: '',
-		description: 'The user responsible for this note',
+		description: 'The user responsible for this note. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 	teamId: {
-		displayName: 'Team',
+		displayName: 'Team Name or ID',
 		name: 'team_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getTeamOptions',
 		},
 		default: '',
-		description: 'The team responsible for this note',
+		description: 'The team responsible for this note. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 };
 
@@ -76,19 +76,19 @@ export const noteOperations: INodeProperties[] = [
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a note',
+				description: 'Delete a note permanently',
 				action: 'Delete a note',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a note',
+				description: 'Retrieve a note',
 				action: 'Get a note',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many notes',
+				description: 'Retrieve a list of notes',
 				action: 'Get many notes',
 			},
 			{
@@ -110,6 +110,7 @@ export const noteFields: INodeProperties[] = [
 		displayName: 'Text',
 		name: 'text',
 		type: 'string',
+		placeholder: 'e.g. Follow up with client on project requirements',
 		typeOptions: {
 			alwaysOpenEditWindow: true,
 		},

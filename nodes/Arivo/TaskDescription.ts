@@ -82,24 +82,24 @@ const taskFieldDefinitions = {
 		description: 'ID of the deal/opportunity related to this task',
 	} as INodeProperties,
 	userId: {
-		displayName: 'User',
+		displayName: 'User Name or ID',
 		name: 'user_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getUserOptions',
 		},
 		default: '',
-		description: 'The user responsible for this task',
+		description: 'The user responsible for this task. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 	teamId: {
-		displayName: 'Team',
+		displayName: 'Team Name or ID',
 		name: 'team_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getTeamOptions',
 		},
 		default: '',
-		description: 'The team responsible for this task',
+		description: 'The team responsible for this task. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 	tags: {
 		displayName: 'Tags',
@@ -125,26 +125,26 @@ export const taskOperations: INodeProperties[] = [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new task',
+				description: 'Create a task',
 				action: 'Create a task',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a task',
+				description: 'Delete a task permanently',
 				action: 'Delete a task',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a task',
+				description: 'Retrieve a task',
 				action: 'Get a task',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get multiple tasks',
-				action: 'Get multiple tasks',
+				description: 'Retrieve a list of tasks',
+				action: 'Get many tasks',
 			},
 			{
 				name: 'Update',
@@ -165,6 +165,7 @@ export const taskFields: INodeProperties[] = [
 		displayName: 'Name',
 		name: 'name',
 		type: 'string',
+		placeholder: 'e.g. Follow up call with client',
 		displayOptions: {
 			show: {
 				operation: ['create'],

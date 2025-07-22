@@ -23,7 +23,8 @@ export async function deleteProductCategory(
 ): Promise<IDataObject> {
 	const categoryId = this.getNodeParameter('categoryId', index) as string;
 
-	return await arivoApiRequest.call(this, 'DELETE', `/product_categories/${categoryId}`);
+	await arivoApiRequest.call(this, 'DELETE', `/product_categories/${categoryId}`);
+	return { deleted: true };
 }
 
 export async function getProductCategory(

@@ -10,7 +10,7 @@ async function getCustomFields(this: ILoadOptionsFunctions, fieldType: string): 
     const responseData = await arivoApiRequest.call(this, 'GET', endpoint);
 
     if (responseData === undefined) {
-        throw new NodeOperationError(this.getNode(), 'No data got returned');
+        throw new NodeOperationError(this.getNode(), 'Unable to load custom fields from Arivo CRM', { description: 'Check your API credentials and ensure the Arivo CRM service is accessible. Verify that custom fields exist for this resource type.' });
     }
 
     const returnData: INodePropertyOptions[] = [];
@@ -44,7 +44,7 @@ export async function getTaskTypes(this: ILoadOptionsFunctions): Promise<INodePr
     const responseData = await arivoApiRequest.call(this, 'GET', '/task_types');
 
     if (responseData === undefined) {
-        throw new NodeOperationError(this.getNode(), 'No data got returned');
+        throw new NodeOperationError(this.getNode(), 'Unable to load task types from Arivo CRM', { description: 'Check your API credentials and ensure the Arivo CRM service is accessible. Task types may not be configured in your Arivo CRM account.' });
     }
 
     const returnData: INodePropertyOptions[] = [];
@@ -67,7 +67,7 @@ export async function getPipelines(this: ILoadOptionsFunctions): Promise<INodePr
     const responseData = await arivoApiRequest.call(this, 'GET', '/pipelines');
 
     if (!responseData) {
-        throw new NodeOperationError(this.getNode(), 'No data got returned');
+        throw new NodeOperationError(this.getNode(), 'Unable to load pipelines from Arivo CRM', { description: 'Check your API credentials and ensure the Arivo CRM service is accessible. Verify that sales pipelines are configured in your Arivo CRM account.' });
     }
 
     const returnData: INodePropertyOptions[] = [];
@@ -116,7 +116,7 @@ export async function getPipelineSteps(this: ILoadOptionsFunctions): Promise<INo
     const pipeline = await arivoApiRequest.call(this, 'GET', `/pipelines/${pipelineId}`);
 
     if (!pipeline || !pipeline.pipeline_steps) {
-        throw new NodeOperationError(this.getNode(), 'No pipeline steps found for the selected pipeline');
+        throw new NodeOperationError(this.getNode(), 'No pipeline steps available for the selected pipeline', { description: 'Select a different pipeline or configure pipeline steps in your Arivo CRM account. Each pipeline must have at least one step defined.' });
     }
 
     const returnData: INodePropertyOptions[] = [];
@@ -164,14 +164,14 @@ export async function getDealPipelineSteps(this: ILoadOptionsFunctions): Promise
     const deal = await arivoApiRequest.call(this, 'GET', `/deals/${dealId}`);
     
     if (!deal || !deal.pipeline_id) {
-        throw new NodeOperationError(this.getNode(), 'Could not determine pipeline for this deal');
+        throw new NodeOperationError(this.getNode(), 'Unable to determine which pipeline this deal belongs to', { description: 'Ensure the deal exists and has a valid pipeline assigned. Check the "Deal ID" parameter and verify the deal is accessible with your current API credentials.' });
     }
 
     // Now fetch the pipeline steps using the deal's pipeline_id
     const pipeline = await arivoApiRequest.call(this, 'GET', `/pipelines/${deal.pipeline_id}`);
 
     if (!pipeline || !pipeline.pipeline_steps) {
-        throw new NodeOperationError(this.getNode(), 'No pipeline steps found for the deal pipeline');
+        throw new NodeOperationError(this.getNode(), 'No pipeline steps configured for this deal\'s pipeline', { description: 'Configure pipeline steps in your Arivo CRM account for this deal\'s pipeline, or assign the deal to a different pipeline that has steps configured.' });
     }
 
     const returnData: INodePropertyOptions[] = [];
@@ -193,7 +193,7 @@ export async function getProductOptions(this: ILoadOptionsFunctions): Promise<IN
     const responseData = await arivoApiRequest.call(this, 'GET', '/products');
 
     if (!responseData) {
-        throw new NodeOperationError(this.getNode(), 'No data got returned');
+        throw new NodeOperationError(this.getNode(), 'Unable to load products from Arivo CRM', { description: 'Check your API credentials and ensure the Arivo CRM service is accessible. Products may not be configured in your Arivo CRM account.' });
     }
 
     const returnData: INodePropertyOptions[] = [];
@@ -216,7 +216,7 @@ export async function getProductCategories(this: ILoadOptionsFunctions): Promise
     const responseData = await arivoApiRequest.call(this, 'GET', '/product_categories');
 
     if (!responseData) {
-        throw new NodeOperationError(this.getNode(), 'No data got returned');
+        throw new NodeOperationError(this.getNode(), 'Unable to load product categories from Arivo CRM', { description: 'Check your API credentials and ensure the Arivo CRM service is accessible. Product categories may not be configured in your Arivo CRM account.' });
     }
 
     const returnData: INodePropertyOptions[] = [];
@@ -239,7 +239,7 @@ export async function getUserOptions(this: ILoadOptionsFunctions): Promise<INode
     const responseData = await arivoApiRequest.call(this, 'GET', '/users');
 
     if (!responseData) {
-        throw new NodeOperationError(this.getNode(), 'No data got returned');
+        throw new NodeOperationError(this.getNode(), 'Unable to load users from Arivo CRM', { description: 'Check your API credentials and ensure the Arivo CRM service is accessible. Verify that users exist in your Arivo CRM account.' });
     }
 
     const returnData: INodePropertyOptions[] = [];
@@ -262,7 +262,7 @@ export async function getTeamOptions(this: ILoadOptionsFunctions): Promise<INode
     const responseData = await arivoApiRequest.call(this, 'GET', '/teams');
 
     if (!responseData) {
-        throw new NodeOperationError(this.getNode(), 'No data got returned');
+        throw new NodeOperationError(this.getNode(), 'Unable to load teams from Arivo CRM', { description: 'Check your API credentials and ensure the Arivo CRM service is accessible. Teams may not be configured in your Arivo CRM account.' });
     }
 
     const returnData: INodePropertyOptions[] = [];
@@ -285,7 +285,7 @@ export async function getCustomRecordDefinitions(this: ILoadOptionsFunctions): P
     const responseData = await arivoApiRequest.call(this, 'GET', '/custom_record_definitions');
 
     if (!responseData) {
-        throw new NodeOperationError(this.getNode(), 'No data got returned');
+        throw new NodeOperationError(this.getNode(), 'Unable to load custom record definitions from Arivo CRM', { description: 'Check your API credentials and ensure the Arivo CRM service is accessible. Custom record definitions may not be configured in your Arivo CRM account.' });
     }
 
     const returnData: INodePropertyOptions[] = [];
@@ -332,7 +332,7 @@ export async function getCustomRecordCustomFields(this: ILoadOptionsFunctions): 
     const definition = await arivoApiRequest.call(this, 'GET', `/custom_record_definitions/${definitionId}`);
 
     if (!definition || !definition.definitions) {
-        throw new NodeOperationError(this.getNode(), 'No custom fields found for the selected definition');
+        throw new NodeOperationError(this.getNode(), 'No custom fields configured for the selected custom record definition', { description: 'Add custom fields to this custom record definition in your Arivo CRM account, or select a different custom record definition that has fields configured.' });
     }
 
     const returnData: INodePropertyOptions[] = [];

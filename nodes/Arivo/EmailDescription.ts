@@ -15,25 +15,25 @@ export const emailOperations: INodeProperties[] = [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new email',
+				description: 'Create an email',
 				action: 'Create an email',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete an email',
+				description: 'Delete an email permanently',
 				action: 'Delete an email',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get an email',
+				description: 'Retrieve an email',
 				action: 'Get an email',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many emails',
+				description: 'Retrieve a list of emails',
 				action: 'Get many emails',
 			},
 			{

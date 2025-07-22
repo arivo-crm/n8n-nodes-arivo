@@ -16,25 +16,25 @@ export const customRecordOperations: INodeProperties[] = [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new custom record',
+				description: 'Create a custom record',
 				action: 'Create a custom record',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a custom record',
+				description: 'Delete a custom record permanently',
 				action: 'Delete a custom record',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get a custom record',
+				description: 'Retrieve a custom record',
 				action: 'Get a custom record',
 			},
 			{
 				name: 'Get Many',
 				value: 'getMany',
-				description: 'Get many custom records',
+				description: 'Retrieve a list of custom records',
 				action: 'Get many custom records',
 			},
 			{
@@ -64,7 +64,7 @@ const customFields: INodeProperties = {
 			displayName: 'Custom Field',
 			values: [
 				{
-					displayName: 'Field',
+					displayName: 'Field Name or ID',
 					name: 'field',
 					type: 'options',
 					typeOptions: {
@@ -72,7 +72,7 @@ const customFields: INodeProperties = {
 						loadOptionsDependsOn: ['customRecordDefinitionId'],
 					},
 					default: '',
-					description: 'The custom field to set',
+					description: 'The custom field to set. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 				},
 				{
 					displayName: 'Value',
@@ -90,7 +90,7 @@ const customFields: INodeProperties = {
 // Basic field definitions
 const basicFields = {
 	customRecordDefinitionId: {
-		displayName: 'Custom Record Definition',
+		displayName: 'Custom Record Definition Name or ID',
 		name: 'customRecordDefinitionId',
 		type: 'options',
 		typeOptions: {
@@ -98,7 +98,7 @@ const basicFields = {
 		},
 		default: '',
 		required: true,
-		description: 'The custom record definition that defines the structure of this record',
+		description: 'The custom record definition that defines the structure of this record. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 	dealId: {
 		displayName: 'Deal ID',
@@ -122,24 +122,24 @@ const basicFields = {
 		description: 'Tags for the custom record (comma-separated)',
 	} as INodeProperties,
 	userId: {
-		displayName: 'User',
+		displayName: 'User Name or ID',
 		name: 'user_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getUserOptions',
 		},
 		default: '',
-		description: 'The user responsible for this custom record',
+		description: 'The user responsible for this custom record. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 	teamId: {
-		displayName: 'Team',
+		displayName: 'Team Name or ID',
 		name: 'team_id',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getTeamOptions',
 		},
 		default: '',
-		description: 'The team responsible for this custom record',
+		description: 'The team responsible for this custom record. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	} as INodeProperties,
 };
 
@@ -147,7 +147,7 @@ const basicFields = {
 export const customRecordFields: INodeProperties[] = [
 	// Create operation
 	{
-		displayName: 'Custom Record Definition',
+		displayName: 'Custom Record Definition Name or ID',
 		name: 'customRecordDefinitionId',
 		type: 'options',
 		typeOptions: {
@@ -161,7 +161,7 @@ export const customRecordFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The custom record definition that defines the structure of this record',
+		description: 'The custom record definition that defines the structure of this record. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -187,9 +187,10 @@ export const customRecordFields: INodeProperties[] = [
 
 	// Get operation
 	{
-		displayName: 'Custom Record Definition',
+		displayName: 'Custom Record Definition Name or ID',
 		name: 'customRecordDefinitionId',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>',
 		typeOptions: {
 			loadOptionsMethod: 'getCustomRecordDefinitions',
 		},
@@ -201,7 +202,6 @@ export const customRecordFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The custom record definition',
 	},
 	{
 		displayName: 'Custom Record ID',
@@ -220,9 +220,10 @@ export const customRecordFields: INodeProperties[] = [
 
 	// Get Many operation
 	{
-		displayName: 'Custom Record Definition',
+		displayName: 'Custom Record Definition Name or ID',
 		name: 'customRecordDefinitionId',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>',
 		typeOptions: {
 			loadOptionsMethod: 'getCustomRecordDefinitions',
 		},
@@ -234,7 +235,6 @@ export const customRecordFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The custom record definition',
 	},
 	{
 		displayName: 'Return All',
@@ -262,7 +262,6 @@ export const customRecordFields: INodeProperties[] = [
 		},
 		typeOptions: {
 			minValue: 1,
-			maxValue: 200,
 		},
 		default: 50,
 		description: 'Max number of results to return',
@@ -332,16 +331,16 @@ export const customRecordFields: INodeProperties[] = [
 					},
 				],
 				default: 'desc',
-				description: 'Sort order',
 			},
 		],
 	},
 
 	// Update operation
 	{
-		displayName: 'Custom Record Definition',
+		displayName: 'Custom Record Definition Name or ID',
 		name: 'customRecordDefinitionId',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>',
 		typeOptions: {
 			loadOptionsMethod: 'getCustomRecordDefinitions',
 		},
@@ -353,7 +352,6 @@ export const customRecordFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The custom record definition',
 	},
 	{
 		displayName: 'Custom Record ID',
@@ -393,9 +391,10 @@ export const customRecordFields: INodeProperties[] = [
 
 	// Delete operation
 	{
-		displayName: 'Custom Record Definition',
+		displayName: 'Custom Record Definition Name or ID',
 		name: 'customRecordDefinitionId',
 		type: 'options',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>',
 		typeOptions: {
 			loadOptionsMethod: 'getCustomRecordDefinitions',
 		},
@@ -407,7 +406,6 @@ export const customRecordFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The custom record definition',
 	},
 	{
 		displayName: 'Custom Record ID',
