@@ -13,11 +13,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/arivo-crm/n8n-nodes-arivo"
+    "url": "git+https://github.com/arivo-crm/n8n-nodes-arivo.git"
   },
   "engines": {
     "node": ">=20.15"
-  },  
+  },
   "main": "index.js",
   "scripts": {
     "build": "npx rimraf dist && tsc && gulp build:icons",
