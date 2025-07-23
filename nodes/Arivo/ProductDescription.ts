@@ -78,6 +78,12 @@ export const productOperations: INodeProperties[] = [
 				action: 'Create a product',
 			},
 			{
+				name: 'Create or Update',
+				value: 'createOrUpdate',
+				description: 'Create a new product, or update the current one if it already exists (upsert)',
+				action: 'Create or update a product',
+			},
+			{
 				name: 'Delete',
 				value: 'delete',
 				description: 'Delete a product permanently',
@@ -131,6 +137,69 @@ export const productFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['create'],
+				resource: ['product'],
+			},
+		},
+		default: {},
+		options: [
+			productFieldDefinitions.code,
+			productFieldDefinitions.description,
+			productFieldDefinitions.price,
+			productFieldDefinitions.available,
+			productFieldDefinitions.productCategoryId,
+			productFieldDefinitions.tags,
+		],
+	},
+
+	// ----------------------------------
+	//         product:createOrUpdate
+	// ----------------------------------
+	{
+		displayName: 'Product Name',
+		name: 'productName',
+		type: 'string',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
+				resource: ['product'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'The name of the product',
+	},
+	{
+		displayName: 'Field to Match On',
+		name: 'matchField',
+		type: 'options',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
+				resource: ['product'],
+			},
+		},
+		options: [
+			{
+				name: 'Name',
+				value: 'name',
+				description: 'Match products by name',
+			},
+			{
+				name: 'Code',
+				value: 'code',
+				description: 'Match products by external product code',
+			},
+		],
+		default: 'name',
+		description: 'The field to use for finding existing products to update',
+	},
+	{
+		displayName: 'Additional Fields',
+		name: 'additionalFields',
+		type: 'collection',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
 				resource: ['product'],
 			},
 		},

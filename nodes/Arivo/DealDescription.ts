@@ -214,6 +214,12 @@ export const dealOperations: INodeProperties[] = [
 				action: 'Create a deal',
 			},
 			{
+				name: 'Create or Update',
+				value: 'createOrUpdate',
+				description: 'Create a new deal, or update the current one if it already exists (upsert)',
+				action: 'Create or update a deal',
+			},
+			{
 				name: 'Delete',
 				value: 'delete',
 				description: 'Delete a deal permanently',
@@ -277,6 +283,52 @@ export const dealFields: INodeProperties[] = [
 			dealFieldDefinitions.value,
 			dealFieldDefinitions.companyId,
 			dealFieldDefinitions.contactId,
+			dealFieldDefinitions.temperature,
+			dealFieldDefinitions.openedAt,
+			dealFieldDefinitions.estimatedCloseDate,
+			dealFieldDefinitions.pipelineId,
+			dealFieldDefinitions.tags,
+			dealFieldDefinitions.userId,
+			dealFieldDefinitions.teamId,
+			customFields,
+		],
+	},
+
+	// ----------------------------------
+	//         deal:createOrUpdate
+	// ----------------------------------
+	{
+		displayName: 'Deal Name',
+		name: 'dealName',
+		type: 'string',
+		placeholder: 'e.g. Software License Deal',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
+				resource: ['deal'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'The name of the deal - used for matching existing deals',
+	},
+	{
+		displayName: 'Additional Fields',
+		name: 'additionalFields',
+		type: 'collection',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
+				resource: ['deal'],
+			},
+		},
+		default: {},
+		options: [
+			dealFieldDefinitions.description,
+			dealFieldDefinitions.value,
+			dealFieldDefinitions.companyId,
+			dealFieldDefinitions.contactId,
+			dealFieldDefinitions.status,
 			dealFieldDefinitions.temperature,
 			dealFieldDefinitions.openedAt,
 			dealFieldDefinitions.estimatedCloseDate,

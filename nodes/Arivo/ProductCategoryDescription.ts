@@ -37,6 +37,12 @@ export const productCategoryOperations: INodeProperties[] = [
 				action: 'Create a product category',
 			},
 			{
+				name: 'Create or Update',
+				value: 'createOrUpdate',
+				description: 'Create a new product category, or update the current one if it already exists (upsert)',
+				action: 'Create or update a product category',
+			},
+			{
 				name: 'Delete',
 				value: 'delete',
 				description: 'Delete a product category permanently',
@@ -91,6 +97,68 @@ export const productCategoryFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['create'],
+				resource: ['productCategory'],
+			},
+		},
+		default: {},
+		options: [
+			{
+				...productCategoryFieldDefinitions.code,
+				required: false,
+			},
+		],
+	},
+
+	// ----------------------------------
+	//       productCategory:createOrUpdate
+	// ----------------------------------
+	{
+		displayName: 'Category Name',
+		name: 'categoryName',
+		type: 'string',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
+				resource: ['productCategory'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'Name of the product category',
+	},
+	{
+		displayName: 'Field to Match On',
+		name: 'matchField',
+		type: 'options',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
+				resource: ['productCategory'],
+			},
+		},
+		options: [
+			{
+				name: 'Name',
+				value: 'name',
+				description: 'Match categories by name',
+			},
+			{
+				name: 'Code',
+				value: 'code',
+				description: 'Match categories by external code',
+			},
+		],
+		default: 'name',
+		description: 'The field to use for finding existing categories to update',
+	},
+	{
+		displayName: 'Additional Fields',
+		name: 'additionalFields',
+		type: 'collection',
+		placeholder: 'Add Field',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
 				resource: ['productCategory'],
 			},
 		},

@@ -18,17 +18,17 @@ import { productOperations, productFields } from './ProductDescription';
 import { productCategoryOperations, productCategoryFields } from './ProductCategoryDescription';
 import { fileOperations, fileFields } from './FileDescription';
 import { customRecordOperations, customRecordFields } from './CustomRecordDescription';
-import { createPerson, getPerson, getPersons, updatePerson, deletePerson } from './PersonOperations';
-import { createCompany, getCompany, getCompanies, updateCompany, deleteCompany } from './CompanyOperations';
-import { createDeal, getDeal, getDeals, updateDeal, deleteDeal } from './DealOperations';
+import { createPerson, createOrUpdatePerson, getPerson, getPersons, updatePerson, deletePerson } from './PersonOperations';
+import { createCompany, createOrUpdateCompany, getCompany, getCompanies, updateCompany, deleteCompany } from './CompanyOperations';
+import { createDeal, createOrUpdateDeal, getDeal, getDeals, updateDeal, deleteDeal } from './DealOperations';
 import { createDealItem, getDealItem, getDealItems, updateDealItem, deleteDealItem } from './DealItemOperations';
 import { createPhone, getPhone, getPhones, updatePhone, deletePhone } from './PhoneOperations';
 import { createEmail, getEmail, getEmails, updateEmail, deleteEmail } from './EmailOperations';
 import { createAddress, getAddress, getAddresses, updateAddress, deleteAddress } from './AddressOperations';
 import { createNote, getNote, getNotes, updateNote, deleteNote } from './NoteOperations';
 import { createTask, getTask, getTasks, updateTask, deleteTask } from './TaskOperations';
-import { createProduct, getProduct, getProducts, updateProduct, deleteProduct } from './ProductOperations';
-import { createProductCategory, getProductCategory, getProductCategories as getProductCategoriesOperation, updateProductCategory, deleteProductCategory } from './ProductCategoryOperations';
+import { createProduct, createOrUpdateProduct, getProduct, getProducts, updateProduct, deleteProduct } from './ProductOperations';
+import { createProductCategory, createOrUpdateProductCategory, getProductCategory, getProductCategories as getProductCategoriesOperation, updateProductCategory, deleteProductCategory } from './ProductCategoryOperations';
 import { getFile, getFiles, deleteFile } from './FileOperations';
 import { createCustomRecord, getCustomRecord, getCustomRecords, updateCustomRecord, deleteCustomRecord } from './CustomRecordOperations';
 import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductOptions, getProductCategories, getUserOptions, getTeamOptions, getCustomRecordDefinitions, getCustomRecordCustomFields } from './loadOptions';
@@ -174,6 +174,8 @@ export class Arivo implements INodeType {
 					let response: IDataObject = {};
 					if (operation === 'create') {
 						response = await createPerson.call(this, i);
+					} else if (operation === 'createOrUpdate') {
+						response = await createOrUpdatePerson.call(this, i);
 					} else if (operation === 'delete') {
 						response = await deletePerson.call(this, i);
 					} else if (operation === 'get') {
@@ -192,6 +194,8 @@ export class Arivo implements INodeType {
 					let response: IDataObject = {};
 					if (operation === 'create') {
 						response = await createCompany.call(this, i);
+					} else if (operation === 'createOrUpdate') {
+						response = await createOrUpdateCompany.call(this, i);
 					} else if (operation === 'delete') {
 						response = await deleteCompany.call(this, i);
 					} else if (operation === 'get') {
@@ -228,6 +232,8 @@ export class Arivo implements INodeType {
 					let response: IDataObject = {};
 					if (operation === 'create') {
 						response = await createDeal.call(this, i);
+					} else if (operation === 'createOrUpdate') {
+						response = await createOrUpdateDeal.call(this, i);
 					} else if (operation === 'delete') {
 						response = await deleteDeal.call(this, i);
 					} else if (operation === 'get') {
@@ -368,6 +374,8 @@ export class Arivo implements INodeType {
 					let response: IDataObject = {};
 					if (operation === 'create') {
 						response = await createProduct.call(this, i);
+					} else if (operation === 'createOrUpdate') {
+						response = await createOrUpdateProduct.call(this, i);
 					} else if (operation === 'delete') {
 						response = await deleteProduct.call(this, i);
 					} else if (operation === 'get') {
@@ -386,6 +394,8 @@ export class Arivo implements INodeType {
 					let response: IDataObject = {};
 					if (operation === 'create') {
 						response = await createProductCategory.call(this, i);
+					} else if (operation === 'createOrUpdate') {
+						response = await createOrUpdateProductCategory.call(this, i);
 					} else if (operation === 'delete') {
 						response = await deleteProductCategory.call(this, i);
 					} else if (operation === 'get') {

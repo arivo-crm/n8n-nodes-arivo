@@ -286,6 +286,12 @@ export const companyOperations: INodeProperties[] = [
 				action: 'Create a company',
 			},
 			{
+				name: 'Create or Update',
+				value: 'createOrUpdate',
+				description: 'Create a new company, or update the current one if it already exists (upsert)',
+				action: 'Create or update a company',
+			},
+			{
 				name: 'Delete',
 				value: 'delete',
 				description: 'Delete a company permanently',
@@ -339,6 +345,78 @@ export const companyFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['create'],
+				resource: ['company'],
+			},
+		},
+		default: {},
+		options: [
+			companyFieldDefinitions.cnpj,
+			companyFieldDefinitions.mainContactId,
+			companyFieldDefinitions.website,
+			emailField,
+			phoneField,
+			companyFieldDefinitions.tags,
+			companyFieldDefinitions.userId,
+			companyFieldDefinitions.teamId,
+			addressField,
+			customFields,
+		],
+	},
+
+	// ----------------------------------
+	//         company:createOrUpdate
+	// ----------------------------------
+	{
+		displayName: 'Company Name',
+		name: 'companyName',
+		type: 'string',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
+				resource: ['company'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'The name of the company',
+	},
+	{
+		displayName: 'Field to Match On',
+		name: 'matchField',
+		type: 'options',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
+				resource: ['company'],
+			},
+		},
+		options: [
+			{
+				name: 'Name',
+				value: 'name',
+				description: 'Match companies by name',
+			},
+			{
+				name: 'Email',
+				value: 'email',
+				description: 'Match companies by email address',
+			},
+			{
+				name: 'CNPJ',
+				value: 'cnpj',
+				description: 'Match companies by CNPJ (Brazilian company taxpayer registration)',
+			},
+		],
+		default: 'name',
+		description: 'The field to use for finding existing companies to update',
+	},
+	{
+		displayName: 'Additional Fields',
+		name: 'additionalFields',
+		type: 'collection',
+		displayOptions: {
+			show: {
+				operation: ['createOrUpdate'],
 				resource: ['company'],
 			},
 		},

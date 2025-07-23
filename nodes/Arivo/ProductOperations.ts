@@ -41,6 +41,65 @@ export async function createProduct(
 	return await arivoApiRequest.call(this, 'POST', '/products', body);
 }
 
+export async function createOrUpdateProduct(
+	this: IExecuteFunctions,
+	index: number,
+): Promise<IDataObject> {
+	const productName = this.getNodeParameter('productName', index) as string;
+	const matchField = this.getNodeParameter('matchField', index) as string;
+	const additionalFields = this.getNodeParameter('additionalFields', index, {}) as IDataObject;
+
+	const body: IDataObject = {
+		name: productName,
+		...additionalFields,
+	};
+
+	buildCommonProductBody(body, additionalFields);
+
+	// Search for existing product by the selected field
+	let existingProduct: IDataObject | null = null;
+	let searchValue: string | undefined;
+
+	// Determine the search value based on the selected match field
+	if (matchField === 'name') {
+		searchValue = productName;
+	} else if (matchField === 'code') {
+		searchValue = body.code as string;
+	}
+
+	// Only search if we have a value to search for
+	if (searchValue) {
+		try {
+			const searchQuery: IDataObject = {};
+			searchQuery[matchField] = searchValue;
+			
+			const searchResults = await arivoApiRequestAllItems.call(this, 'GET', '/products', {}, searchQuery);
+			if (searchResults && searchResults.length > 0) {
+				existingProduct = searchResults[0];
+			}
+		} catch (error) {
+			// If search fails, continue with creating new product
+		}
+	}
+
+	if (existingProduct) {
+		// Update existing product
+		const productId = existingProduct.id as string;
+		const updatedProduct = await arivoApiRequest.call(this, 'PUT', `/products/${productId}`, body);
+		return {
+			...updatedProduct,
+			__n8n_operation: 'updated',
+		};
+	} else {
+		// Create new product
+		const newProduct = await arivoApiRequest.call(this, 'POST', '/products', body);
+		return {
+			...newProduct,
+			__n8n_operation: 'created',
+		};
+	}
+}
+
 export async function deleteProduct(
 	this: IExecuteFunctions,
 	index: number,
