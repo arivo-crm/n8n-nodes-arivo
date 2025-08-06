@@ -34,7 +34,7 @@ import { createCustomRecord, getCustomRecord, getCustomRecords, updateCustomReco
 import { getPersonCustomFields, getCompanyCustomFields, getDealCustomFields, getTaskTypes, getPipelines, getPipelineSteps, getDealPipelineSteps, getProductOptions, getProductCategories, getUserOptions, getTeamOptions, getCustomRecordDefinitions, getCustomRecordCustomFields } from './loadOptions';
 
 export class Arivo implements INodeType {
-	description: INodeTypeDescription = {
+	description: INodeTypeDescription = ({
 		displayName: 'Arivo CRM',
 		name: 'arivo',
 		icon: 'file:arivo.svg',
@@ -45,6 +45,7 @@ export class Arivo implements INodeType {
 		defaults: {
 			name: 'Arivo CRM',
 		},
+		usableAsTool: true,
 		inputs: ['main'],
 		outputs: ['main'],
 		credentials: [
@@ -142,7 +143,7 @@ export class Arivo implements INodeType {
 			...productCategoryOperations,
 			...productCategoryFields,
 		],
-	};
+	} as any);
 
 	methods = {
 		loadOptions: {
