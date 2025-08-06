@@ -119,6 +119,10 @@ The API key will be used for authentication using the Token method as described 
 
 ## Version history
 
+### 1.1.0
+
+- Enable use of Arivo nodes as AI agent tools
+
 ### 1.0.0
 
 - Initial release
