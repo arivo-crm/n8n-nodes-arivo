@@ -16,7 +16,15 @@ _Arivo CRM_ is a online CRM built for small to medium companies to keep track of
 
 ## Installation
 
-Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
+To install the Arivo CRM node in a self-hosted n8n instance:
+1. Open "Settings" (in the menu beside your user name)
+2. Navigate to "Community nodes"
+3. Click "Install"
+4. Fill "npm Package Name" with "n8n-nodes-arivo"
+5. Check "I understand the risks of installing unverified code from a public source."
+6. Click "Install"
+
+Or follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
 
 ## Operations
 
