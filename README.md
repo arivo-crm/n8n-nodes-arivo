@@ -1,5 +1,8 @@
 # n8n-nodes-arivo
 
+[![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/arivo-crm/n8n-nodes-arivo/blob/main/README.md)
+[![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](https://github.com/arivo-crm/n8n-nodes-arivo/blob/main/README.pt-BR.md)
+
 This is an n8n community node for Arivo CRM.
 
 _Arivo CRM_ is a online CRM built for small to medium companies to keep track of contacts and deals.
@@ -8,11 +11,12 @@ _Arivo CRM_ is a online CRM built for small to medium companies to keep track of
 
 [Installation](#installation)  
 [Operations](#operations)  
-[Credentials](#credentials)  <!-- delete if no auth needed -->  
-[Compatibility](#compatibility)  
-[Usage](#usage)  <!-- delete if not using this section -->  
+[Credentials](#credentials)   
+[Compatibility](#compatibility)   
+[Usage](#usage)   
 [Resources](#resources)  
-[Version history](#version-history)  <!-- delete if not using this section -->  
+[Version history](#version-history)   
+[License](#license)
 
 ## Installation
 
@@ -120,6 +124,36 @@ To use this node, you need to configure Arivo API credentials:
 
 The API key will be used for authentication using the Token method as described in the [Arivo API documentation](https://arivo.docs.apiary.io).
 
+## Compatibility
+
+This package has been tested with recent n8n versions and requires Node.js >= 20.15.
+
+## Usage
+
+### Contact Management
+- Create and manage person and company contacts
+- Add phones, emails, and addresses
+- Configure custom fields
+- Associate contacts with deals and tasks
+
+### Sales Opportunities
+- Create and track sales deals
+- Add products and services to deals
+- Set up custom sales pipelines
+- Monitor progress through pipeline stages
+
+### Activities and Tasks
+- Schedule and manage activities
+- Configure recurring tasks
+- Associate activities with contacts and deals
+- Mark activities as completed
+
+### Automation with Webhooks
+- Set up triggers for CRM events
+- Automate workflows based on data changes
+- Receive real-time notifications
+- Integrate with other systems
+
 ## Resources
 
 * [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
@@ -139,3 +173,7 @@ The API key will be used for authentication using the Token method as described 
 - Support for phone, email, and address management
 - Custom fields and load options support
 - Extensive test coverage with 390+ tests 
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
