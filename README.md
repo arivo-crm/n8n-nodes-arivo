@@ -154,6 +154,12 @@ This package has been tested with recent n8n versions and requires Node.js >= 20
 - Receive real-time notifications
 - Integrate with other systems
 
+### AI Agent Integration
+- Use Arivo nodes as tools for AI agents in n8n workflows
+- Enable AI agents to autonomously manage CRM data
+- Allow AI to create, update, and retrieve contacts, deals, tasks, and notes
+- Integrate CRM operations into AI-powered automation workflows
+
 ## Resources
 
 * [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)

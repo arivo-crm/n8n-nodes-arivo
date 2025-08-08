@@ -153,6 +153,12 @@ Este pacote foi testado com n8n versões recentes e requer Node.js >= 20.15.
 - Receba notificações em tempo real
 - Integre com outros sistemas
 
+### Integração com Agentes de IA
+- Use os nós do Arivo como ferramentas para agentes de IA em workflows n8n
+- Permita que agentes de IA gerenciem dados do CRM de forma autônoma
+- Permita que a IA crie, atualize e recupere contatos, oportunidades, atividades e anotações
+- Integre operações de CRM em workflows de automação baseados em IA
+
 ## Recursos
 
 * [Documentação dos nós da comunidade n8n](https://docs.n8n.io/integrations/community-nodes/)
