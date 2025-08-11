@@ -64,8 +64,20 @@ export class ArivoTrigger implements INodeType {
 						value: 'deal.deleted',
 					},
 					{
+						name: 'Deal Lost',
+						value: 'deal.lost',
+					},
+					{
+						name: 'Deal Reopened',
+						value: 'deal.reopen',
+					},
+					{
 						name: 'Deal Updated',
 						value: 'deal.updated',
+					},
+					{
+						name: 'Deal Won',
+						value: 'deal.won',
 					},
 					{
 						name: 'Note Created',

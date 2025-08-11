@@ -71,6 +71,18 @@ describe('ArivoTrigger Node', () => {
 				value: 'deal.created',
 			});
 			expect(eventProperty?.options).toContainEqual({
+				name: 'Deal Lost',
+				value: 'deal.lost',
+			});
+			expect(eventProperty?.options).toContainEqual({
+				name: 'Deal Reopened',
+				value: 'deal.reopen',
+			});
+			expect(eventProperty?.options).toContainEqual({
+				name: 'Deal Won',
+				value: 'deal.won',
+			});
+			expect(eventProperty?.options).toContainEqual({
 				name: 'Task Created',
 				value: 'task.created',
 			});
@@ -232,6 +244,108 @@ describe('ArivoTrigger Node', () => {
 					event: 'contact.deleted',
 				});
 			});
+
+			it('should create webhook for deal.won event', async () => {
+				const nodeParameters = {
+					event: 'deal.won',
+				};
+
+				const webhookUrl = 'https://test-webhook.n8n.cloud/webhook/default';
+				const webhookData = {};
+				const mockHookFunction = createMockHookFunction(nodeParameters);
+				mockHookFunction.getNodeWebhookUrl = jest.fn().mockReturnValue(webhookUrl);
+				mockHookFunction.getWorkflowStaticData = jest.fn().mockReturnValue(webhookData);
+
+				const expectedWebhookData = {
+					id: '201',
+					callback_url: webhookUrl,
+					event: 'deal.won',
+					status: 'active',
+				};
+
+				// Mock arivoApiRequest
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+				mockApiRequest.mockResolvedValue(expectedWebhookData);
+
+				const result = await arivoTrigger.webhookMethods!.default.create!.call(
+					mockHookFunction,
+				);
+
+				expect(result).toBe(true);
+				expect(mockApiRequest).toHaveBeenCalledWith('POST', '/webhooks', {
+					callback_url: webhookUrl,
+					event: 'deal.won',
+				});
+				expect(webhookData).toHaveProperty('webhookId', '201');
+			});
+
+			it('should create webhook for deal.lost event', async () => {
+				const nodeParameters = {
+					event: 'deal.lost',
+				};
+
+				const webhookUrl = 'https://test-webhook.n8n.cloud/webhook/default';
+				const webhookData = {};
+				const mockHookFunction = createMockHookFunction(nodeParameters);
+				mockHookFunction.getNodeWebhookUrl = jest.fn().mockReturnValue(webhookUrl);
+				mockHookFunction.getWorkflowStaticData = jest.fn().mockReturnValue(webhookData);
+
+				const expectedWebhookData = {
+					id: '202',
+					callback_url: webhookUrl,
+					event: 'deal.lost',
+					status: 'active',
+				};
+
+				// Mock arivoApiRequest
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+				mockApiRequest.mockResolvedValue(expectedWebhookData);
+
+				const result = await arivoTrigger.webhookMethods!.default.create!.call(
+					mockHookFunction,
+				);
+
+				expect(result).toBe(true);
+				expect(mockApiRequest).toHaveBeenCalledWith('POST', '/webhooks', {
+					callback_url: webhookUrl,
+					event: 'deal.lost',
+				});
+				expect(webhookData).toHaveProperty('webhookId', '202');
+			});
+
+			it('should create webhook for deal.reopen event', async () => {
+				const nodeParameters = {
+					event: 'deal.reopen',
+				};
+
+				const webhookUrl = 'https://test-webhook.n8n.cloud/webhook/default';
+				const webhookData = {};
+				const mockHookFunction = createMockHookFunction(nodeParameters);
+				mockHookFunction.getNodeWebhookUrl = jest.fn().mockReturnValue(webhookUrl);
+				mockHookFunction.getWorkflowStaticData = jest.fn().mockReturnValue(webhookData);
+
+				const expectedWebhookData = {
+					id: '203',
+					callback_url: webhookUrl,
+					event: 'deal.reopen',
+					status: 'active',
+				};
+
+				// Mock arivoApiRequest
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+				mockApiRequest.mockResolvedValue(expectedWebhookData);
+
+				const result = await arivoTrigger.webhookMethods!.default.create!.call(
+					mockHookFunction,
+				);
+
+				expect(result).toBe(true);
+				expect(mockApiRequest).toHaveBeenCalledWith('POST', '/webhooks', {
+					callback_url: webhookUrl,
+					event: 'deal.reopen',
+				});
+				expect(webhookData).toHaveProperty('webhookId', '203');
+			});
 		});
 
 		describe('delete', () => {
@@ -390,6 +504,138 @@ describe('ArivoTrigger Node', () => {
 								event: 'contact.deleted',
 								data: {
 									id: 123,
+								},
+							},
+						},
+					],
+				],
+			});
+		});
+
+		it('should process deal.won webhook payload', async () => {
+			const mockWebhookFunction = {
+				getBodyData: jest.fn().mockReturnValue({
+					event: 'deal.won',
+					data: {
+						id: 456,
+						name: 'Big Deal',
+						status: 'won',
+						value: '50000.00',
+						closed_at: '2024-01-15T10:30:00-03:00',
+					},
+				}),
+				getHeaderData: jest.fn().mockReturnValue({
+					'x-arivo-event': 'deal.won',
+				}),
+				helpers: {
+					returnJsonArray: jest.fn().mockImplementation((data) => 
+						data.map((item: any) => ({ json: item }))
+					),
+				},
+			} as unknown as IWebhookFunctions;
+
+			const result = await arivoTrigger.webhook!.call(mockWebhookFunction);
+
+			expect(result).toEqual({
+				workflowData: [
+					[
+						{
+							json: {
+								event: 'deal.won',
+								data: {
+									id: 456,
+									name: 'Big Deal',
+									status: 'won',
+									value: '50000.00',
+									closed_at: '2024-01-15T10:30:00-03:00',
+								},
+							},
+						},
+					],
+				],
+			});
+		});
+
+		it('should process deal.lost webhook payload', async () => {
+			const mockWebhookFunction = {
+				getBodyData: jest.fn().mockReturnValue({
+					event: 'deal.lost',
+					data: {
+						id: 789,
+						name: 'Lost Opportunity',
+						status: 'lost',
+						value: '25000.00',
+						closed_at: '2024-01-15T14:45:00-03:00',
+					},
+				}),
+				getHeaderData: jest.fn().mockReturnValue({
+					'x-arivo-event': 'deal.lost',
+				}),
+				helpers: {
+					returnJsonArray: jest.fn().mockImplementation((data) => 
+						data.map((item: any) => ({ json: item }))
+					),
+				},
+			} as unknown as IWebhookFunctions;
+
+			const result = await arivoTrigger.webhook!.call(mockWebhookFunction);
+
+			expect(result).toEqual({
+				workflowData: [
+					[
+						{
+							json: {
+								event: 'deal.lost',
+								data: {
+									id: 789,
+									name: 'Lost Opportunity',
+									status: 'lost',
+									value: '25000.00',
+									closed_at: '2024-01-15T14:45:00-03:00',
+								},
+							},
+						},
+					],
+				],
+			});
+		});
+
+		it('should process deal.reopen webhook payload', async () => {
+			const mockWebhookFunction = {
+				getBodyData: jest.fn().mockReturnValue({
+					event: 'deal.reopen',
+					data: {
+						id: 321,
+						name: 'Reopened Deal',
+						status: 'open',
+						value: '35000.00',
+						closed_at: null,
+					},
+				}),
+				getHeaderData: jest.fn().mockReturnValue({
+					'x-arivo-event': 'deal.reopen',
+				}),
+				helpers: {
+					returnJsonArray: jest.fn().mockImplementation((data) => 
+						data.map((item: any) => ({ json: item }))
+					),
+				},
+			} as unknown as IWebhookFunctions;
+
+			const result = await arivoTrigger.webhook!.call(mockWebhookFunction);
+
+			expect(result).toEqual({
+				workflowData: [
+					[
+						{
+							json: {
+								event: 'deal.reopen',
+								data: {
+									id: 321,
+									name: 'Reopened Deal',
+									status: 'open',
+									value: '35000.00',
+									closed_at: null,
 								},
 							},
 						},

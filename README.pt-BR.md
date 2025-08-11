@@ -97,6 +97,9 @@ Ou siga o [guia de instalação](https://docs.n8n.io/integrations/community-node
 - Oportunidade Criada
 - Oportunidade Atualizada
 - Oportunidade Excluída
+- Oportunidade Ganha
+- Oportunidade Perdida
+- Oportunidade Reaberta
 - Anotação Criada
 - Anotação Atualizada
 - Anotação Excluída
