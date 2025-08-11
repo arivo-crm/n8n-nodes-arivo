@@ -98,6 +98,9 @@ Or follow the [installation guide](https://docs.n8n.io/integrations/community-no
 - Deal Created
 - Deal Updated
 - Deal Deleted
+- Deal Won
+- Deal Lost
+- Deal Reopened
 - Note Created
 - Note Updated
 - Note Deleted
@@ -166,6 +169,10 @@ This package has been tested with recent n8n versions and requires Node.js >= 20
 * [Arivo API Documentation](https://arivo.docs.apiary.io)
 
 ## Version history
+
+### 1.2.0
+
+- Add trigger events for deal lifecycle: Deal Won, Deal Lost, and Deal Reopened
 
 ### 1.1.0
 
