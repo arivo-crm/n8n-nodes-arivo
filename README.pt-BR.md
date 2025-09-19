@@ -108,6 +108,9 @@ Ou siga o [guia de instalação](https://docs.n8n.io/integrations/community-node
 - Atividade Finalizada
 - Atividade Marcada como Não Finalizada
 - Atividade Excluída
+- Registro Personalizado Criado
+- Registro Personalizado Atualizado
+- Registro Personalizado Excluído
 
 ## Credenciais
 
@@ -167,6 +170,29 @@ Este pacote foi testado com n8n versões recentes e requer Node.js >= 20.15.
 * [Documentação dos nós da comunidade n8n](https://docs.n8n.io/integrations/community-nodes/)
 * [Documentação da API do Arivo](https://arivo.docs.apiary.io)
 * [Site oficial do Arivo CRM](https://arivo.com.br)
+
+## Histórico de versões
+
+### 1.3.0
+
+- Adiciona eventos de gatilho para registros personalizados com seleção de definição via webhook
+
+### 1.2.0
+
+- Adiciona eventos de gatilho para o ciclo de vida de oportunidades: Oportunidade Ganha, Perdida e Reaberta
+
+### 1.1.0
+
+- Permite usar os nós do Arivo como ferramentas para agentes de IA
+
+### 1.0.0
+
+- Lançamento inicial
+- Operações completas de CRUD para contatos (pessoas e empresas), oportunidades, anotações, atividades, produtos, categorias de produto, arquivos e registros personalizados
+- Cobertura abrangente de webhooks para os principais eventos
+- Suporte para gerenciamento de telefone, e-mail e endereço
+- Suporte a campos personalizados e opções dinâmicas
+- Extensa suíte de testes com mais de 390 testes
 
 ## Suporte
 
