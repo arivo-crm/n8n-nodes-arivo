@@ -109,6 +109,9 @@ Or follow the [installation guide](https://docs.n8n.io/integrations/community-no
 - Task Done
 - Task Updated to Not Done
 - Task Deleted
+- Custom Record Created
+- Custom Record Updated
+- Custom Record Deleted
 
 ## Credentials
 
@@ -169,6 +172,10 @@ This package has been tested with recent n8n versions and requires Node.js >= 20
 * [Arivo API Documentation](https://arivo.docs.apiary.io)
 
 ## Version history
+
+### 1.3.0
+
+- Add custom record trigger events with definition-aware webhooks and UI configuration
 
 ### 1.2.0
 

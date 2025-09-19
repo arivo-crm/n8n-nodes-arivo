@@ -90,6 +90,40 @@ describe('ArivoTrigger Node', () => {
 				name: 'Note Created',
 				value: 'note.created',
 			});
+			expect(eventProperty?.options).toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({
+						name: 'Custom Record Created',
+						value: 'customRecord.created',
+					}),
+					expect.objectContaining({
+						name: 'Custom Record Updated',
+						value: 'customRecord.updated',
+					}),
+					expect.objectContaining({
+						name: 'Custom Record Deleted',
+						value: 'customRecord.deleted',
+					}),
+				]),
+			);
+		});
+
+		it('should configure custom record definition selector', () => {
+			const definitionProperty = arivoTrigger.description.properties.find(
+				(prop) => prop.name === 'customRecordDefinitionId',
+			);
+			expect(definitionProperty).toBeDefined();
+			expect(definitionProperty?.required).toBe(true);
+			expect(definitionProperty?.typeOptions?.loadOptionsMethod).toBe('getCustomRecordDefinitions');
+			expect(definitionProperty?.displayOptions?.show?.event).toEqual([
+				'customRecord.created',
+				'customRecord.updated',
+				'customRecord.deleted',
+			]);
+		});
+
+		it('should expose load options for custom record definitions', () => {
+			expect(arivoTrigger.methods?.loadOptions?.getCustomRecordDefinitions).toBeDefined();
 		});
 	});
 
@@ -124,6 +158,37 @@ describe('ArivoTrigger Node', () => {
 				expect(result).toBe(true);
 				expect(mockApiRequest).toHaveBeenCalledWith('GET', '/webhooks');
 				expect(webhookData).toHaveProperty('webhookId', '123');
+			});
+
+			it('should handle existing custom record webhook', async () => {
+				const nodeParameters = {
+					event: 'customRecord.created',
+					customRecordDefinitionId: '42',
+				};
+
+				const webhookUrl = 'https://test-webhook.n8n.cloud/webhook/default';
+				const webhookData: Record<string, unknown> = {};
+				const mockHookFunction = createMockHookFunction(nodeParameters);
+				mockHookFunction.getNodeWebhookUrl = jest.fn().mockReturnValue(webhookUrl);
+				mockHookFunction.getWorkflowStaticData = jest.fn().mockReturnValue(webhookData);
+
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+				mockApiRequest.mockResolvedValue([
+					{
+						id: '900',
+						callback_url: webhookUrl,
+						event: 'custom_record.42.created',
+						status: 'active',
+					},
+				]);
+
+				const result = await arivoTrigger.webhookMethods!.default.checkExists!.call(
+					mockHookFunction,
+				);
+
+				expect(result).toBe(true);
+				expect(mockApiRequest).toHaveBeenCalledWith('GET', '/webhooks');
+				expect(webhookData).toHaveProperty('webhookId', '900');
 			});
 
 			it('should return false if webhook does not exist', async () => {
@@ -345,6 +410,56 @@ describe('ArivoTrigger Node', () => {
 					event: 'deal.reopen',
 				});
 				expect(webhookData).toHaveProperty('webhookId', '203');
+			});
+
+			it('should create webhook for custom record created event', async () => {
+				const nodeParameters = {
+					event: 'customRecord.created',
+					customRecordDefinitionId: '42',
+				};
+
+				const webhookUrl = 'https://test-webhook.n8n.cloud/webhook/default';
+				const webhookData: Record<string, unknown> = {};
+				const mockHookFunction = createMockHookFunction(nodeParameters);
+				mockHookFunction.getNodeWebhookUrl = jest.fn().mockReturnValue(webhookUrl);
+				mockHookFunction.getWorkflowStaticData = jest.fn().mockReturnValue(webhookData);
+
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+				mockApiRequest.mockResolvedValue({
+					id: '904',
+					callback_url: webhookUrl,
+					event: 'custom_record.42.created',
+					status: 'active',
+				});
+
+				const result = await arivoTrigger.webhookMethods!.default.create!.call(
+					mockHookFunction,
+				);
+
+				expect(result).toBe(true);
+				expect(mockApiRequest).toHaveBeenCalledWith('POST', '/webhooks', {
+					callback_url: webhookUrl,
+					event: 'custom_record.42.created',
+				});
+				expect(webhookData).toHaveProperty('webhookId', '904');
+			});
+
+			it('should throw when custom record definition is missing', async () => {
+				const nodeParameters = {
+					event: 'customRecord.updated',
+				};
+
+				const mockHookFunction = createMockHookFunction(nodeParameters);
+				mockHookFunction.getNodeWebhookUrl = jest.fn().mockReturnValue('https://test-webhook.n8n.cloud/webhook/default');
+				mockHookFunction.getWorkflowStaticData = jest.fn().mockReturnValue({});
+
+				const mockApiRequest = GenericFunctions.arivoApiRequest as jest.MockedFunction<typeof GenericFunctions.arivoApiRequest>;
+
+				await expect(
+					arivoTrigger.webhookMethods!.default.create!.call(mockHookFunction),
+				).rejects.toThrow('Select a custom record definition to subscribe to custom record events.');
+
+				expect(mockApiRequest).not.toHaveBeenCalled();
 			});
 		});
 
@@ -636,6 +751,50 @@ describe('ArivoTrigger Node', () => {
 									status: 'open',
 									value: '35000.00',
 									closed_at: null,
+								},
+							},
+						},
+					],
+				],
+			});
+		});
+
+		it('should process custom record webhook payload', async () => {
+			const mockWebhookFunction = {
+				getBodyData: jest.fn().mockReturnValue({
+					event: 'custom_record.42.updated',
+					data: {
+						id: 512,
+						object: 'custom_record',
+						custom_fields: {
+							custom_nome: 'Example',
+						},
+					},
+				}),
+				getHeaderData: jest.fn().mockReturnValue({
+					'x-arivo-event': 'custom_record.42.updated',
+				}),
+				helpers: {
+					returnJsonArray: jest.fn().mockImplementation((data) => 
+						data.map((item: any) => ({ json: item }))
+					),
+				},
+			} as unknown as IWebhookFunctions;
+
+			const result = await arivoTrigger.webhook!.call(mockWebhookFunction);
+
+			expect(result).toEqual({
+				workflowData: [
+					[
+						{
+							json: {
+								event: 'custom_record.42.updated',
+								data: {
+									id: 512,
+									object: 'custom_record',
+									custom_fields: {
+										custom_nome: 'Example',
+									},
 								},
 							},
 						},

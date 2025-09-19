@@ -4,9 +4,45 @@ import {
 	IWebhookFunctions,
 	IWebhookResponseData,
 	IHookFunctions,
+	NodeOperationError,
 } from 'n8n-workflow';
 
 import { arivoApiRequest } from './GenericFunctions';
+import { getCustomRecordDefinitions } from './loadOptions';
+
+const CUSTOM_RECORD_EVENT_PREFIX = 'customRecord.';
+
+function resolveEventName(context: IHookFunctions, event: string): string {
+	if (!event.startsWith(CUSTOM_RECORD_EVENT_PREFIX)) {
+		return event;
+	}
+
+	const definitionId = context.getNodeParameter('customRecordDefinitionId') as string | undefined;
+	const trimmedDefinitionId = definitionId?.toString().trim();
+
+	if (!trimmedDefinitionId) {
+		throw new NodeOperationError(
+			context.getNode(),
+			'Select a custom record definition to subscribe to custom record events.',
+		);
+	}
+
+	const [, action] = event.split('.');
+	const allowedActions: Record<string, string> = {
+		created: 'created',
+		updated: 'updated',
+		deleted: 'deleted',
+	};
+
+	if (!action || !allowedActions[action]) {
+		throw new NodeOperationError(
+			context.getNode(),
+			`Unsupported custom record action "${action ?? ''}".`,
+		);
+	}
+
+	return `custom_record.${trimmedDefinitionId}.${allowedActions[action]}`;
+}
 
 export class ArivoTrigger implements INodeType {
 	description: INodeTypeDescription = {
@@ -15,7 +51,8 @@ export class ArivoTrigger implements INodeType {
 		icon: 'file:arivo.svg',
 		group: ['trigger'],
 		version: 1,
-		subtitle: '={{$parameter["event"]}}',
+		subtitle:
+			'={{ $parameter["event"] && $parameter["event"].startsWith("customRecord.") && $parameter["customRecordDefinitionId"] ? "custom_record." + $parameter["customRecordDefinitionId"] + "." + $parameter["event"].split(".")[1] : $parameter["event"] }}',
 		description: 'Starts the workflow when Arivo events occur',
 		defaults: {
 			name: 'Arivo CRM Trigger',
@@ -54,6 +91,18 @@ export class ArivoTrigger implements INodeType {
 					{
 						name: 'Company Updated',
 						value: 'contact.company.updated',
+					},
+					{
+						name: 'Custom Record Created',
+						value: 'customRecord.created',
+					},
+					{
+						name: 'Custom Record Deleted',
+						value: 'customRecord.deleted',
+					},
+					{
+						name: 'Custom Record Updated',
+						value: 'customRecord.updated',
 					},
 					{
 						name: 'Deal Created',
@@ -126,7 +175,34 @@ export class ArivoTrigger implements INodeType {
 				],
 				default: 'contact.person.created',
 			},
+			{
+				displayName: 'Custom Record Definition Name or ID',
+				name: 'customRecordDefinitionId',
+				type: 'options',
+				required: true,
+				typeOptions: {
+					loadOptionsMethod: 'getCustomRecordDefinitions',
+				},
+				displayOptions: {
+					show: {
+						event: [
+							'customRecord.created',
+							'customRecord.updated',
+							'customRecord.deleted',
+						],
+					},
+				},
+				default: '',
+				description:
+					'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>',
+			},
 		],
+	};
+
+	methods = {
+		loadOptions: {
+			getCustomRecordDefinitions,
+		},
 	};
 
 	webhookMethods = {
@@ -134,15 +210,17 @@ export class ArivoTrigger implements INodeType {
 			async checkExists(this: IHookFunctions): Promise<boolean> {
 				const webhookUrl = this.getNodeWebhookUrl('default');
 				const event = this.getNodeParameter('event') as string;
+				const resolvedEvent = resolveEventName(this, event);
 				const webhookData = this.getWorkflowStaticData('node');
 
 				try {
 					const response = await arivoApiRequest.call(this, 'GET', '/webhooks');
 
 					if (response && Array.isArray(response)) {
-						const existingWebhook = response.find((webhook: any) => 
-							webhook.callback_url === webhookUrl && 
-							webhook.event === event
+						const existingWebhook = response.find(
+							(webhook: any) =>
+								webhook.callback_url === webhookUrl &&
+								webhook.event === resolvedEvent,
 						);
 
 						if (existingWebhook) {
@@ -160,11 +238,12 @@ export class ArivoTrigger implements INodeType {
 			async create(this: IHookFunctions) {
 				const webhookUrl = this.getNodeWebhookUrl('default');
 				const event = this.getNodeParameter('event') as string;
+				const resolvedEvent = resolveEventName(this, event);
 				const webhookData = this.getWorkflowStaticData('node');
 
 				const response = await arivoApiRequest.call(this, 'POST', '/webhooks', {
 					callback_url: webhookUrl,
-					event: event,
+					event: resolvedEvent,
 				});
 				
 				if (!response.id) {
